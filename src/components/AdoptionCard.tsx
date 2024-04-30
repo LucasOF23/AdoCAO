@@ -20,7 +20,10 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
   const ownerPrefix = getOwnerPrefix(info.owner.kind);
 
   return (
-    <div className="border rounded-t-2xl overflow-hidden w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50">
+    <a
+      href="#"
+      className="border rounded-t-2xl overflow-hidden w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50"
+    >
       <div className="w-full h-72">
         <Image
           alt={imageAlt}
@@ -43,6 +46,6 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
           </span>
         </p>
       </div>
-    </div>
+    </a>
   );
 }
