@@ -1,3 +1,9 @@
+import PageForms from "./adoption/forms/page-forms";
+
 export default function Root() {
-  return <div>Root</div>;
+  return (
+    <>
+      <PageForms />
+    </>
+  );
 }
