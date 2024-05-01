@@ -1,5 +1,6 @@
-import { FormsSel, FormsItem } from "../../../components/FormsSel";
-import { FormsInput, FormsInputProps } from "../../../components/FormsInput";
+import { FormsSel, FormsItem } from "@/components/FormsSel";
+import { FormsInput, FormsInputProps } from "@/components/FormsInput";
+import { InfoB, InfoBProps } from "@/components/infoB";
 
 export default function PageForms() {
   const items: FormsItem[] = [
@@ -20,6 +21,8 @@ export default function PageForms() {
     <>
       <FormsSel items={items} key={220} title="Porte" />
       <FormsInput key={1} title="bom dia" />
+      <br />
+      <InfoB />
     </>
   );
 }

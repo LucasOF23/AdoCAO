@@ -9,7 +9,10 @@ export type FormsInputProps = {
 export function FormsInput({ key, title }: FormsInputProps) {
   return (
     <>
-      <h3>{title}</h3>
+      <div className="flex">
+        <h3>{title}</h3>
+        <InfoB />
+      </div>
       <input
         type="text"
         placeholder="Digite aqui"
