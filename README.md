@@ -4,9 +4,10 @@ Esse projeto, iniciado como atividade da disciplina de Engenharia de Software e 
 
 ## Getting Started
 
-First, run the development server:
+First, install and run the development server:
 
 ```bash
+npm install
 npm run dev
 ```
 
