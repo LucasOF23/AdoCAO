@@ -1,24 +1,37 @@
+import React, { ReactNode } from "react";
+import { InfoB } from "./infoB";
 export type FormsItem = {
   id: number;
   label: string;
 };
 
 export type FormsSelProps = {
+  children?: ReactNode | ReactNode[];
   items: FormsItem[];
   key: number;
   title: string;
-  // question_button: QuestionButton;
 };
 
-export function FormsSel({ items, key, title }: FormsSelProps) {
+export function FormsSel({ children, items, key, title }: FormsSelProps) {
+  const childrenArray = React.Children.toArray(children);
+
   return (
-    <>
-      <h3>{title}</h3>
-      <select className="select select-bordered select-xs w-full max-w-xs">
+    <div className="inline-block min-w-min">
+      <div className="flex justify-left items-center">
+        <p className="text-2xl font-serif px-1">{title}</p>
+
+        {Array.isArray(childrenArray) &&
+          childrenArray.map((child, index) => (
+            <div key={index}>
+              <InfoB>{child}</InfoB>
+            </div>
+          ))}
+      </div>
+      <select className="select select-bordered w-full max-w-xs">
         {items.map((item) => (
           <option>{item.label}</option>
         ))}
       </select>
-    </>
+    </div>
   );
 }

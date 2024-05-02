@@ -1,29 +1,28 @@
 "use client";
-import { useState } from "react";
-import { PopUp, PopUpProps } from "./PopUp";
-import { Modal, ModalProps } from "./Modal";
+import { useState, ReactNode } from "react";
+import { Popup, PopupProps } from "./PopUp";
 
 export type InfoBProps = {
-  popup: string; //PopUpProps;
+  children: ReactNode;
 };
 
-export function InfoB({ popup }: InfoBProps) {
+export function InfoB({ children }: InfoBProps) {
   const [showPopUp, setShowPopUp] = useState(false);
 
   return (
-    <div className="w-3 h-3">
+    <div className="w-4 h-4 flex justify-center align-items">
       <button
         className="btn btn-circle btn-xs btn-ghost btn-outline
-      min-w-0 min-h-0 h-3 w-3"
+      min-w-0 min-h-0 h-5 w-5"
         onClick={() => {
-          console.log("CLiqUEI");
           setShowPopUp(true);
         }}
       >
-        <p className="font-mono text-[10px]">i</p>
-
-        {showPopUp && <Modal on_close={() => setShowPopUp(false)} />}
+        <p className="font-mono text-[15px]">i</p>
       </button>
+      {showPopUp && (
+        <Popup on_close={() => setShowPopUp(false)}>{children}</Popup>
+      )}
     </div>
   );
 }

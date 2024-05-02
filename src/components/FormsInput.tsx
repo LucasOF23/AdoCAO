@@ -1,23 +1,31 @@
-import { InfoB, InfoBProps } from "./infoB";
+import React, { ReactNode } from "react";
+import { InfoB } from "./infoB";
 
 export type FormsInputProps = {
+  children?: ReactNode | ReactNode[];
   key: number;
   title: string;
-  //   informative_button: InfoBProps;
 };
 
-export function FormsInput({ key, title }: FormsInputProps) {
+export function FormsInput({ children, key, title }: FormsInputProps) {
+  const childrenArray = React.Children.toArray(children);
   return (
-    <>
-      <div className="flex">
-        <h3>{title}</h3>
-        <InfoB />
+    <div className="max-w-full">
+      <div className="flex justify-left items-center">
+        <p className="text-2xl font-serif px-1">{title}</p>
+
+        {Array.isArray(childrenArray) &&
+          childrenArray.map((child, index) => (
+            <div key={index}>
+              <InfoB>{child}</InfoB>
+            </div>
+          ))}
       </div>
       <input
         type="text"
         placeholder="Digite aqui"
-        className="input input-bordered w-full max-w-xs input-xs"
+        className="input input-bordered w-full max-w-xs"
       />
-    </>
+    </div>
   );
 }
