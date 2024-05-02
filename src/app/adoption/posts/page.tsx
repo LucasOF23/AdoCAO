@@ -2,7 +2,6 @@
 
 import AdoptionCard from "@/components/AdoptionCard";
 import { DogInfo } from "@/types/dog";
-import Select from "react-select";
 
 export default function AdoptionPosts() {
   const dogInfos: DogInfo[] = [
@@ -173,8 +172,8 @@ export default function AdoptionPosts() {
   return (
     <>
       <div>AdoptionPosts</div>
-      <Select isMulti options={options} />
-      <div className="p-4 grid justify-items-center grid-autofit gap-4">
+
+      <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {dogInfos.map((info) => (
           <AdoptionCard key={info.id} info={info} />
         ))}
