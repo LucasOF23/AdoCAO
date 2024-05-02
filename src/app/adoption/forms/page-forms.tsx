@@ -78,49 +78,53 @@ export default function PageForms() {
   const ask_detalhes = <FormsInput key={13} title="Mais detalhes"></FormsInput>;
 
   return (
-    <div className="flex border-solid border-2 border-indigo-600 pl-5 gap-1">
+    <div className="flex ml-5">
       <div className="flex-auto flex flex-col flex-nowrap">
         {/*Diferença entre topo e baixo */}
         <div className="flex-auto flex flex-row flex-nowrap">
           {/* Cima - divide entre rows e imagem*/}
 
-          <div className="grow flex flex-col flex-wrap pt-3">
+          <div className="grow flex flex-col flex-wrap ">
             {/* Itens  */}
-            <div className="flex flex-row flex-wrap">
-              {ask_especie}
-              {ask_raca}
-            </div>
-            <div className="flex flex-row flex-wrap">{ask_nome}</div>
-
-            <div className="flex flex-row flex-wrap">
-              {ask_sexo}
-              {ask_nasc}
-              {ask_responsavel}
+            <p className="text-black text-[27px] min-[300px]:text-red-600 font-serif text-left mr-6">
+              Preencha o formulário para cadastrar seu animal
+            </p>
+            <div className="flex flex-row flex-wrap mr-2 mt-6">
+              <div className="w-full">{ask_nome}</div>
             </div>
             <div className="flex flex-row flex-wrap">
-              {ask_df}
-              {ask_cidade}
+              <div className="max-w-[115px] pr-2">{ask_responsavel}</div>
+              <div className="min-w-[70px] pr-2">{ask_df}</div>
+              <div className="max-w-[180px] pr-2">{ask_cidade}</div>
             </div>
           </div>
-          <div className="flex-none bg-indigo-600 w-[200px] h-[300px]">
-            {/* Div de imagem */}Imagem
+          <div className="flex-none w-[150px] h-[200px] mt-5 mr-8">
+            <div className="bg-indigo-600 w-full h-full">Imagem</div>
+            {/* Div de imagem */}
           </div>
         </div>
         <div className="flex-auto flex flex-col flex-nowrap">
           {/* Baixo - divide em rows*/}
-          <div className="flex flex-row">
-            {ask_peso}
-            {ask_porte}
+          <div className="flex flex-row flex-wrap justify-start ">
+            <div className="min-w-[30px] pr-2">{ask_sexo}</div>
+            <div className="max-w-[160px] min-w-[100px] pr-2">{ask_nasc}</div>
+            <div className="max-w-[160px] min-w-[100px] pr-2">{ask_peso}</div>
+            <div className="max-w-[160px] min-w-[100px]">{ask_porte}</div>
           </div>
-          <div className="flex flex-row">
-            {ask_castrado}
-            {ask_vermifugado}
+          <div className="flex flex-row min-w-[70px] justify-start flex-wrap">
+            <div className="min-w-[110px]">{ask_especie}</div>
+            <div className="min-w-[120px]">{ask_raca}</div>
+            <div className="w-[85px] flex flex-col self-end">
+              {ask_castrado}
+            </div>
+            <div className="w-[105px] flex flex-col self-end">
+              {ask_vermifugado}
+            </div>
           </div>
-          <div className="flex flex-row">{ask_tags}</div>
+          <div className="flex flex-row w-full">{ask_tags}</div>
           <div className="flex flex-row">{ask_detalhes}</div>
         </div>
       </div>
-      <></>
     </div>
   );
 }

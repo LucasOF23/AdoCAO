@@ -10,9 +10,9 @@ export type FormsInputProps = {
 export function FormsInput({ children, key, title }: FormsInputProps) {
   const childrenArray = React.Children.toArray(children);
   return (
-    <div className="max-w-full">
+    <div className="w-full">
       <div className="flex justify-left items-center">
-        <p className="text-2xl font-serif px-1">{title}</p>
+        <p className="text-xl font-serif px-1">{title}</p>
 
         {Array.isArray(childrenArray) &&
           childrenArray.map((child, index) => (
@@ -24,7 +24,7 @@ export function FormsInput({ children, key, title }: FormsInputProps) {
       <input
         type="text"
         placeholder="Digite aqui"
-        className="input input-bordered w-full max-w-xs"
+        className="input input-bordered w-full select-sm"
       />
     </div>
   );
