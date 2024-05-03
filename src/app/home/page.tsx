@@ -3,7 +3,8 @@
 import AdoptionCard from "@/components/AdoptionCard";
 import { DogInfo } from "@/types/dog";
 
-import Navbar from "@/components/Navbar";
+import Navbar2 from "@/components/Navbar2";
+import Sidebar from "@/components/Sidebar";
 
 export default function AdoptionPosts() {
   const dogInfos: DogInfo[] = [
@@ -243,7 +244,8 @@ export default function AdoptionPosts() {
 
   return (
     <>
-      <Navbar />
+      <Navbar2 />
+      <Sidebar />
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {dogInfos.map((info) => (
           <AdoptionCard key={info.id} info={info} />
