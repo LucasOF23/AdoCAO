@@ -27,7 +27,7 @@ export function FormsSel({ children, items, key, title }: FormsSelProps) {
             </div>
           ))}
       </div>
-      <select className="select select-bordered w-full max-w-xs select-sm">
+      <select className="select select-bordered w-full max-w-xs select-sm select-secondary">
         {items.map((item) => (
           <option>{item.label}</option>
         ))}

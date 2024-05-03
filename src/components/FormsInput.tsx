@@ -24,7 +24,7 @@ export function FormsInput({ children, key, title }: FormsInputProps) {
       <input
         type="text"
         placeholder="Digite aqui"
-        className="input input-bordered w-full select-sm"
+        className="input input-bordered w-full select-sm select-error"
       />
     </div>
   );
