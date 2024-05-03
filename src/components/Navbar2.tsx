@@ -1,7 +1,4 @@
-import React, { useState } from "react";
 import Image from "next/image";
-import { createPortal } from "react-dom";
-import Login from "./Login";
 
 export default function Navbar2() {
   return (

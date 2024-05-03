@@ -182,8 +182,10 @@ export default function PageForms() {
             </ul>
           </details>
         </div>
-        {ask_castrado}
-        {ask_vermifugado}
+        <div className="flex gap-3">
+            {ask_castrado}
+            {ask_vermifugado}
+        </div>
         <div className="my-3">
           <h1>Descrição:</h1>
           {ask_descricao}

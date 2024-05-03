@@ -5,6 +5,7 @@ import { DogInfo } from "@/types/dog";
 
 import Navbar2 from "@/components/Navbar2";
 import Sidebar from "@/components/Sidebar";
+import Lowerbar from "@/components/Lowerbar";
 
 export default function AdoptionPosts() {
   const dogInfos: DogInfo[] = [
@@ -251,6 +252,7 @@ export default function AdoptionPosts() {
           <AdoptionCard key={info.id} info={info} />
         ))}
       </div>
+      <Lowerbar />
     </>
   );
 }

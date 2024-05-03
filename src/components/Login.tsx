@@ -75,9 +75,9 @@ export default function Login({ onClose }: LoginProps) {
         </div>
       )}
 
-      <button className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+      <a href="/home" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
         Enviar
-      </button>
+      </a>
 
       <button
         onClick={() => setIsLogin((prev) => !prev)}
