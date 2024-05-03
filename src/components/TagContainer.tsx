@@ -2,9 +2,9 @@ import React from "react";
 
 export type TagContainerProps = {
   text: string;
-  color_class: string;
+  className: string;
 };
 
-export default function TagContainer({ text, color_class }: TagContainerProps) {
-  return <span className={`${color_class} p-1 m-1 rounded`}>{text}</span>;
+export default function TagContainer({ text, className }: TagContainerProps) {
+  return <a className={`${className} p-1 m-1 rounded`} href="#">{text}</a>;
 }
