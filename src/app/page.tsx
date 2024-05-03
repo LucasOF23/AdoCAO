@@ -1,3 +1,6 @@
-export default function Home() {
-  return <div>Home</div>;
+"use client";
+import Login from "@/components/Login";
+
+export default function LoginPage() {
+  return <Login />;
 }
