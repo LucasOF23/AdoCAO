@@ -13,6 +13,7 @@ export default function AdoptionPosts() {
     const profileInfo: ProfileInfo = 
         {
           id: 1,
+          user_type: "user",
           name: "Zeca",
           location: { city: "São Carlos", state: "São Paulo" },
           imageUrl: "https://images.dog.ceo/breeds/lhasa/n02098413_7389.jpg",
@@ -27,8 +28,8 @@ export default function AdoptionPosts() {
               name: "Zeca",
             },
             location: {
-              city: "Zurich",
-              state: "SW",
+              city: "São Carlos",
+              state: "São Paulo",
             },
             gender: "male",
             ageInYears: 1,

@@ -1,3 +1,4 @@
+import { OngCardProps } from "@/components/OngCard";
 import { DogInfo } from "./dog";
 
 export type ProfileLocation = {
@@ -7,6 +8,7 @@ export type ProfileLocation = {
 
 export type ProfileInfo = {
     id: number;
+    user_type: "user" | "ONG";
     name: string;
     cellphone: string;
     email: string;
