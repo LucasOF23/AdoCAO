@@ -6,6 +6,7 @@ export type OngLocation = {
 export type OngInfo = {
   id: number;
   name: string;
+  contact: string;
   location: OngLocation;
   imageUrl: string;
 };

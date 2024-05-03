@@ -10,11 +10,11 @@ export default function OngCard({ info }: OngCardProps) {
   const imageAlt = `Imagem da ONG "${info.name}"`;
 
   return (
-    <div className="border rounded-t-2xl overflow-hidden w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50">
-      <div className="w-full h-72">
+    <div className="border rounded-t-2xl overflow-hidden w-full max-w-lg hover:shadow-md hover:scale-[101%] transition delay-50 flex">
+      <div className="w-72 h-52">
         <Image
           alt={imageAlt}
-          className="object-cover w-full h-full"
+          className="object-cover h-full"
           src={info.imageUrl}
           width={2000}
           height={2000}
@@ -29,6 +29,7 @@ export default function OngCard({ info }: OngCardProps) {
             {info.location.city} ({info.location.state})
           </span>
         </p>
+        <p>Contato: {info.contact}</p>
       </div>
     </div>
   );

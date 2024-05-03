@@ -2,18 +2,21 @@ import OngCard from "@/components/OngCard";
 import { OngInfo } from "@/types/ong";
 
 export default function AdoptionPosts() {
-  const ongInfos: [OngInfo] = [
+  const ongInfos: OngInfo[] = [
     {
       id: 1,
       name: "S.O.S. Doguinhos",
-      location: { city: "São Carlos", state: "São Paulo" },
-      imageUrl: "",
+      contact: "(12) 3 4567-8910",
+      location: { city: "São Carlos", state: "SP" },
+      imageUrl:
+        "https://images.dog.ceo/breeds/poodle-standard/n02113799_1316.jpg",
     },
     {
       id: 2,
-      name: "S.O.S. Doguinhos",
-      location: { city: "São Carlos", state: "São Paulo" },
-      imageUrl: "",
+      name: "Dogões S.A.",
+      contact: "(12) 3 4567-8910",
+      location: { city: "São Carlos", state: "SP" },
+      imageUrl: "https://images.dog.ceo/breeds/shiba/shiba-17.jpg",
     },
   ];
 
