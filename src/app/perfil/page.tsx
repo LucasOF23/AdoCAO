@@ -15,7 +15,7 @@ export default function AdoptionPosts() {
           id: 1,
           user_type: "user",
           name: "Zeca",
-          location: { city: "São Carlos", state: "São Paulo" },
+          location: { city: "São Carlos", state: "São Paulo" , type_loc: 'casa'},
           imageUrl: "https://images.dog.ceo/breeds/lhasa/n02098413_7389.jpg",
           cellphone: "(16) 9xxxx-xxxx",
           email: "zeca@estadual.com.br",
@@ -70,6 +70,7 @@ export default function AdoptionPosts() {
                             <li>Celular: {profileInfo.cellphone}</li>
                             <li>Estado: {profileInfo.location.state}</li>
                             <li>Cidade: {profileInfo.location.city}</li>
+                            <li>Tipo de moradia: {profileInfo.location.type_loc}</li>
                         </ul>
                     </div>
                 </div>
