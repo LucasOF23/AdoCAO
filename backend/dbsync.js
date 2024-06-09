@@ -1,4 +1,4 @@
-import Animal from './models/animal.js'
+import Animal from './models/animal.model.js'
 import AnimalSpecie from './models/animalspecie.model.js'
 import AnimalTag from './models/animaltag.model.js'
 import City from './models/city.model.js'

@@ -63,6 +63,8 @@ async function validateToken(request, response, next) {
         if (token && token.startsWith("Bearer")) {
             token = token.substring(7, token.length);
             const decodedToken = jwt.verify(token, secret);
+
+			response.locals.userId = decodedToken.sub;
             next();
         } else {
             return response.status(401).send({ message: "Unauthorized" });

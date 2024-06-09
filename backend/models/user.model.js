@@ -1,6 +1,8 @@
 import {Model, DataTypes } from "sequelize";
 import sequelize from "./dbconfig.js";
 import ONG from "./ong.model.js"
+import UserManagesONG from "./usermanagesong.js"
+import UserWorksAtONG from "./userworksatong.js"
 
 class User extends Model {};
 
@@ -11,7 +13,7 @@ User.init({
 	passwordHash: { type: DataTypes.STRING, allowNull: false }
 }, {sequelize: sequelize, timestamps: false });
 
-User.belongsToMany(ONG, { through: "UserManagesONG" });
-User.belongsToMany(ONG, { through: "UserWorksAtONG" });
+User.belongsToMany(ONG, { through: UserManagesONG });
+User.belongsToMany(ONG, { through: UserWorksAtONG });
 
 export default User;
