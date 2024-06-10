@@ -1,11 +1,19 @@
 import model from "../models/animal.model.js";
 import User from "../models/user.model.js";
+import City from "../models/city.model.js";
+import ONG from "../models/ong.model.js"
 import UserWorksAtONG from "../models/userworksatong.js"
 import { eraseFile, eraseRequestFiles } from "../upload/image.js"
 
+const defaultInclude = [
+	{ model: City },
+	{ model: User, attributes: ['id', 'name'] },
+	{ model: ONG, attributes: ['id', 'name', 'address'], include: City }
+];
+
 async function findAll(request, response) {
 	model
-		.findAll().then(function (res) {
+		.findAll({ include: defaultInclude }).then(function (res) {
 			response.status(200).json(res);
 		}).catch(function (err) {
 			response.status(500).send(err);
@@ -14,7 +22,7 @@ async function findAll(request, response) {
 
 async function findById(request, response) {
 	model
-		.findByPk(request.params.id, { include: User })
+		.findByPk(request.params.id, { include: defaultInclude })
 		.then(function (res) {
 			response.status(200).json(res);
 		}).catch(function (err) {
@@ -24,7 +32,7 @@ async function findById(request, response) {
 
 async function findByUserId(request, response) {
 	model
-		.findAll({ where: { UserId: request.params.id } })
+		.findAll({ where: { UserId: request.params.id }, include: defaultInclude })
 		.then(function (results) {
 			response.status(200).json(results);
 		}).catch(function (err) {
