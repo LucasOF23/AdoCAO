@@ -56,6 +56,8 @@ function addOngsRoutes(router, needAuth) {
 	   @returns 500 - error (unknown error)
 	 */
 	router.delete('/ongs/:id/users', needAuth, ongController.unassignWorker);
+
+	router.get('/ongs/:id/animals', ongController.findAnimals);
 }
 
 export default addOngsRoutes

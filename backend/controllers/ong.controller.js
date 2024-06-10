@@ -1,6 +1,7 @@
 import model from "../models/ong.model.js";
 import User from "../models/user.model.js";
 import UserWorksAtONG from "../models/userworksatong.js"
+import Animal from "../models/animal.model.js";
 
 async function getWorkRelation(userId, ongId) {
 	return UserWorksAtONG.findOne({ where: {
@@ -46,6 +47,16 @@ async function findWorkers(request, response) {
 		} ));
 	}).catch(function (err) {
 		console.log(err);
+		response.status(500).send(err);
+	});
+}
+
+async function findAnimals(request, response) {
+	Animal.findAll( {
+		where: { ONGId: request.params.id }
+	}).then(function (res) {
+		response.status(200).json(res);
+	}).catch(function (err) {
 		response.status(500).send(err);
 	});
 }
@@ -163,8 +174,9 @@ export default {
 	findAll,
 	findById,
 	findWorkers,
+	findAnimals,
 	create,
 	update,
 	assignWorker,
-	unassignWorker
+	unassignWorker,
 };
