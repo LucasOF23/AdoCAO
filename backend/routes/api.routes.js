@@ -7,6 +7,7 @@ const needAuth = authController.validateToken;
 
 router.post("/signup", authController.register);
 router.post("/signin", authController.login);
+router.post('/change_password', needAuth, authController.changePassword);
 
 // TODO: RETIRAR ISSO DAQUI, É SÓ PARA TESTAR
 router.get("/users", authController.findAll);

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
+import ContactInfo from "../models/contactinfo.model.js"
 
 const secret = process.env["AUTHSECRET"];
 
@@ -21,14 +22,18 @@ async function register(request, response) {
     const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(request.body.password, salt);
 
+	const emptyContactInfo = await ContactInfo.create();
+	if(emptyContactInfo === null) {
+		return response.status(500).send('Erro inesperado.');
+	}
+	
     User.create({
 		name: request.body.name,
         email: request.body.email,
         passwordHash: hashedPassword,
+		ContactInfoId: emptyContactInfo.id
     }).then((result) => {
-        const token = getToken(
-            result.dataValues.id
-        );
+        const token = getToken(result.dataValues.id);
         response.status(201).send({ token: token });
     }).catch((erro) => {
         console.log(erro);
@@ -74,14 +79,46 @@ async function validateToken(request, response, next) {
     }
 }
 
-function findAll(request, response) {
+async function findAll(request, response) {
     User.findAll()
         .then(function (res) {
-            response.json(res).status(200);
+            response.status(200).json(res);
         })
         .catch(function (err) {
-            response.json(err).status(500);
+            response.status(500).send(err);
         });
 }
 
-export default { register, login, validateToken, findAll };
+// ==================
+// === NEEDS AUTH ===
+// ==================
+
+async function changePassword(request, response) {
+	if(!request.body.oldPassword || !request.body.newPassword) {
+		return response.status(400).send('Senha nova ou antiga não especificada.');
+	}
+
+	const user = await User.findByPk(response.locals.userId);
+	if(!user) {
+		return response.status(500).send('Usuário não encontrado.');
+	}
+
+	const isEqual = bcrypt.compareSync(request.body.oldPassword, user.passwordHash);
+    if (!isEqual) {
+        return response.status(401).send("Senha antiga inválida.");
+    }
+
+	const salt = bcrypt.genSaltSync();
+    const hashedPassword = bcrypt.hashSync(request.body.newPassword, salt);
+
+	User.update(
+		{ passwordHash: hashedPassword },
+		{ where: { id: user.id } }
+	).then(function(res) {
+		response.status(200).send();
+	}).catch(function(res) {
+		response.status(500).json(err);
+	})
+}
+
+export default { register, login, validateToken, findAll, changePassword };

@@ -5,9 +5,9 @@ import UserWorksAtONG from "../models/userworksatong.js"
 async function findAll(request, response) {
 	model
 		.findAll().then(function (res) {
-			response.json(res).status(200);
+			response.status(200).json(res);
 		}).catch(function (err) {
-			response.json(err).status(500);
+			response.status(500).send(err);
 		});
 }
 
@@ -15,9 +15,9 @@ async function findById(request, response) {
 	model
 		.findByPk(request.params.id, { include: User })
 		.then(function (res) {
-			response.json(res).status(200);
+			response.status(200).json(res);
 		}).catch(function (err) {
-			response.json(err).status(500);
+			response.status(500).send(err);
 		});
 }
 
@@ -25,9 +25,9 @@ async function findByUserId(request, response) {
 	model
 		.findAll({ where: { UserId: request.params.id } })
 		.then(function (results) {
-			response.json(results).status(200);
+			response.status(200).json(results);
 		}).catch(function (err) {
-			response.json(err).status(500);
+			response.status(500).send(err);
 		});
 }
 
@@ -77,9 +77,9 @@ async function create(request, response) {
 	
 	model
 		.create(data).then(function (res) {
-			response.json(res).status(201);
+			response.status(201).json(res);
 		}).catch(function (err) {
-			response.json(err).status(500);
+			response.status(500).send(err);
 		});
 }
 
@@ -94,7 +94,7 @@ async function deleteByPk(request, response) {
 		.then(function (res) {
 			response.status(200).send();
 		}).catch(function (err) {
-			response.json(err).status(500);
+			response.status(500).send(err);
 		});
 }
 
@@ -118,7 +118,7 @@ async function update(request, response) {
 		.then(function (res) {
 			response.status(200).send();
 		}).catch((e) => {
-			response.json(e).status(500);
+			response.status(500).json(e);
 		});
 }
 

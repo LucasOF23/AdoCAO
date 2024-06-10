@@ -13,6 +13,6 @@ ContactInfo.init({
 	other: { type: DataTypes.STRING, allowNull: true },
 }, {sequelize: sequelize, timestamps: false });
 
-ContactInfo.belongsTo(User);
+ContactInfo.hasOne(User);
 
 export default ContactInfo;
