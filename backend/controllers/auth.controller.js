@@ -2,11 +2,17 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import ContactInfo from "../models/contactinfo.model.js"
+import UserWorksAtONG from "../models/userworksatong.js"
 
 const secret = process.env["AUTHSECRET"];
 
-function getToken(uid) {
-    return jwt.sign({ sub: uid }, secret, { expiresIn: "7d", });
+function getToken(uid, isSuperAdmin=false, isOngManager=false, isOngWorker=false) {
+    return jwt.sign({
+		sub: uid,
+		isSuperAdmin,
+		isOngManager,
+		isOngWorker
+	}, secret, { expiresIn: "7d", });
 }
 
 async function register(request, response) {
@@ -58,7 +64,10 @@ async function login(request, response) {
         return response.status(401).send("Usuário e senha inválidos!");
     }
 
-    const token = getToken(user.id);
+	const anyManagedOng = await UserWorksAtONG.findOne({ where: { UserId: user.id, isManager: true } });
+	const anyWorkOng = anyManagedOng || await UserWorksAtONG.findOne({ where: { UserId: user.id } });
+	
+    const token = getToken(user.id, user.isSuperAdmin, anyManagedOng !== null, anyWorkOng !== null);
     response.status(200).json({ token: token });
 }
 
@@ -70,6 +79,9 @@ async function validateToken(request, response, next) {
             const decodedToken = jwt.verify(token, secret);
 
 			response.locals.userId = decodedToken.sub;
+			response.locals.isSuperAdmin = decodedToken.isSuperAdmin;
+			response.locals.isOngManager = decodedToken.isOngManager;
+			response.locals.isOngWorker = decodedToken.isOngWorker;
             next();
         } else {
             return response.status(401).send({ message: "Unauthorized" });
