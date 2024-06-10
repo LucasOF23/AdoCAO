@@ -8,7 +8,7 @@ export default function PageForms() {
     <FormsInput key={0} title="Nome do responsável"></FormsInput>
   );
   const ask_email = <FormsInput key={1} title="Email"></FormsInput>;
-  const ask_celular = <FormsInput key={2} title="Celular"></FormsInput>;
+  const ask_contato = <FormsInput key={2} title="Contato"></FormsInput>;
   const ask_df = (
     <FormsSel
       key={3}
@@ -24,7 +24,7 @@ export default function PageForms() {
   const ask_all_responsavel = [
     ask_nome,
     ask_email,
-    ask_celular,
+    ask_contato,
     ask_df,
     ask_cidade,
   ];

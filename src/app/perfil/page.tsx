@@ -4,7 +4,9 @@ import Image from "next/image";
 
 import { useState } from "react";
 
+import { CopyText } from "@/components/CopyText";
 import Navbar from "@/components/Navbar2";
+import HrefButton from "@/components/HrefButton";
 import { ProfileInfo } from "@/types/profile";
 import { unescape } from "querystring";
 import Lowerbar from "@/components/Lowerbar";
@@ -12,7 +14,7 @@ import Lowerbar from "@/components/Lowerbar";
 export default function AdoptionPosts() {
     const profileInfo: ProfileInfo = 
         {
-          id: 1,
+          id: 14563,
           user_type: "user",
           name: "Zeca",
           location: { city: "São Carlos", state: "São Paulo" , type_loc: 'casa'},
@@ -45,7 +47,7 @@ export default function AdoptionPosts() {
     ;
 
     const [mobile, setMobile] = useState(false);
-
+    
     return (
     <>
       <Navbar />
@@ -58,7 +60,11 @@ export default function AdoptionPosts() {
             height={400}
           />
         <div className="w-full">
-            <h1 className="text-5xl font-bold text-center p-5">Meu Perfil</h1>
+            <div>
+              <h1 className="text-5xl font-bold text-center p-5">Meu Perfil</h1>
+              <CopyText text={`ID pessoal: ${profileInfo.id.toString()}`} copy={profileInfo.id.toString()} />
+            </div>
+            
             <hr />
             <div className="p-4 screen-max-width grid justify-items-center grid-autofit">
                 <div>
@@ -87,9 +93,9 @@ export default function AdoptionPosts() {
       </div>
       <hr />
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
-        <button className="py-7 px-10 bg-purple-600 rounded-md">Editar Perfil</button>
-        <button className="py-7 px-10 bg-purple-600 rounded-md">Trocar Senha</button>
-        <button className="py-7 px-10 bg-rose-600 rounded-md">Apagar Perfil</button>
+        <div className="py-7 px-10 bg-purple-600 rounded-md"><HrefButton href='/edit_perfil'>Editar Perfil</HrefButton></div>
+        <div className="py-7 px-10 bg-purple-600 rounded-md"><HrefButton href='/trocar_senha'>Trocar Senha</HrefButton></div>
+        <div className="py-7 px-10 bg-rose-600 rounded-md"><HrefButton href='/confirmar_apagar'>Apagar Perfil</HrefButton></div>
       </div>
       <Lowerbar />
     </>

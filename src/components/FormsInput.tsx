@@ -13,7 +13,7 @@ export function FormsInput({ children, key, title }: FormsInputProps) {
     <div className="w-full">
       <div className="flex justify-left items-center">
         <p className="text-xl font-serif px-1">{title}</p>
-
+        
         {Array.isArray(childrenArray) &&
           childrenArray.map((child, index) => (
             <div key={index}>

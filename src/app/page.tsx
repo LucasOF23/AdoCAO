@@ -9,6 +9,8 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Lowerbar from "@/components/Lowerbar";
 import EditPerfil from "@/app/edit_perfil/page";
+import PageForms from "@/components/PageForms";
+import ModalCreateONG from "@/components/ModalCreateONG";
 
 
 export default function AdoptionPosts() {
@@ -246,18 +248,17 @@ export default function AdoptionPosts() {
       tags: ["Energético", "Amável", "Explosivo"],
     },
   ];
-
+  
   return (
-    // <>
-    //   <Navbar />
-    //   <Sidebar />
-    //   <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
-    //     {dogInfos.map((info) => (
-    //       <AdoptionCard key={info.id} info={info} />
-    //     ))}
-    //   </div>
-    //   <Lowerbar />
-    // </>
-    <EditPerfil/>
+    <>
+      <Navbar />
+      <Sidebar />
+      <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
+        {dogInfos.map((info) => (
+          <AdoptionCard key={info.id} info={info} />
+        ))}
+      </div>
+      <Lowerbar />
+    </>
   );
 }
