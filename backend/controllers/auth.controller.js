@@ -7,12 +7,14 @@ import UserWorksAtONG from "../models/userworksatong.js"
 const secret = process.env["AUTHSECRET"];
 
 function getToken(uid, isSuperAdmin=false, isOngManager=false, isOngWorker=false) {
-    return jwt.sign({
+	const payload = {
 		sub: uid,
 		isSuperAdmin,
 		isOngManager,
 		isOngWorker
-	}, secret, { expiresIn: "7d", });
+	}; 
+    const token = jwt.sign(payload, secret, { expiresIn: "7d", });
+	return { token, payload };
 }
 
 async function register(request, response) {
@@ -56,7 +58,7 @@ async function login(request, response) {
         where: { email: request.body.email },
     });
     if (!user) {
-        return response.status(400).send("Usuário não cadastrado.");
+        return response.status(404).send("Usuário não cadastrado.");
     }
 
     const isEqual = bcrypt.compareSync(request.body.password, user.passwordHash);
