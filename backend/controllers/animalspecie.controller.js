@@ -1,4 +1,5 @@
 import AnimalSpecie from "../models/animalspecie.model.js";
+import { Op } from "sequelize";
 
 async function findAll(request, response) {
     try {
@@ -12,7 +13,7 @@ async function findAll(request, response) {
 async function findByName(request, response) {
     const name = request.params.name;
     try {
-        const animalSpecies = await AnimalSpecie.findAll({ where: { name } });
+        const animalSpecies = await AnimalSpecie.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } });
         response.status(200).json(animalSpecies);
     } catch (error) {
         response.status(500).send(error.message);
