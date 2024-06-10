@@ -52,6 +52,9 @@ function addAnimalsRoutes(router, needAuth) {
 	   @returns 500 - error (unknown error)
 	 */
 	router.delete('/animals/:id', needAuth, animalController.deleteByPk);
+
+	router.post('/animals/:id/tag', needAuth, animalController.addTag);
+	router.delete('/animals/:id/tag', needAuth, animalController.removeTag);
 }
 
 export default addAnimalsRoutes

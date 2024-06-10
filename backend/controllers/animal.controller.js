@@ -1,14 +1,16 @@
 import model from "../models/animal.model.js";
 import User from "../models/user.model.js";
 import City from "../models/city.model.js";
-import ONG from "../models/ong.model.js"
-import UserWorksAtONG from "../models/userworksatong.js"
-import { eraseFile, eraseRequestFiles } from "../upload/image.js"
+import ONG from "../models/ong.model.js";
+import UserWorksAtONG from "../models/userworksatong.js";
+import AnimalTag from "../models/animaltag.model.js";
+import { eraseFile, eraseRequestFiles } from "../upload/image.js";
 
 const defaultInclude = [
 	{ model: City },
 	{ model: User, attributes: ['id', 'name'] },
-	{ model: ONG, attributes: ['id', 'name', 'address'], include: City }
+	{ model: ONG, attributes: ['id', 'name', 'address'], include: City },
+	{ model: AnimalTag, through: { attributes: [] } }
 ];
 
 async function checkPermission(response, animal) {
@@ -176,11 +178,49 @@ async function update(request, response) {
 		});
 }
 
+async function addTag(request, response) {
+	const animal = await model.findByPk(request.params.id);
+	if(!animal) {
+		return response.status(400).send('Animal não existe.');
+	}
+
+	if(!await checkPermission(response, animal)) {
+		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
+	}
+
+	animal.addAnimalTag(request.body.tagId)
+		.then(function (res) {
+			response.status(200).send();
+		}).catch(function (err) {
+			response.status(500).send(err);
+		});
+}
+
+async function removeTag(request, response) {
+	const animal = await model.findByPk(request.params.id);
+	if(!animal) {
+		return response.status(400).send('Animal não existe.');
+	}
+
+	if(!await checkPermission(response, animal)) {
+		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
+	}
+
+	animal.removeAnimalTag(request.body.tagId)
+		.then(function (res) {
+			response.status(200).send();
+		}).catch(function (err) {
+			response.status(500).send(err);
+		});
+}
+
 export default {
-  findAll,
-  findById,
-  create,
-  deleteByPk,
-  update,
-  findByUserId,
+	findAll,
+	findById,
+	create,
+	deleteByPk,
+	update,
+	findByUserId,
+	addTag,
+	removeTag
 };
