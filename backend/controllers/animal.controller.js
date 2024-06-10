@@ -1,6 +1,7 @@
 import model from "../models/animal.model.js";
 import User from "../models/user.model.js";
 import UserWorksAtONG from "../models/userworksatong.js"
+import { eraseFile, eraseRequestFiles } from "../upload/image.js"
 
 async function findAll(request, response) {
 	model
@@ -36,11 +37,15 @@ async function findByUserId(request, response) {
 // ==================
 
 async function create(request, response) {
+	if(!request.file) {
+		return response.status(400).send('Sem foto.');
+	}
+
 	let data = {
 		name: request.body.name,
 		description: request.body.description,
 		birthdate: request.body.birthdate,
-		imagePath: 'sem foto',
+		imagePath: request.file.filename,
 		heightInCm: request.body.heightInCm,
 		weightInKg: request.body.weightInKg,
 		isNeutered: request.body.isNeutered,
@@ -51,6 +56,7 @@ async function create(request, response) {
 	};
 
 	if(request.body.isUserOwned === undefined || request.body.isUserOwned === null) {
+		eraseRequestFiles(request);
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
 
@@ -58,6 +64,7 @@ async function create(request, response) {
 		data.UserId = response.locals.userId;
 	} else {
 		if(!request.body.ongId) {
+			eraseRequestFiles(request);
 			return response.status(400).send('ONG não especificada.');
 		}
 		
@@ -69,6 +76,7 @@ async function create(request, response) {
 		});
 
 		if(rel === null) {
+			eraseRequestFiles(request);
 			return response.status(403).send('Usuário não trabalha na ONG.');
 		}
 
@@ -79,19 +87,26 @@ async function create(request, response) {
 		.create(data).then(function (res) {
 			response.status(201).json(res);
 		}).catch(function (err) {
+			eraseRequestFiles(request);
 			response.status(500).send(err);
 		});
 }
 
 async function deleteByPk(request, response) {
 	const animal = await model.findByPk(request.params.id);
+	if(!animal) {
+		return response.status(400).send('Animal não existe.');
+	}
 	if(animal.UserId != response.locals.userId) {
 		return response.status(403).send('Usuário não é dono do animal.');
 	}
+
+	const filename = animal.imagePath;
 	
 	model
 		.destroy({ where: { id: request.params.id } })
 		.then(function (res) {
+			eraseFile(filename);
 			response.status(200).send();
 		}).catch(function (err) {
 			response.status(500).send(err);
@@ -108,14 +123,28 @@ async function update(request, response) {
 		}
 	}
 
+	let oldFilename = null;
+	
 	const animal = await model.findByPk(request.params.id);
+	if(!animal) {
+		return response.status(400).send('Animal não existe.');
+	}
 	if(animal.UserId != response.locals.userId) {
 		return response.status(403).send('Usuário não é dono do animal.');
+	}
+
+	if(request.file) {
+		updData['imagePath'] = request.file.filename;
+		oldFilename = animal.imagePath;
 	}
 	
 	model
 		.update(updData, {where: { id: request.params.id }})
 		.then(function (res) {
+			if(oldFilename) {
+				eraseFile(oldFilename);
+			}
+			
 			response.status(200).send();
 		}).catch((e) => {
 			response.status(500).json(e);
