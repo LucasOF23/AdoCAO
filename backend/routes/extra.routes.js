@@ -1,5 +1,6 @@
 import cityController from "../controllers/city.controller.js";
 import animalSpecieController from "../controllers/animalspecie.controller.js";
+import animalTagController from "../controllers/animaltag.controller.js";
 
 function addCityRoutes(router) {
 	/**
@@ -13,14 +14,7 @@ function addCityRoutes(router) {
 }
 
 function addAnimalSpecieRoutes(router, needAuth) {
-	/**
-	   @returns Array of animal species objects.
-	 */
 	router.get('/animal-species', animalSpecieController.findAll);
-
-	/**
-	   @returns Array of animal species objects with the specified name.
-	 */
 	router.get('/animal-species/name/:name', animalSpecieController.findByName);
 
     /**
@@ -42,4 +36,27 @@ function addAnimalSpecieRoutes(router, needAuth) {
     router.delete('/animal-species/:id', needAuth, animalSpecieController.remove);
 }
 
-export { addCityRoutes, addAnimalSpecieRoutes };
+function addAnimalTagRoutes(router, needAuth) {
+	router.get('/animal-tags', animalTagController.findAll);
+	router.get('/animal-tags/name/:name', animalTagController.findByName);
+
+    /**
+	   @params name.
+	   
+	   @returns 201 - Created animal tag object.
+	   @returns 400 - error (bad input format)
+	   @returns 403 - Error (Only ONG managers or superadmins can create animal tags).
+	   @returns 500 - Error (Unknown error).
+	 */
+    router.post('/animal-tags', needAuth, animalTagController.create);
+	
+	/**
+	   @returns 200 - Success.
+	   @returns 403 - Error (Only ONG managers or superadmins can remove animal tags).
+	   @returns 404 - Error (Animal species not found).
+	   @returns 500 - Error (Unknown error).
+	 */
+    router.delete('/animal-tags/:id', needAuth, animalTagController.remove);
+}
+
+export { addCityRoutes, addAnimalSpecieRoutes, addAnimalTagRoutes };
