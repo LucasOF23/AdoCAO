@@ -1,6 +1,5 @@
 import {Model, DataTypes } from "sequelize";
 import sequelize from "./dbconfig.js";
-import User from './user.model.js'
 
 class ContactInfo extends Model {};
 
@@ -12,7 +11,5 @@ ContactInfo.init({
 	telephoneNumber: { type: DataTypes.STRING(15), allowNull: true },
 	other: { type: DataTypes.STRING, allowNull: true },
 }, {sequelize: sequelize, timestamps: false });
-
-ContactInfo.hasOne(User);
 
 export default ContactInfo;

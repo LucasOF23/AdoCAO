@@ -93,16 +93,6 @@ async function validateToken(request, response, next) {
     }
 }
 
-async function findAll(request, response) {
-    User.findAll()
-        .then(function (res) {
-            response.status(200).json(res);
-        })
-        .catch(function (err) {
-            response.status(500).send(err);
-        });
-}
-
 // ==================
 // === NEEDS AUTH ===
 // ==================
@@ -135,4 +125,4 @@ async function changePassword(request, response) {
 	})
 }
 
-export default { register, login, validateToken, findAll, changePassword };
+export default { register, login, validateToken, changePassword };

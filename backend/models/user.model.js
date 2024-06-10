@@ -2,6 +2,7 @@ import {Model, DataTypes } from "sequelize";
 import sequelize from "./dbconfig.js";
 import ONG from "./ong.model.js"
 import UserWorksAtONG from "./userworksatong.js"
+import ContactInfo from "./contactinfo.model.js";
 
 class User extends Model {};
 
@@ -14,5 +15,6 @@ User.init({
 }, {sequelize: sequelize, timestamps: false });
 
 User.belongsToMany(ONG, { through: UserWorksAtONG });
+User.belongsTo(ContactInfo);
 
 export default User;

@@ -33,9 +33,6 @@ function addAuthRoutes(router, needAuth) {
 	   @returns 500 - error (unkown error)
 	*/
 	router.post('/change_password', needAuth, authController.changePassword);
-
-	// TODO: RETIRAR ISSO DAQUI, É SÓ PARA TESTAR
-	router.get("/users", authController.findAll);
 }
 
 export default addAuthRoutes
