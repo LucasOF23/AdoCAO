@@ -8,6 +8,8 @@ import { DogInfo } from "@/types/dog";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Lowerbar from "@/components/Lowerbar";
+import EditPerfil from "@/app/edit_perfil/page";
+
 
 export default function AdoptionPosts() {
   const dogInfos: DogInfo[] = [
@@ -246,15 +248,16 @@ export default function AdoptionPosts() {
   ];
 
   return (
-    <>
-      <Navbar />
-      <Sidebar />
-      <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
-        {dogInfos.map((info) => (
-          <AdoptionCard key={info.id} info={info} />
-        ))}
-      </div>
-      <Lowerbar />
-    </>
+    // <>
+    //   <Navbar />
+    //   <Sidebar />
+    //   <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
+    //     {dogInfos.map((info) => (
+    //       <AdoptionCard key={info.id} info={info} />
+    //     ))}
+    //   </div>
+    //   <Lowerbar />
+    // </>
+    <EditPerfil/>
   );
 }

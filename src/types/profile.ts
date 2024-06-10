@@ -17,3 +17,11 @@ export type ProfileInfo = {
     location: ProfileLocation;
     animals: [DogInfo];
 }
+
+export type ProfileInfo_edit = {
+    name: string;
+    cellphone: string;
+    email: string;
+    imageUrl: string;
+    location: ProfileLocation;
+}
