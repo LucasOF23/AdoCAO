@@ -11,6 +11,21 @@ const defaultInclude = [
 	{ model: ONG, attributes: ['id', 'name', 'address'], include: City }
 ];
 
+async function checkPermission(response, animal) {
+	const { userId, isSuperAdmin } = response.locals;
+	if(isSuperAdmin) return true;
+	
+	if(animal.UserId)
+		return userId === animal.UserId;
+
+	const workRel = await UserWorksAtONG.findOne({ where: {
+		UserId: userId,
+		ONGId: animal.ONGId
+	}});
+
+	return workRel !== null;
+}
+
 async function findAll(request, response) {
 	model
 		.findAll({ include: defaultInclude }).then(function (res) {
@@ -105,8 +120,9 @@ async function deleteByPk(request, response) {
 	if(!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
-	if(animal.UserId != response.locals.userId) {
-		return response.status(403).send('Usuário não é dono do animal.');
+
+	if(!await checkPermission(response, animal)) {
+		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
 	const filename = animal.imagePath;
@@ -137,8 +153,9 @@ async function update(request, response) {
 	if(!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
-	if(animal.UserId != response.locals.userId) {
-		return response.status(403).send('Usuário não é dono do animal.');
+
+	if(!await checkPermission(response, animal)) {
+		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
 	if(request.file) {
