@@ -5,6 +5,7 @@ export type ProfileLocation = {
     city: string;
     state: string;
     type_loc: 'casa' | 'apartamento' | 'chácara' | 'sítio' | 'outro';
+    address: string;
 }
 
 export type ProfileInfo = {
@@ -16,6 +17,7 @@ export type ProfileInfo = {
     imageUrl: string;
     location: ProfileLocation;
     animals: [DogInfo];
+    description: string;
 }
 
 export type ProfileInfo_edit = {
