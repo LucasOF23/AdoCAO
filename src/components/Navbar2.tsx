@@ -1,11 +1,16 @@
 import Image from "next/image";
+import HrefButton from "./HrefButton";
 
 export default function Navbar2() {
   return (
     <>
       <div className="z-10 border-b-2 h-20 shadow-sm sticky top-0 bg-white">
         <div className="mx-auto screen-max-width px-4 h-full flex flex-row justify-between align-middle">
-          <Image alt="AdoCÃO logo" src="/logo.svg" width={200} height={200} />
+          <div className='min-w-min'>
+            <HrefButton href='/home'>
+              <Image alt="AdoCÃO logo" src="/logo.svg" width={200} height={200} />
+            </HrefButton>
+          </div>
           <details className="dropdown content-center">
             <summary className="btn hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl m-auto">Menu</summary>
             <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-52">

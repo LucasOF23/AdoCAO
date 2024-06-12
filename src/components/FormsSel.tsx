@@ -19,7 +19,7 @@ export function FormsSel({ children, items, key, title }: FormsSelProps) {
     <div className="inline-block min-w-min">
       <div className="flex justify-left items-center">
         <p className="text-xl font-serif px-1">{title}</p>
-
+        
         {Array.isArray(childrenArray) &&
           childrenArray.map((child, index) => (
             <div key={index}>

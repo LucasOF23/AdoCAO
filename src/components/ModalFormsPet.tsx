@@ -199,9 +199,11 @@ export default function PageForms() {
         </div>
       </div>
       <div className="text-center content-center">
-        <button className="text-3xl font-bold rounded-md bg-white text-center p-5">
-          Enviar
-        </button>
+        <div className="modal-action">  
+          <form method="dialog" className="modal-backdrop text-3xl font-bold rounded-md bg-white text-center p-5">
+            <button>Enviar</button>
+          </form>
+        </div>
       </div>
     </div>
   );

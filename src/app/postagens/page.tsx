@@ -3,7 +3,7 @@
 import AdoptionCard from "@/components/AdoptionCard";
 
 import Navbar2 from "@/components/Navbar2";
-import PageForms from "@/components/PageForms";
+import PageForms from "@/components/ModalFormsPet";
 import Sidebar from "@/components/Sidebar";
 import Lowerbar from "@/components/Lowerbar";
 import { ProfileInfo } from "@/types/profile";
@@ -52,14 +52,14 @@ export default function AdoptionPosts() {
             <AdoptionCard key={info.id} info={info} />
             ))}
             <button className="btn text-9xl text-center content-center border rounded-2xl overflow-hidden
-            w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50" 
+             max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50" 
             onClick={()=>document.getElementById('my_modal_2').showModal()}>+</button>
-            <dialog id="my_modal_2" className="modal w-1000">
-                <div className="modal-box">
+            <dialog id="my_modal_2" className="modal">
+                <div className="modal-box duration-1000">
                 <PageForms />
                 </div>
                 <form method="dialog" className="modal-backdrop">
-                <button>FECHAR</button>
+                  <button>FECHAR</button>
                 </form>
             </dialog>
         </div>

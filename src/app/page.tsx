@@ -8,9 +8,6 @@ import { DogInfo } from "@/types/dog";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Lowerbar from "@/components/Lowerbar";
-import EditPerfil from "@/app/edit_perfil/page";
-import PageForms from "@/components/PageForms";
-import ModalCreateONG from "@/components/ModalCreateONG";
 
 
 export default function AdoptionPosts() {

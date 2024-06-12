@@ -36,11 +36,11 @@ export default function ModalCreateONG() {
     <textarea key={8} className="textarea textarea-bordered w-full"></textarea>
   );
     
-
+  
   
   // Formulário de ong
   return (
-    <div className="w-full h-full bg-indigo-400 p-4">
+    <div className="w-[40vw] h-full bg-indigo-400 p-4">
       <h1 className="font-bold text-3xl text-center">FORMULÁRIO PARA CRIAÇÃO DE ONG</h1>
       <hr className="my-5" />
       <div className="p-4">
@@ -74,9 +74,13 @@ export default function ModalCreateONG() {
         </div>
       </div>
       <div className="text-center content-center">
-        <button className="text-3xl font-bold rounded-md bg-white text-center p-5">
-          Criar ONG
-        </button>
+        {/* <button className="text-3xl font-bold rounded-md bg-white text-center p-5" onClick={()=> onClose()}> */}
+          {/* Criar ONG */}
+        <div className="modal-action">  
+          <form method="dialog" className="modal-backdrop text-3xl font-bold rounded-md bg-white text-center p-5">
+            <button>Criar ONG</button>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { DogInfo } from "./dog";
 export type ProfileLocation = {
     city: string;
     state: string;
-    type_loc: 'casa' | 'apartamento' | 'chácara' | 'sítio' | 'outro';
+    type_loc: string; //'casa' | 'apartamento' | 'chácara' | 'sítio' | 'outro';
     address: string;
 }
 

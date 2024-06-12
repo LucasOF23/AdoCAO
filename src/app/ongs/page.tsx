@@ -59,12 +59,12 @@ export default function AdoptionPosts() {
             onClick={() => document.getElementById('my_modal_3').showModal()}>
                 Criar ONG
                 <dialog id="my_modal_3" className="modal w-1000">
-                  <div className="modal-box justify-start items-start">
-                    <ModalCreateONG />
-                  </div>
-                  <form method="dialog" className="modal-backdrop">
-                    <button>FECHAR</button>
-                  </form>
+                  <div className="modal-box justify-start items-start duration-1">
+                    <ModalCreateONG/>
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                  <button>FECHAR</button>
+                </form>
                 </dialog>
             </button>
           </div>

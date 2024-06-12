@@ -26,10 +26,10 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
   const ownerPrefix = getOwnerPrefix(info.owner.kind);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  
   const openModal = () => setIsModalVisible(true);
   const closeModal = () => setIsModalVisible(false);
-
+  
   return (
     <>
       <button
