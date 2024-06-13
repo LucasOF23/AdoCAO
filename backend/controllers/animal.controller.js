@@ -15,15 +15,17 @@ const defaultInclude = [
 
 async function checkPermission(response, animal) {
 	const { userId, isSuperAdmin } = response.locals;
-	if(isSuperAdmin) return true;
-	
-	if(animal.UserId)
+	if (isSuperAdmin) return true;
+
+	if (animal.UserId)
 		return userId === animal.UserId;
 
-	const workRel = await UserWorksAtONG.findOne({ where: {
-		UserId: userId,
-		ONGId: animal.ONGId
-	}});
+	const workRel = await UserWorksAtONG.findOne({
+		where: {
+			UserId: userId,
+			ONGId: animal.ONGId
+		}
+	});
 
 	return workRel !== null;
 }
@@ -62,7 +64,7 @@ async function findByUserId(request, response) {
 // ==================
 
 async function create(request, response) {
-	if(!request.file) {
+	if (!request.file) {
 		return response.status(400).send('Sem foto.');
 	}
 
@@ -80,19 +82,19 @@ async function create(request, response) {
 		CityId: request.body.CityId
 	};
 
-	if(request.body.isUserOwned === undefined || request.body.isUserOwned === null) {
+	if (request.body.isUserOwned === undefined || request.body.isUserOwned === null) {
 		eraseRequestFiles(request);
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
 
-	if(request.body.isUserOwned == '1') {
+	if (request.body.isUserOwned == '1') {
 		data.UserId = response.locals.userId;
 	} else {
-		if(!request.body.ongId) {
+		if (!request.body.ongId) {
 			eraseRequestFiles(request);
 			return response.status(400).send('ONG não especificada.');
 		}
-		
+
 		const rel = await UserWorksAtONG.findOne({
 			where: {
 				'UserId': response.locals.userId,
@@ -100,14 +102,14 @@ async function create(request, response) {
 			}
 		});
 
-		if(rel === null) {
+		if (rel === null) {
 			eraseRequestFiles(request);
 			return response.status(403).send('Usuário não trabalha na ONG.');
 		}
 
 		data.ONGId = rel.ONGId;
 	}
-	
+
 	model
 		.create(data).then(function (res) {
 			response.status(201).json(res);
@@ -119,16 +121,16 @@ async function create(request, response) {
 
 async function deleteByPk(request, response) {
 	const animal = await model.findByPk(request.params.id);
-	if(!animal) {
+	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
 
-	if(!await checkPermission(response, animal)) {
+	if (!await checkPermission(response, animal)) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
 	const filename = animal.imagePath;
-	
+
 	model
 		.destroy({ where: { id: request.params.id } })
 		.then(function (res) {
@@ -143,35 +145,35 @@ async function deleteByPk(request, response) {
 async function update(request, response) {
 	const allowedKeys = ['name', 'description', 'birthdate', 'heightInCm', 'weightInKg', 'isNeutered', 'isDewormed', 'animalGender', 'CityId', 'AnimalSpecieId'];
 	let updData = {};
-	for(const key of allowedKeys) {
-		if(key in request.body) {
+	for (const key of allowedKeys) {
+		if (key in request.body) {
 			updData[key] = request.body[key];
 		}
 	}
 
 	let oldFilename = null;
-	
+
 	const animal = await model.findByPk(request.params.id);
-	if(!animal) {
+	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
 
-	if(!await checkPermission(response, animal)) {
+	if (!await checkPermission(response, animal)) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
-	if(request.file) {
+	if (request.file) {
 		updData['imagePath'] = request.file.filename;
 		oldFilename = animal.imagePath;
 	}
-	
+
 	model
-		.update(updData, {where: { id: request.params.id }})
+		.update(updData, { where: { id: request.params.id } })
 		.then(function (res) {
-			if(oldFilename) {
+			if (oldFilename) {
 				eraseFile(oldFilename);
 			}
-			
+
 			response.status(200).send();
 		}).catch((e) => {
 			response.status(500).json(e);
@@ -180,11 +182,11 @@ async function update(request, response) {
 
 async function addTag(request, response) {
 	const animal = await model.findByPk(request.params.id);
-	if(!animal) {
+	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
 
-	if(!await checkPermission(response, animal)) {
+	if (!await checkPermission(response, animal)) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
@@ -198,11 +200,11 @@ async function addTag(request, response) {
 
 async function removeTag(request, response) {
 	const animal = await model.findByPk(request.params.id);
-	if(!animal) {
+	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
 
-	if(!await checkPermission(response, animal)) {
+	if (!await checkPermission(response, animal)) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
@@ -214,7 +216,7 @@ async function removeTag(request, response) {
 		});
 }
 
-export default {
+const animalController = {
 	findAll,
 	findById,
 	create,
@@ -224,3 +226,4 @@ export default {
 	addTag,
 	removeTag
 };
+export default animalController;

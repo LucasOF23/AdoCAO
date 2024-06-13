@@ -1,0 +1,112 @@
+openapi: "3.0.2"
+
+info:
+  title: AdoCÃO API
+  version: "1.0"
+
+servers:
+  - url: "http://localhost:8080"
+    description: Development server
+
+paths:
+  # Auth
+  /signup:
+    post:
+      tags:
+        - Auth
+      summary: Sign up a new user and get a token
+      requestBody:
+        description: User object that needs to be added to the database
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        200:
+          description: A token object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /signin:
+    post:
+      tags:
+        - Auth
+      summary: Sign in an existing user and get a token
+      requestBody:
+        description: User credentials for signing in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SigninRequest"
+      responses:
+        200:
+          description: A token object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  # Animals
+  # Extra
+  # Ongs
+  # Users
+
+components:
+  schemas:
+    SignupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Bruna Carolina Rodrigues da Cunha"
+        email:
+          type: string
+          example: "brunaru@icmc.usp.br"
+        password:
+          type: string
+          example: "#Senha1234"
+      required:
+        - name
+        - email
+        - password
+
+    SigninRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "brunaru@icmc.usp.br"
+        password:
+          type: string
+          example: "#Senha1234"
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: object
+          properties:
+            token:
+              type: string
+              example: "<base64>"
+            payload:
+              type: object
+              properties:
+                sub:
+                  type: integer
+                  example: 1
+                isSuperAdmin:
+                  type: boolean
+                  example: false
+                isOngManager:
+                  type: boolean
+                  example: false
+                isOngWorker:
+                  type: boolean
+                  example: false

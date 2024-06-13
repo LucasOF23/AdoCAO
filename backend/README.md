@@ -28,7 +28,7 @@ no novo ".env" (deixe o de exemplo quieto).
 
 ## Resto
 
-Execute o `npm install`. Depois, rode `npm dbsync.js` para criar as tabelas do banco de dados.
+Execute o `npm install`. Depois, rode `node dbsync.js` para criar as tabelas do banco de dados.
 
 # Executando
 

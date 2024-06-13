@@ -1,4 +1,4 @@
-import {Model, DataTypes } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "./dbconfig.js";
 import AnimalSpecie from "./animalspecie.model.js"
 import AnimalTag from "./animaltag.model.js"
@@ -6,7 +6,7 @@ import ONG from "./ong.model.js"
 import User from "./user.model.js"
 import City from "./city.model.js"
 
-class Animal extends Model {};
+class Animal extends Model { };
 
 Animal.init({
 	id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
@@ -19,7 +19,7 @@ Animal.init({
 	isNeutered: { type: DataTypes.BOOLEAN, allowNull: false },
 	isDewormed: { type: DataTypes.BOOLEAN, allowNull: false },
 	animalGender: { type: DataTypes.CHAR(1), allowNull: true }
-}, {sequelize: sequelize, timestamps: false });
+}, { sequelize: sequelize, timestamps: false });
 
 Animal.belongsToMany(AnimalTag, { through: 'AnimalHasAnimalTag' });
 Animal.belongsTo(AnimalSpecie);

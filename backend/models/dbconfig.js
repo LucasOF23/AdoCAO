@@ -9,7 +9,7 @@ const PGPASSWORD = process.env['PGPASSWORD'];
 
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   dialect: "postgres",
-  schema: PGDATABASE,
+  schema: "public",
   host: PGHOST,
   port: PGPORT,
   ssl: false
