@@ -11,6 +11,7 @@ import { ProfileInfo } from "@/types/profile";
 import { unescape } from "querystring";
 import Lowerbar from "@/components/Lowerbar";
 import EditableLabel from "@/components/EditableLabel";
+import EditableImg from "@/components/EditableImg";
 
 export default function EditPerfil() {
     const profileInfo: ProfileInfo = 
@@ -53,44 +54,48 @@ export default function EditPerfil() {
     const [stateText, setStateText] = useState(profileInfo.location.state);
     const [cityText, setCityText] = useState(profileInfo.location.city);
     const [type_locText, setTypelocText] = useState(profileInfo.location.type_loc);
+    const [urlImg, setUrlImg] = useState(profileInfo.imageUrl);
   
     const pedir_confirmacao_senha = () =>{
       //Fazer a confirmação de senha
     }
   
     const handle_nome = (newNome:string) => {
-      pedir_confirmacao_senha();
+      // pedir_confirmacao_senha();
       setNameText(newNome);
     };
     
     const handle_cellphone = (newCellPhone:string) => {
-      pedir_confirmacao_senha();
+      // pedir_confirmacao_senha();
       setCellphoneText(newCellPhone);
     };
     const handle_state = (newState:string) => {
-      pedir_confirmacao_senha();
+      // pedir_confirmacao_senha();
       setStateText(newState);
     };
     const handle_city = (newCity:string) => {
-      pedir_confirmacao_senha();
+      // pedir_confirmacao_senha();
       setCityText(newCity);
     };
     const handle_typeloc = (newTypeloc:string) => {
-      pedir_confirmacao_senha();
+      // pedir_confirmacao_senha();
       setTypelocText(newTypeloc);
     };
+    const handle_img = (newImg:string) => {
+      // pedir_confirmacao_senha();
+      console.log('I was triggered during render AAAAAAAAAA: ',newImg)
+      setUrlImg(newImg);
+    };
+    
     
     return (
     <>
       <Navbar />
       <div className="pl-[5vw] pt-[2vw] screen-max-width flex md:flex-row flex-col">
-        <Image
-            alt={`Imagem do Perfil ${profileInfo.name}`}
-            className="object-cover rounded-[10%] min-w-full min-h-full md:min-w-[30%]"
-            src={profileInfo.imageUrl}
-            width={400}
-            height={400}
-          />
+          <div className='min-w-full min-h-full md:min-w-[30%] h-[400px] w-[400px]'>
+            <EditableImg url={urlImg} onChange={handle_img}/>  
+          </div>
+          
         <div className="w-full">
             <div>
               <h1 className="text-5xl font-bold text-center pt-5">Meu Perfil</h1>
