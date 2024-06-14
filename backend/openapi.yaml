@@ -223,6 +223,148 @@ paths:
 
   # Extra
   # Ongs
+
+  /ongs:
+    get:
+      summary: Retrieve all ONGs
+      responses:
+        '200':
+          description: Array of ONG objects returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OngResponse"
+
+    post:
+      summary: Create a new ONG
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/OngCreateRequest"
+      responses:
+        '201':
+          description: ONG object created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OngResponse"
+        '400':
+          description: If the request is missing required fields
+        '403':
+          description: If the user is not authorized to create the ONG
+
+  /ongs/{id}:
+    get:
+      summary: Retrieve an ONG by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ONG to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ONG object returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OngResponse"
+        '400':
+          description: If the specified ONG does not exist
+        '403':
+          description: If the user is not authorized to access the ONG
+    put:
+      summary: Update an ONG by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ONG to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/OngUpdateRequest"
+      responses:
+        '200':
+          description: If the ONG is updated successfully
+        '400':
+          description: If the specified ONG does not exist or the request is missing required fields
+        '403':
+          description: If the user is not authorized to update the ONG
+
+  /ongs/{id}/users:
+    get: 
+      summary: Retrieve the workers of an ONG.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ONG to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array of user objects.
+          content:
+            application/json:
+              schema:
+                type: array 
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+    post:
+      summary: Assign a worker to the Ong.
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ong
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AssignWorkerRequest"
+      responses:
+        '200':
+          description: If the worker is assigned successfully
+    delete:
+      summary: Unassign a worker from an ong 
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ong 
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UnassignWorkerRequest"
+      responses:
+        '200':
+          description: If the worker is unassigned successfully
+
   # Users
 
 components:
@@ -472,4 +614,53 @@ components:
       required:
         - id 
         - imagePath
+
+    OngCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        cnpj:
+          type: string
+        address:
+          type: string
+        CityId:
+          type: number
+      required:
+        - name
+        - cnpj
+        - address
+        - CityId
+
+    OngUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        cnpj:
+          type: string
+        CityId:
+          type: number
+
+    AssignWorkerRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        isManager:
+          type: boolean
+      required:
+        - email
+        - isManager 
+
+    UnassignWorkerRequest:
+      type: object
+      properties:
+        email:
+          type: string
+      required:
+        - email
+
 
