@@ -73,6 +73,10 @@ paths:
       responses:
         '201':
           description: Animal object created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleAnimalResponse"
         '400':
           description: >
             If the request is missing required fields or specifies an invalid ONG
@@ -92,6 +96,10 @@ paths:
       responses:
         '200':
           description: Animal object returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimalResponse"
         '400':
           description: If the specified animal does not exist
         '403':
@@ -126,16 +134,20 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/AnimalCreateRequest"
+              $ref: "#/components/schemas/AnimalUpdateRequest"
       responses:
         '200':
           description: If the animal is updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleAnimalResponse"
         '400':
           description: If the specified animal does not exist or the request is missing required fields
         '403':
           description: If the user is not authorized to update the animal
 
-  /animals/user/{id}:
+  /users/{id}/animals:
     get:
       summary: Retrieve animals belonging to a user
       parameters:
@@ -148,6 +160,12 @@ paths:
       responses:
         '200':
           description: Array of animal objects belonging to the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnimalResponse"
 
   /animals/{id}/tag:
     post:
@@ -306,6 +324,35 @@ components:
         - CityId 
         - photo
 
+    AnimalCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        birthdate:
+          type: string
+        heightInCm:
+          type: number
+        weightInKg:
+          type: number
+        isNeutered:
+          type: boolean
+        isDewormed:
+          type: boolean
+        animalGender:
+          type: string
+        AnimalSpecieId:
+          type: number
+        CityId:
+          type: number
+        ongId:
+          type: number
+        photo:
+          type: string
+          format: binary
+
     AnimalTagRequest:
       type: object
       properties:
@@ -350,7 +397,7 @@ components:
         - id 
         - name
 
-    OngRespose:
+    OngResponse:
       type: object 
       properties:
         id:
@@ -408,4 +455,15 @@ components:
           type: array 
           items:
             $ref: '#/components/schemas/AnimalTagResponse' 
+
+    SimpleAnimalResponse:
+      type: object 
+      properties:
+        id:
+          type: integer 
+        imagePath:
+          type: string 
+      required:
+        - id 
+        - imagePath
 

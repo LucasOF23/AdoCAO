@@ -31,35 +31,36 @@ async function checkPermission(response, animal) {
 }
 
 async function findAll(request, response) {
-	model
-		.findAll({ include: defaultInclude }).then(function (res) {
-			response.status(200).json(res);
-		}).catch(function (err) {
-			console.log(err);
-			response.status(500).send();
-		});
+	try {
+		const res = await model.findAll({ include: defaultInclude });
+		response.status(200).json( (res) ? res : []);
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();		
+	}
 }
 
 async function findById(request, response) {
-	model
-		.findByPk(request.params.id, { include: defaultInclude })
-		.then(function (res) {
+	try {
+		const res = await model.findByPk(request.params.id, { include: defaultInclude });
+		if(!res)
+			response.status(404).send();
+		else 
 			response.status(200).json(res);
-		}).catch(function (err) {
-			console.log(err);
-			response.status(500).send();
-		});
+	} catch(res) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function findByUserId(request, response) {
-	model
-		.findAll({ where: { UserId: request.params.id }, include: defaultInclude })
-		.then(function (results) {
-			response.status(200).json(results);
-		}).catch(function (err) {
-			console.log(err);
-			response.status(500).send();
-		});
+	try {
+		const res = await model.findAll({ where: { UserId: request.params.id }, include: defaultInclude });
+		response.status(200).json( (res) ? res : []);
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 // ==================
@@ -113,14 +114,17 @@ async function create(request, response) {
 		data.ONGId = rel.ONGId;
 	}
 
-	model
-		.create(data).then(function (res) {
-			response.status(201).json(res);
-		}).catch(function (err) {
-			eraseRequestFiles(request);
-			console.log(err);
-			response.status(500).send();
+	try {
+		const res = await model.create(data);
+		response.status(201).json({
+			id: res.id,
+			imagePath: res.imagePath
 		});
+	} catch(err) {
+		eraseRequestFiles(request);
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function deleteByPk(request, response) {
