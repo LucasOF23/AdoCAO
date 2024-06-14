@@ -28,9 +28,7 @@ async function update(request, response) {
 		}
 	}
 
-	console.log('Update normal de', request.params.id);
-
-	let userId = request.params.userId;
+	let userId = request.params.id;
 	if (!userId) {
 		userId = response.locals.userId;
 	} else if (userId != response.locals.userId && !response.locals.isSuperAdmin) {
