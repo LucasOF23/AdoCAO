@@ -4,20 +4,18 @@ import { Op } from "sequelize";
 async function findAllMixed(request, response) {
 	const { state, name } = request.query;
 
-	if(!state && !name)
+	if (!state && !name)
 		return response.status(400).send('Estado ou nome não especificados.');
 
-	let queryData;
+	let queryData = {};
 
-	if(name) {
-		queryData = {
-			name: { [Op.iLike]: `%${name}%` }
-		};
+	if (name) {
+		queryData.name = { [Op.iLike]: `%${name}%` };
 	}
-	
-	if(state)
+
+	if (state)
 		queryData.state = state;
-	
+
 	try {
 		const cities = await City.findAll({ where: queryData });
 		response.status(200).json(cities);
@@ -26,6 +24,5 @@ async function findAllMixed(request, response) {
 	}
 }
 
-export default {
-	findAllMixed
-};
+const cityController = { findAllMixed };
+export default cityController;

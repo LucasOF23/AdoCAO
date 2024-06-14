@@ -25,10 +25,10 @@ async function create(request, response) {
         return response.status(403).send('Apenas administradores de ONG ou superadmins podem criar espécies de animais.');
     }
 
-	if(!request.body.name) {
-		return response.status(400).send('Nome não especificado.');
-	}
-	
+    if (!request.body.name) {
+        return response.status(400).send('Nome não especificado.');
+    }
+
     try {
         const createdSpecie = await AnimalSpecie.create({ name: request.body.name });
         response.status(201).json(createdSpecie);
@@ -54,9 +54,5 @@ async function remove(request, response) {
     }
 }
 
-export default {
-    findAll,
-    findByName,
-    create,
-    remove
-};
+const animalSpecieController = { findAll, findByName, create, remove };
+export default animalSpecieController;

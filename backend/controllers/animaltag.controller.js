@@ -25,10 +25,10 @@ async function create(request, response) {
         return response.status(403).send('Only ONG managers or superadmins can create animal tags.');
     }
 
-	if(!request.body.name) {
-		return response.status(400).send('Nome não especificado.');
-	}
-	
+    if (!request.body.name) {
+        return response.status(400).send('Nome não especificado.');
+    }
+
     try {
         const createdTag = await AnimalTag.create({ name: request.body.name });
         response.status(201).json(createdTag);
@@ -54,9 +54,5 @@ async function remove(request, response) {
     }
 }
 
-export default {
-    findAll,
-    findByName,
-    create,
-    remove
-};
+const animalTagController = { findAll, findByName, create, remove };
+export default animalTagController;

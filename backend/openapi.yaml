@@ -23,7 +23,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SignupRequest"
       responses:
-        200:
+        "200":
           description: A token object
           content:
             application/json:
@@ -42,19 +42,39 @@ paths:
             schema:
               $ref: "#/components/schemas/SigninRequest"
       responses:
-        200:
+        "200":
           description: A token object
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
 
+  /change_password:
+    post:
+      tags:
+        - Auth
+      summary: Change the user's password
+      security:
+        - Bearer: []
+      requestBody:
+        description: User credentials for signing in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+      responses:
+        "200":
+          description: If the password is changed successfully
+        "400":
+          description: If the request is missing required fields or the old password is incorrect
+
   # Animals
   /animals:
     get:
       summary: Retrieve all animals
       responses:
-        '200':
+        "200":
           description: Array of animal objects returned upon successful retrieval
           content:
             application/json:
@@ -71,16 +91,16 @@ paths:
             schema:
               $ref: "#/components/schemas/AnimalCreateRequest"
       responses:
-        '201':
+        "201":
           description: Animal object created successfully
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SimpleAnimalResponse"
-        '400':
+        "400":
           description: >
             If the request is missing required fields or specifies an invalid ONG
-        '403':
+        "403":
           description: If the user is not authorized to create the animal
 
   /animals/{id}:
@@ -94,15 +114,15 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Animal object returned upon successful retrieval
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/AnimalResponse"
-        '400':
+        "400":
           description: If the specified animal does not exist
-        '403':
+        "403":
           description: If the user is not authorized to access the animal
     delete:
       summary: Delete an animal by ID
@@ -116,11 +136,11 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: If the animal is deleted successfully
-        '400':
+        "400":
           description: If the specified animal does not exist
-        '403':
+        "403":
           description: If the user is not authorized to delete the animal
     put:
       summary: Update an animal by ID
@@ -140,15 +160,15 @@ paths:
             schema:
               $ref: "#/components/schemas/AnimalUpdateRequest"
       responses:
-        '200':
+        "200":
           description: If the animal is updated successfully
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SimpleAnimalResponse"
-        '400':
+        "400":
           description: If the specified animal does not exist or the request is missing required fields
-        '403':
+        "403":
           description: If the user is not authorized to update the animal
 
   /users/{id}/animals:
@@ -162,7 +182,7 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Array of animal objects belonging to the specified user
           content:
             application/json:
@@ -190,11 +210,11 @@ paths:
             schema:
               $ref: "#/components/schemas/AnimalTagRequest"
       responses:
-        '200':
+        "200":
           description: If the tag is added successfully
-        '400':
+        "400":
           description: If the specified animal or tag does not exist
-        '403':
+        "403":
           description: If the user is not authorized to add a tag to the animal
     delete:
       summary: Remove a tag from an animal
@@ -214,16 +234,422 @@ paths:
             schema:
               $ref: "#/components/schemas/AnimalTagRequest"
       responses:
-        '200':
+        "200":
           description: If the tag is removed successfully
-        '400':
+        "400":
           description: If the specified animal or tag does not exist
-        '403':
+        "403":
           description: If the user is not authorized to remove a tag from the animal
 
   # Extra
+  /cities:
+    get:
+      tags:
+        - City
+      summary: Retrieve all cities
+      # name and state in query
+      parameters:
+        - name: state
+          in: query
+          description: State of the city (optional)
+          schema:
+            type: string
+          example: "SP"
+        - name: name
+          in: query
+          description: Name of the city (optional if and only if state is specified)
+          schema:
+            type: string
+          example: "São Carlos"
+      responses:
+        "200":
+          description: Array of city objects returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CityResponse"
+        "400":
+          description: If neither state nor name is specified
+
+  /animal-species:
+    get:
+      tags:
+        - Animal Species
+      summary: Retrieve all animal species
+      responses:
+        "200":
+          description: Array of animal species objects returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnimalSpecieResponse"
+
+    post:
+      tags:
+        - Animal Species
+      summary: Create a new animal species
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        "201":
+          description: Animal species object created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimalSpecieResponse"
+        "400":
+          description: If the request is missing required fields
+        "403":
+          description: If the user is not authorized to create the animal species
+
+  /animal-species/name/{name}:
+    get:
+      tags:
+        - Animal Species
+      summary: Retrieve an animal species by name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the animal species to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Animal species object returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnimalSpecieResponse"
+
+  /animal-species/{id}:
+    delete:
+      tags:
+        - Animal Species
+      summary: Delete an animal species by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal species to delete
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: If the animal species is deleted successfully
+        "400":
+          description: If the specified animal species does not exist
+        "403":
+          description: If the user is not authorized to delete the animal species
+
+  /animal-tags:
+    get:
+      tags:
+        - Animal Tags
+      summary: Retrieve all animal tags
+      responses:
+        "200":
+          description: Array of animal tags objects returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnimalTagResponse"
+
+    post:
+      tags:
+        - Animal Tags
+      summary: Create a new animal tags
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        "201":
+          description: Animal tags object created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimalTagResponse"
+        "400":
+          description: If the request is missing required fields
+        "403":
+          description: If the user is not authorized to create the animal tags
+
+  /animal-tags/name/{name}:
+    get:
+      tags:
+        - Animal Tags
+      summary: Retrieve an animal tags by name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the animal tags to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Animal tags object returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnimalTagResponse"
+
+  /animal-tags/{id}:
+    delete:
+      tags:
+        - Animal Tags
+      summary: Delete an animal tags by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal tags to delete
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: If the animal tags is deleted successfully
+        "400":
+          description: If the specified animal tags does not exist
+        "403":
+          description: If the user is not authorized to delete the animal tags
+
   # Ongs
+
   # Users
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Retrieve a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to retrieve
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User object returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetailedInfo"
+
+    put:
+      tags:
+        - Users
+      summary: Update a user by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Bruna Cunha"
+                email:
+                  type: string
+                  example: "brunaru@gmail.com"
+      responses:
+        "200":
+          description: If the user is updated successfully
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Retrieve the current logged user
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: User object returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetailedInfo"
+
+    put:
+      tags:
+        - Users
+      summary: Update the current logged user
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Bruna Cunha"
+                email:
+                  type: string
+                  example: "brunaru@gmail.com"
+      responses:
+        "200":
+          description: If the user is updated successfully
+
+  /users/{id}/change-super-admin:
+    post:
+      tags:
+        - Users
+      summary: Change the super admin status of a user by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newStatus:
+                  type: boolean
+                  example: true
+      responses:
+        "200":
+          description: If the user is updated successfully
+
+  /contact-info:
+    put:
+      tags:
+        - Contact Info
+      summary: Update the contact info for the current logged user
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: brunaru@icmc.usp.br
+                instagramProfile:
+                  type: string
+                  nullable: true
+                  example: null
+                facebookProfile:
+                  type: string
+                  nullable: true
+                  example: null
+                telephoneNumber:
+                  type: string
+                  nullable: true
+                  example: null
+                other:
+                  type: string
+                  nullable: true
+                  example: null
+      responses:
+        "200":
+          description: If the contact info is updated successfully
+
+  /contact-info/{id}:
+    put:
+      tags:
+        - Contact Info
+      summary: Update the contact info by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the contact info to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: brunaru@icmc.usp.br
+                instagramProfile:
+                  type: string
+                  nullable: true
+                  example: null
+                facebookProfile:
+                  type: string
+                  nullable: true
+                  example: null
+                telephoneNumber:
+                  type: string
+                  nullable: true
+                  example: null
+                other:
+                  type: string
+                  nullable: true
+                  example: null
+      responses:
+        "200":
+          description: If the contact info is updated successfully
 
 components:
   securitySchemes:
@@ -264,6 +690,19 @@ components:
       required:
         - email
         - password
+
+    ChangePasswordRequest:
+      type: object
+      properties:
+        newPassword:
+          type: string
+          example: "#Senha12345"
+        oldPassword:
+          type: string
+          example: "#Senha1234"
+      required:
+        - newPassword
+        - oldPassword
 
     AuthResponse:
       type: object
@@ -324,12 +763,12 @@ components:
         - name
         - description
         - birthdate
-        - isNeutered 
-        - isDewormed 
+        - isNeutered
+        - isDewormed
         - isUserOwned
-        - animalGender 
+        - animalGender
         - AnimalSpecieId
-        - CityId 
+        - CityId
         - photo
 
     AnimalUpdateRequest:
@@ -368,108 +807,164 @@ components:
         - tagId
 
     UserResponse:
-      type: object 
+      type: object
       properties:
         id:
-          type: number 
+          type: number
         name:
-          type: string 
-      required:
-        - id 
-        - name 
-
-    CityResponse:
-      type: object 
-      properties:
-        id:
-          type: number 
-        name:
-          type: string 
-        state:
-          type: string 
+          type: string
       required:
         - id
-        - name 
+        - name
+
+    CityResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        state:
+          type: string
+      required:
+        - id
+        - name
         - state
 
     AnimalTagResponse:
-      type: object 
+      type: object
       properties:
         id:
-          type: number 
+          type: number
         name:
-          type: string 
-      require:
-        - id 
+          type: string
+      required:
+        - id
+        - name
+
+    AnimalSpecieResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+      required:
+        - id
         - name
 
     OngResponse:
-      type: object 
+      type: object
       properties:
         id:
-          type: number 
+          type: number
         name:
           type: string
         address:
-          type: string 
+          type: string
         City:
-          $ref: '#/components/schemas/CityResponse'
+          $ref: "#/components/schemas/CityResponse"
       required:
-        - id 
-        - name 
-        - address 
-        - City 
+        - id
+        - name
+        - address
+        - City
 
     AnimalResponse:
-      type: object 
+      type: object
       properties:
         id:
-          type: number 
+          type: number
         name:
           type: string
         description:
           type: string
-        imagePath: 
-          type: string 
+        imagePath:
+          type: string
         birthdate:
           type: string
         heightInCm:
-          type: number 
+          type: number
         weightInKg:
-          type: number 
+          type: number
         isNeutered:
           type: boolean
         isDewormed:
           type: boolean
         animalGender:
-          type: string 
+          type: string
         AnimalSpecieId:
-          type: number 
+          type: number
         ONGId:
-          type: number 
+          type: number
         UserId:
           type: number
         CityId:
-          type: number 
-        City: 
-          $ref: '#/components/schemas/CityResponse'
+          type: number
+        City:
+          $ref: "#/components/schemas/CityResponse"
         User:
-          $ref: '#/components/schemas/UserResponse'
+          $ref: "#/components/schemas/UserResponse"
         ONG:
-          $ref: '#/components/schemas/OngResponse' 
+          $ref: "#/components/schemas/OngResponse"
         AnimalTags:
-          type: array 
+          type: array
           items:
-            $ref: '#/components/schemas/AnimalTagResponse' 
+            $ref: "#/components/schemas/AnimalTagResponse"
 
     SimpleAnimalResponse:
-      type: object 
+      type: object
       properties:
         id:
-          type: integer 
+          type: integer
         imagePath:
-          type: string 
+          type: string
       required:
-        - id 
+        - id
         - imagePath
 
+    UserDetailedInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Bruna Carolina Rodrigues da Cunha
+        email:
+          type: string
+          format: email
+          example: brunaru@icmc.usp.br
+        isSuperAdmin:
+          type: boolean
+          example: true
+        ContactInfo:
+          $ref: "#/components/schemas/ContactInfo"
+
+    ContactInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: brunaru@icmc.usp.br
+        instagramProfile:
+          type: string
+          nullable: true
+          example: null
+        facebookProfile:
+          type: string
+          nullable: true
+          example: null
+        telephoneNumber:
+          type: string
+          nullable: true
+          example: null
+        other:
+          type: string
+          nullable: true
+          example: null

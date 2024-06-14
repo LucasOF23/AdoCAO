@@ -6,15 +6,15 @@ import UserWorksAtONG from "../models/userworksatong.js"
 
 const secret = process.env["AUTHSECRET"];
 
-function getToken(uid, isSuperAdmin=false, isOngManager=false, isOngWorker=false) {
-	const payload = {
-		sub: uid,
-		isSuperAdmin,
-		isOngManager,
-		isOngWorker
-	}; 
+function getToken(uid, isSuperAdmin = false, isOngManager = false, isOngWorker = false) {
+    const payload = {
+        sub: uid,
+        isSuperAdmin,
+        isOngManager,
+        isOngWorker
+    };
     const token = jwt.sign(payload, secret, { expiresIn: "7d", });
-	return { token, payload };
+    return { token, payload };
 }
 
 async function register(request, response) {
@@ -26,20 +26,20 @@ async function register(request, response) {
     if (user) {
         return response.status(400).send("Email já cadastrado.");
     }
-	
+
     const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(request.body.password, salt);
 
-	const emptyContactInfo = await ContactInfo.create();
-	if(emptyContactInfo === null) {
-		return response.status(500).send('Erro inesperado.');
-	}
-	
+    const emptyContactInfo = await ContactInfo.create();
+    if (emptyContactInfo === null) {
+        return response.status(500).send('Erro inesperado.');
+    }
+
     User.create({
-		name: request.body.name,
+        name: request.body.name,
         email: request.body.email,
         passwordHash: hashedPassword,
-		ContactInfoId: emptyContactInfo.id
+        ContactInfoId: emptyContactInfo.id
     }).then((result) => {
         const token = getToken(result.dataValues.id);
         response.status(201).send({ token: token });
@@ -66,9 +66,9 @@ async function login(request, response) {
         return response.status(401).send("Usuário e senha inválidos!");
     }
 
-	const anyManagedOng = await UserWorksAtONG.findOne({ where: { UserId: user.id, isManager: true } });
-	const anyWorkOng = anyManagedOng || await UserWorksAtONG.findOne({ where: { UserId: user.id } });
-	
+    const anyManagedOng = await UserWorksAtONG.findOne({ where: { UserId: user.id, isManager: true } });
+    const anyWorkOng = anyManagedOng || await UserWorksAtONG.findOne({ where: { UserId: user.id } });
+
     const token = getToken(user.id, user.isSuperAdmin, anyManagedOng !== null, anyWorkOng !== null);
     response.status(200).json({ token: token });
 }
@@ -80,10 +80,10 @@ async function validateToken(request, response, next) {
             token = token.substring(7, token.length);
             const decodedToken = jwt.verify(token, secret);
 
-			response.locals.userId = decodedToken.sub;
-			response.locals.isSuperAdmin = decodedToken.isSuperAdmin;
-			response.locals.isOngManager = decodedToken.isOngManager;
-			response.locals.isOngWorker = decodedToken.isOngWorker;
+            response.locals.userId = decodedToken.sub;
+            response.locals.isSuperAdmin = decodedToken.isSuperAdmin;
+            response.locals.isOngManager = decodedToken.isOngManager;
+            response.locals.isOngWorker = decodedToken.isOngWorker;
             next();
         } else {
             return response.status(401).send({ message: "Unauthorized" });
@@ -98,31 +98,32 @@ async function validateToken(request, response, next) {
 // ==================
 
 async function changePassword(request, response) {
-	if(!request.body.oldPassword || !request.body.newPassword) {
-		return response.status(400).send('Senha nova ou antiga não especificada.');
-	}
+    if (!request.body.oldPassword || !request.body.newPassword) {
+        return response.status(400).send('Senha nova ou antiga não especificada.');
+    }
 
-	const user = await User.findByPk(response.locals.userId);
-	if(!user) {
-		return response.status(500).send('Usuário não encontrado.');
-	}
+    const user = await User.findByPk(response.locals.userId);
+    if (!user) {
+        return response.status(500).send('Usuário não encontrado.');
+    }
 
-	const isEqual = bcrypt.compareSync(request.body.oldPassword, user.passwordHash);
+    const isEqual = bcrypt.compareSync(request.body.oldPassword, user.passwordHash);
     if (!isEqual) {
         return response.status(401).send("Senha antiga inválida.");
     }
 
-	const salt = bcrypt.genSaltSync();
+    const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(request.body.newPassword, salt);
 
-	User.update(
-		{ passwordHash: hashedPassword },
-		{ where: { id: user.id } }
-	).then(function(res) {
-		response.status(200).send();
-	}).catch(function(res) {
-		response.status(500).json(err);
-	})
+    User.update(
+        { passwordHash: hashedPassword },
+        { where: { id: user.id } }
+    ).then(function (res) {
+        response.status(200).send();
+    }).catch(function (res) {
+        response.status(500).json(err);
+    })
 }
 
-export default { register, login, validateToken, changePassword };
+const authController = { register, login, validateToken, changePassword };
+export default authController;
