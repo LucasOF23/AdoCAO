@@ -621,6 +621,28 @@ paths:
         "200":
           description: If the worker is unassigned successfully
 
+  /ongs/{id}/animals:
+    get:
+      tags:
+        - Animals
+      summary: Retrieve animals belonging to an ong 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ong whose animals to retrieve
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Array of animal objects belonging to the specified ong 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnimalResponse"
+
   # Users
   /users/{id}:
     get:
