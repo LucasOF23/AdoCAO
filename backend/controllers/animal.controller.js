@@ -35,7 +35,8 @@ async function findAll(request, response) {
 		.findAll({ include: defaultInclude }).then(function (res) {
 			response.status(200).json(res);
 		}).catch(function (err) {
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 
@@ -45,7 +46,8 @@ async function findById(request, response) {
 		.then(function (res) {
 			response.status(200).json(res);
 		}).catch(function (err) {
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 
@@ -55,7 +57,8 @@ async function findByUserId(request, response) {
 		.then(function (results) {
 			response.status(200).json(results);
 		}).catch(function (err) {
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 
@@ -73,8 +76,8 @@ async function create(request, response) {
 		description: request.body.description,
 		birthdate: request.body.birthdate,
 		imagePath: request.file.filename,
-		heightInCm: request.body.heightInCm,
-		weightInKg: request.body.weightInKg,
+		heightInCm: request.body.heightInCm || null,
+		weightInKg: request.body.weightInKg || null,
 		isNeutered: request.body.isNeutered,
 		isDewormed: request.body.isDewormed,
 		animalGender: request.body.animalGender,
@@ -87,7 +90,7 @@ async function create(request, response) {
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
 
-	if (request.body.isUserOwned == '1') {
+	if (request.body.isUserOwned) {
 		data.UserId = response.locals.userId;
 	} else {
 		if (!request.body.ongId) {
@@ -115,7 +118,8 @@ async function create(request, response) {
 			response.status(201).json(res);
 		}).catch(function (err) {
 			eraseRequestFiles(request);
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 
@@ -137,7 +141,8 @@ async function deleteByPk(request, response) {
 			eraseFile(filename);
 			response.status(200).send();
 		}).catch(function (err) {
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 
@@ -176,7 +181,8 @@ async function update(request, response) {
 
 			response.status(200).send();
 		}).catch((e) => {
-			response.status(500).json(e);
+			console.log(e);
+			response.status(500).send();
 		});
 }
 
@@ -194,7 +200,8 @@ async function addTag(request, response) {
 		.then(function (res) {
 			response.status(200).send();
 		}).catch(function (err) {
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 
@@ -212,7 +219,8 @@ async function removeTag(request, response) {
 		.then(function (res) {
 			response.status(200).send();
 		}).catch(function (err) {
-			response.status(500).send(err);
+			console.log(err);
+			response.status(500).send();
 		});
 }
 

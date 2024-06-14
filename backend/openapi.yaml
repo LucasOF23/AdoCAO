@@ -50,11 +50,164 @@ paths:
                 $ref: "#/components/schemas/AuthResponse"
 
   # Animals
+  /animals:
+    get:
+      summary: Retrieve all animals
+      responses:
+        '200':
+          description: Array of animal objects returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimalResponse"
+    post:
+      summary: Create a new animal
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AnimalCreateRequest"
+      responses:
+        '201':
+          description: Animal object created successfully
+        '400':
+          description: >
+            If the request is missing required fields or specifies an invalid ONG
+        '403':
+          description: If the user is not authorized to create the animal
+
+  /animals/{id}:
+    get:
+      summary: Retrieve an animal by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Animal object returned upon successful retrieval
+        '400':
+          description: If the specified animal does not exist
+        '403':
+          description: If the user is not authorized to access the animal
+    delete:
+      summary: Delete an animal by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: If the animal is deleted successfully
+        '400':
+          description: If the specified animal does not exist
+        '403':
+          description: If the user is not authorized to delete the animal
+    put:
+      summary: Update an animal by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AnimalCreateRequest"
+      responses:
+        '200':
+          description: If the animal is updated successfully
+        '400':
+          description: If the specified animal does not exist or the request is missing required fields
+        '403':
+          description: If the user is not authorized to update the animal
+
+  /animals/user/{id}:
+    get:
+      summary: Retrieve animals belonging to a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user whose animals to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array of animal objects belonging to the specified user
+
+  /animals/{id}/tag:
+    post:
+      summary: Add a tag to an animal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnimalTagRequest"
+      responses:
+        '200':
+          description: If the tag is added successfully
+        '400':
+          description: If the specified animal or tag does not exist
+        '403':
+          description: If the user is not authorized to add a tag to the animal
+    delete:
+      summary: Remove a tag from an animal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the animal
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnimalTagRequest"
+      responses:
+        '200':
+          description: If the tag is removed successfully
+        '400':
+          description: If the specified animal or tag does not exist
+        '403':
+          description: If the user is not authorized to remove a tag from the animal
+
   # Extra
   # Ongs
   # Users
 
 components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Login token
+
   schemas:
     SignupRequest:
       type: object
@@ -110,3 +263,149 @@ components:
                 isOngWorker:
                   type: boolean
                   example: false
+
+    AnimalCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        birthdate:
+          type: string
+        heightInCm:
+          type: number
+        weightInKg:
+          type: number
+        isNeutered:
+          type: boolean
+        isDewormed:
+          type: boolean
+        animalGender:
+          type: string
+        AnimalSpecieId:
+          type: number
+        CityId:
+          type: number
+        isUserOwned:
+          type: boolean
+        ongId:
+          type: number
+        photo:
+          type: string
+          format: binary
+      required:
+        - name
+        - description
+        - birthdate
+        - isNeutered 
+        - isDewormed 
+        - isUserOwned
+        - animalGender 
+        - AnimalSpecieId
+        - CityId 
+        - photo
+
+    AnimalTagRequest:
+      type: object
+      properties:
+        tagId:
+          type: number
+      required:
+        - tagId
+
+    UserResponse:
+      type: object 
+      properties:
+        id:
+          type: number 
+        name:
+          type: string 
+      required:
+        - id 
+        - name 
+
+    CityResponse:
+      type: object 
+      properties:
+        id:
+          type: number 
+        name:
+          type: string 
+        state:
+          type: string 
+      required:
+        - id
+        - name 
+        - state
+
+    AnimalTagResponse:
+      type: object 
+      properties:
+        id:
+          type: number 
+        name:
+          type: string 
+      require:
+        - id 
+        - name
+
+    OngRespose:
+      type: object 
+      properties:
+        id:
+          type: number 
+        name:
+          type: string
+        address:
+          type: string 
+        City:
+          $ref: '#/components/schemas/CityResponse'
+      required:
+        - id 
+        - name 
+        - address 
+        - City 
+
+    AnimalResponse:
+      type: object 
+      properties:
+        id:
+          type: number 
+        name:
+          type: string
+        description:
+          type: string
+        imagePath: 
+          type: string 
+        birthdate:
+          type: string
+        heightInCm:
+          type: number 
+        weightInKg:
+          type: number 
+        isNeutered:
+          type: boolean
+        isDewormed:
+          type: boolean
+        animalGender:
+          type: string 
+        AnimalSpecieId:
+          type: number 
+        ONGId:
+          type: number 
+        UserId:
+          type: number
+        CityId:
+          type: number 
+        City: 
+          $ref: '#/components/schemas/CityResponse'
+        User:
+          $ref: '#/components/schemas/UserResponse'
+        ONG:
+          $ref: '#/components/schemas/OngResponse' 
+        AnimalTags:
+          type: array 
+          items:
+            $ref: '#/components/schemas/AnimalTagResponse' 
+
