@@ -91,7 +91,7 @@ async function create(request, response) {
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
 
-	if (request.body.isUserOwned) {
+	if (request.body.isUserOwned === true || request.body.isUserOwned === '1' || request.body.isUserOwned === 'true') {
 		data.UserId = response.locals.userId;
 	} else {
 		if (!request.body.ongId) {
