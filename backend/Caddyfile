@@ -1,0 +1,5 @@
+sinfonia-test.internal.preditiva.io {
+	handle_path /_api/* {
+		reverse_proxy http://api
+	}
+}
