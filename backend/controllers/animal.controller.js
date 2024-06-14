@@ -33,21 +33,21 @@ async function checkPermission(response, animal) {
 async function findAll(request, response) {
 	try {
 		const res = await model.findAll({ include: defaultInclude });
-		response.status(200).json( (res) ? res : []);
-	} catch(err) {
+		response.status(200).json((res) ? res : []);
+	} catch (err) {
 		console.log(err);
-		response.status(500).send();		
+		response.status(500).send();
 	}
 }
 
 async function findById(request, response) {
 	try {
 		const res = await model.findByPk(request.params.id, { include: defaultInclude });
-		if(!res)
+		if (!res)
 			response.status(404).send();
-		else 
+		else
 			response.status(200).json(res);
-	} catch(res) {
+	} catch (res) {
 		console.log(err);
 		response.status(500).send();
 	}
@@ -56,8 +56,8 @@ async function findById(request, response) {
 async function findByUserId(request, response) {
 	try {
 		const res = await model.findAll({ where: { UserId: request.params.id }, include: defaultInclude });
-		response.status(200).json( (res) ? res : []);
-	} catch(err) {
+		response.status(200).json((res) ? res : []);
+	} catch (err) {
 		console.log(err);
 		response.status(500).send();
 	}
@@ -91,7 +91,7 @@ async function create(request, response) {
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
 
-	if (request.body.isUserOwned) {
+	if (request.body.isUserOwned === true || request.body.isUserOwned === '1' || request.body.isUserOwned === 'true') {
 		data.UserId = response.locals.userId;
 	} else {
 		if (!request.body.ongId) {
@@ -120,7 +120,7 @@ async function create(request, response) {
 			id: res.id,
 			imagePath: res.imagePath
 		});
-	} catch(err) {
+	} catch (err) {
 		eraseRequestFiles(request);
 		console.log(err);
 		response.status(500).send();
@@ -186,7 +186,7 @@ async function update(request, response) {
 			id: animal.id,
 			imagePath: animal.imagePath
 		});
-	} catch(err) {
+	} catch (err) {
 		eraseRequestFiles(request);
 		console.log(err);
 		response.status(500).send();
@@ -196,7 +196,7 @@ async function update(request, response) {
 async function addTag(request, response) {
 	const animal = await model.findByPk(request.params.id);
 	console.log('Comeco', request.body);
-	
+
 	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
@@ -205,13 +205,13 @@ async function addTag(request, response) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
-	if(!request.body.tagId)
+	if (!request.body.tagId)
 		return response.status(400).send('Tag não especificada.');
 
 	try {
 		await animal.addAnimalTag(request.body.tagId);
 		response.status(200).json();
-	} catch(err) {
+	} catch (err) {
 		console.log(err);
 		response.status(500).send();
 	};
@@ -230,7 +230,7 @@ async function removeTag(request, response) {
 	try {
 		await animal.removeAnimalTag(request.body.tagId);
 		response.status(200).send();
-	} catch(err) {
+	} catch (err) {
 		console.log(err);
 		response.status(500).send();
 	}
