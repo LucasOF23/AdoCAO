@@ -2,6 +2,12 @@ import model from "../models/ong.model.js";
 import User from "../models/user.model.js";
 import UserWorksAtONG from "../models/userworksatong.js"
 import Animal from "../models/animal.model.js";
+import City from "../models/city.model.js";
+
+const defaultInclude = [
+	{ model: City },
+];
+const defaultAttr = ['id', 'name', 'address'];
 
 async function getWorkRelation(userId, ongId) {
 	return UserWorksAtONG.findOne({ where: {
@@ -11,54 +17,60 @@ async function getWorkRelation(userId, ongId) {
 }
 
 async function findAll(request, response) {
-	model
-		.findAll().then(function (res) {
-			response.status(200).json(res);
-		}).catch(function (err) {
-			response.status(500).send(err);
-		});
+	try {
+		const res = await model.findAll({ attributes: defaultAttr, include: defaultInclude });
+		response.status(200).json( (res) ? res : [] );
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function findById(request, response) {
-	model
-		.findByPk(request.params.id)
-		.then(function (res) {
+	try {
+		const res = await model.findByPk(request.params.id, { attributes: defaultAttr, include: defaultInclude } );
+		if(res)
 			response.status(200).json(res);
-		}).catch(function (err) {
-			response.status(500).send(err);
-		});
+		else
+			response.status(404).send();
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function findWorkers(request, response) {
-	User.findAll( { attributes: ['id', 'name'], include: {
-		model,
-		attributes: ['id'],
-		through: {
-			attributes: ['isManager'],
-			where: { ONGId: request.params.id }
-		},
-		required: true
-	} }).then(function (res) {
+	try {
+		const res = await User.findAll( { attributes: ['id', 'name'], include: {
+			model,
+			attributes: ['id'],
+			through: {
+				attributes: ['isManager'],
+				where: { ONGId: request.params.id }
+			},
+			required: true
+		} });
+		
 		response.status(200).json(res.map( el => {
 			el = el.get({plain: true});
 			el.isManager = el.ONGs[0].UserWorksAtONG.isManager;
 			delete el.ONGs;
 			return el;
-		} ));
-	}).catch(function (err) {
+		}));
+	} catch(err) {
 		console.log(err);
-		response.status(500).send(err);
-	});
+		response.status(500).send();
+	}
 }
 
 async function findAnimals(request, response) {
-	Animal.findAll( {
-		where: { ONGId: request.params.id }
-	}).then(function (res) {
-		response.status(200).json(res);
-	}).catch(function (err) {
-		response.status(500).send(err);
-	});
+	try {
+		const res = await Animal.findAll( { where: { ONGId: request.params.id }});
+		response.status(200).json( (res) ? res : [] );
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();		
+	}
 }
 
 // ==================
@@ -77,97 +89,96 @@ async function create(request, response) {
 		return response.status(403).send('Usuário não é super admin.');
 	}
 
-	model
-		.create(data).then(function (res) {
-			response.status(201).json(res);
-		}).catch(function (err) {
-			response.status(500).send(err);
-		});
+	try {
+		const res = await model.create(data);
+		response.status(201).json(res);
+	} catch(err) {
+		response.status(500).send(err);
+	}
 }
 
 async function update(request, response) {
 	const allowedKeys = ['name', 'address', 'cnpj', 'CityId'];
 	let updData = {};
 	for(const key of allowedKeys) {
-		if(key in request.body) {
+		if(key in request.body)
 			updData[key] = request.body[key];
-		}
 	}
 
-	if(!response.locals.isSuperAdmin) {
-		const workRel = await getWorkRelation(response.locals.userId, request.params.id);
-		if(!workRel) {
-			return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
+	try {
+		if(!response.locals.isSuperAdmin) {
+			const workRel = await getWorkRelation(response.locals.userId, request.params.id);
+			if(!workRel)
+				return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
+
+			if(!workRel.isManager)
+				return response.status(403).send('Usuário não é administrador da ONG.');
 		}
-		if(!workRel.isManager) {
-			return response.status(403).send('Usuário não é administrador da ONG.');
-		}
+
+		await model.update(updData, {where: { id: request.params.id }});
+		response.status(200).send();
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
 	}
-	
-	model
-		.update(updData, {where: { id: request.params.id }})
-		.then(function (res) {
-			response.status(200).send();
-		}).catch((e) => {
-			response.status(500).json(e);
-		});
 }
 
 async function assignWorker(request, response) {
-	if(!request.body.email || request.body.isManager === undefined) {
+	if(!request.body.email || request.body.isManager === undefined) 
 		return response.status(400).send('Email ou status de administrador não especificados.');
-	}
-	
-	if(!response.locals.isSuperAdmin) {
-		const workRel = await getWorkRelation(response.locals.userId, request.params.id);
-		if(!workRel) {
-			return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
-		}
-		if(!workRel.isManager && request.body.isManager) {
-			return response.status(403).send('Usuário não é administrador da ONG.');
-		}
-	}
 
-	const user = await User.findOne({ where: { email: request.body.email } });
-	if(!user) {
-		return response.status(400).send('Usuário a ser adicionado não encontrado.');
-	}
+	try {
+		if(!response.locals.isSuperAdmin) {
+			const workRel = await getWorkRelation(response.locals.userId, request.params.id);
+			if(!workRel)
+				return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
 
-	UserWorksAtONG.create({
-		UserId: user.id,
-		ONGId: request.params.id,
-		isManager: request.body.isManager
-	}).then(function (res) {
+			if(!workRel.isManager && request.body.isManager) 
+				return response.status(403).send('Usuário não é administrador da ONG.');
+		}
+
+		const user = await User.findOne({ where: { email: request.body.email } });
+		if(!user)
+			return response.status(400).send('Usuário a ser adicionado não encontrado.');
+
+		await UserWorksAtONG.create({
+			UserId: user.id,
+			ONGId: request.params.id,
+			isManager: request.body.isManager
+		});
+		
 		response.status(200).send();
-	}).catch((e) => {
-		response.status(500).json(e);
-	});
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function unassignWorker(request, response) {
-	if(!response.locals.isSuperAdmin) {
-		const workRel = await getWorkRelation(response.locals.userId, request.params.id);
-		if(!workRel) {
-			return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
-		}
-		if(!workRel.isManager) {
-			return response.status(403).send('Usuário não é administrador da ONG.');
-		}
-	}
+	try {
+		if(!response.locals.isSuperAdmin) {
+			const workRel = await getWorkRelation(response.locals.userId, request.params.id);
+			if(!workRel) 
+				return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
 
-	const user = await User.findOne({ where: { email: request.body.email } });
-	if(!user) {
-		return response.status(400).send('Usuário a ser adicionado não encontrado.');
-	}
-	
-	UserWorksAtONG.destroy({ where: {
-		UserId: user.id,
-		ONGId: request.params.id
-	} }).then(function (res) {
+			if(!workRel.isManager) 
+				return response.status(403).send('Usuário não é administrador da ONG.');
+		}
+
+		const user = await User.findOne({ where: { email: request.body.email } });
+		if(!user)
+			return response.status(400).send('Usuário a ser adicionado não encontrado.');
+		
+		await UserWorksAtONG.destroy({ where: {
+			UserId: user.id,
+			ONGId: request.params.id
+		}});
+		
 		response.status(200).send();
-	}).catch((e) => {
-		response.status(500).json(e);
-	});
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 export default {
