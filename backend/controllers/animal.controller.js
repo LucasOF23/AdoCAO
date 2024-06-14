@@ -162,7 +162,7 @@ async function update(request, response) {
 
 	let oldFilename = null;
 
-	const animal = await model.findByPk(request.params.id);
+	let animal = await model.findByPk(request.params.id);
 	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
@@ -174,24 +174,29 @@ async function update(request, response) {
 	if (request.file) {
 		updData['imagePath'] = request.file.filename;
 		oldFilename = animal.imagePath;
+		animal.imagePath = request.file.filename;
 	}
 
-	model
-		.update(updData, { where: { id: request.params.id } })
-		.then(function (res) {
-			if (oldFilename) {
-				eraseFile(oldFilename);
-			}
+	try {
+		const res = await model.update(updData, { where: { id: request.params.id } });
+		if (oldFilename)
+			eraseFile(oldFilename);
 
-			response.status(200).send();
-		}).catch((e) => {
-			console.log(e);
-			response.status(500).send();
+		response.status(200).json({
+			id: animal.id,
+			imagePath: animal.imagePath
 		});
+	} catch(err) {
+		eraseRequestFiles(request);
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function addTag(request, response) {
 	const animal = await model.findByPk(request.params.id);
+	console.log('Comeco', request.body);
+	
 	if (!animal) {
 		return response.status(400).send('Animal não existe.');
 	}
@@ -200,13 +205,16 @@ async function addTag(request, response) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
-	animal.addAnimalTag(request.body.tagId)
-		.then(function (res) {
-			response.status(200).send();
-		}).catch(function (err) {
-			console.log(err);
-			response.status(500).send();
-		});
+	if(!request.body.tagId)
+		return response.status(400).send('Tag não especificada.');
+
+	try {
+		await animal.addAnimalTag(request.body.tagId);
+		response.status(200).json();
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	};
 }
 
 async function removeTag(request, response) {
@@ -219,13 +227,13 @@ async function removeTag(request, response) {
 		return response.status(403).send('Usuário não é dono do animal ou não trabalha na ong dele.');
 	}
 
-	animal.removeAnimalTag(request.body.tagId)
-		.then(function (res) {
-			response.status(200).send();
-		}).catch(function (err) {
-			console.log(err);
-			response.status(500).send();
-		});
+	try {
+		await animal.removeAnimalTag(request.body.tagId);
+		response.status(200).send();
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 const animalController = {
