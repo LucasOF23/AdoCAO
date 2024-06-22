@@ -74,7 +74,7 @@ paths:
     get:
       tags:
         - Animals
-      summary: Retrieve all animals
+      summary: Retrieve all animals 
       responses:
         "200":
           description: Array of animal objects returned upon successful retrieval
@@ -106,6 +106,24 @@ paths:
             If the request is missing required fields or specifies an invalid ONG
         "403":
           description: If the user is not authorized to create the animal
+
+  /animals/search:
+    post:
+      tags:
+        - Animals
+      summary: Retrieve all animals with filter applied
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnimalFilterRequest"
+      responses:
+        "200":
+          description: Array of animal objects returned upon successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimalResponse"
 
   /animals/{id}:
     get:
@@ -1207,3 +1225,43 @@ components:
           type: string
       required:
         - email
+
+    AnimalFilterRequest:
+      type: object
+      properties:
+        genders:
+          type: array
+          items:
+            type: string
+        cityIds:
+          type: array
+          items:
+            type: integer 
+        tagIds:
+          type: array
+          items:
+            type: integer 
+        speciesIds:
+          type: array
+          items:
+            type: integer 
+        ownerKind:
+          type: string 
+        isVerm:
+          type: boolean
+        isCast:
+          type: boolean 
+        heightMin:
+          type: number 
+        heightMax:
+          type: number 
+        weightMin:
+          type: number 
+        weightMax:
+          type: number 
+        ageMin:
+          type: integer  
+        ageMax:
+          type: integer  
+        
+

@@ -3,7 +3,7 @@ import imageUploader from "../upload/image.js"
 
 function addAnimalsRoutes(router, needAuth) {
 	/**
-	   @returns List of Animal objects
+	   @returns List of Animal objects, with filter
 	 */
 	router.get('/animals', animalController.findAll);
 
@@ -55,6 +55,8 @@ function addAnimalsRoutes(router, needAuth) {
 
 	router.post('/animals/:id/tag', needAuth, animalController.addTag);
 	router.delete('/animals/:id/tag', needAuth, animalController.removeTag);
+
+	router.post('/animals/search', animalController.findWithFilter);
 }
 
 export default addAnimalsRoutes

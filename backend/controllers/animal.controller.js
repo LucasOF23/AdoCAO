@@ -5,6 +5,7 @@ import ONG from "../models/ong.model.js";
 import UserWorksAtONG from "../models/userworksatong.js";
 import AnimalTag from "../models/animaltag.model.js";
 import imageUploader from "../upload/image.js";
+import { Op } from "sequelize";
 
 const defaultInclude = [
 	{ model: City },
@@ -12,6 +13,22 @@ const defaultInclude = [
 	{ model: ONG, attributes: ['id', 'name', 'address'], include: City },
 	{ model: AnimalTag, through: { attributes: [] } }
 ];
+
+function _minMaxQuery(minv, maxv) {
+	if(minv && maxv)
+		return { [Op.between]: [minv, maxv] };
+	else if(minv)
+		return { [Op.gte]: minv };
+	else if(maxv)
+		return { [Op.lte]: maxv };
+	return {};
+}
+
+function _deltaDate(years) {
+	let date = new Date();
+	date.setFullYear(date.getFullYear() + years);
+	return date;
+}
 
 async function checkPermission(response, animal) {
 	const { userId, isSuperAdmin } = response.locals;
@@ -33,7 +50,66 @@ async function checkPermission(response, animal) {
 async function findAll(request, response) {
 	try {
 		const res = await model.findAll({ include: defaultInclude });
+		console.log(res);
 		response.status(200).json((res) ? res : []);
+	} catch (err) {
+		console.log(err);
+		response.status(500).send();
+	}
+}
+
+async function findWithFilter(request, response) {
+	let queryData = {};
+	if(request.body.genders)
+		queryData.animalGender = { [Op.or]: request.body.genders };
+	if(request.body.cityIds)
+		queryData.CityId = { [Op.or]: request.body.cityIds };
+	if(request.body.speciesIds)
+		queryData.AnimalSpecieId = { [Op.or]: request.body.speciesIds };
+	if(request.body.ownerKind) {
+		switch(request.body.ownerKind) {
+		case 'user': queryData.UserId = { [Op.not]: null };
+			break;
+		case 'ong': queryData.ONGId = { [Op.not]: null };
+			break;
+		default:
+			return response.status(400).send('Atributo ownerKind incorreto.');
+		}
+	}
+	if(request.body.isVerm !== undefined) 
+		queryData.isDewormed = request.body.isVerm === 'true' || request.body.isVerm;
+	if(request.body.isCast !== undefined)
+		queryData.isNeutered = request.body.isCast === 'true' || request.body.isCast;
+	
+	if(request.body.heightMin || request.body.heightMax)
+		queryData.heightInCm = _minMaxQuery(request.body.heightMin, request.body.heightMax);
+	if(request.body.weightMin || request.body.weightMax)
+		queryData.weightInKg = _minMaxQuery(request.body.weightMin, request.body.weightMax);
+	if(request.body.ageMin || request.body.ageMax) {		
+		const dateMax = (request.body.ageMin) ? _deltaDate(-request.body.ageMin) : null;
+		const dateMin = (request.body.ageMax) ? _deltaDate(-request.body.ageMax) : null;
+		queryData.birthdate = _minMaxQuery(dateMin, dateMax);
+	}
+
+	console.log('Query:', queryData);
+	
+	try {
+		const res = await model.findAll({ include: defaultInclude, where: queryData });
+		
+		if(request.body.tagIds) {
+			const tagSet = new Set(request.body.tagIds);
+			
+			response.status(200).json(res.filter((animal) => {
+				let cnt = 0;
+				for(const tag of animal.AnimalTags) {
+					if(tagSet.has(tag.id)) cnt++;
+				}
+
+				return cnt === tagSet.size;
+			}));
+		} else {
+			response.status(200).json((res) ? res : []);	
+		}
 	} catch (err) {
 		console.log(err);
 		response.status(500).send();
@@ -238,6 +314,7 @@ async function removeTag(request, response) {
 
 const animalController = {
 	findAll,
+	findWithFilter,
 	findById,
 	create,
 	deleteByPk,
