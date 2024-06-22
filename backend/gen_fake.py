@@ -15,14 +15,16 @@ TAG_PER_ANIMAL = (0, 5)
 NORMAL_WORKER_PER_ONG = (1, 5)
 MANAGER_PER_ONG = (1, 3)
 
+seqs_to_reset = ['Animals_id_seq', 'AnimalSpecies_id_seq', 'AnimalTags_id_seq', 'Cities_id_seq', 'ContactInfos_id_seq', 'ONGs_id_seq', 'Users_id_seq']
+
 params = {
-    'Users': '(id, name, email, "passwordHash", "ContactInfoId", "isSuperAdmin")',
-    'ContactInfos': '(id, email, "instagramProfile", "facebookProfile", "telephoneNumber", other)',
-    'Animals': '(id, name, description, "imagePath", birthdate, "heightInCm", "weightInKg", "isNeutered", "isDewormed", "animalGender", "AnimalSpecieId", "ONGId", "UserId", "CityId")',
-    'ONGs': '(id, name, cnpj, address)',
-    'Cities': '(id, name, state)',
-    'AnimalSpecies': '(id, name)',
-    'AnimalTags': '(id, name)',
+    'Users': '(name, email, "passwordHash", "ContactInfoId", "isSuperAdmin")',
+    'ContactInfos': '(email, "instagramProfile", "facebookProfile", "telephoneNumber", other)',
+    'Animals': '(name, description, "imagePath", birthdate, "heightInCm", "weightInKg", "isNeutered", "isDewormed", "animalGender", "AnimalSpecieId", "ONGId", "UserId", "CityId")',
+    'ONGs': '(name, cnpj, address)',
+    'Cities': '(name, state)',
+    'AnimalSpecies': '(name)',
+    'AnimalTags': '(name)',
     'AnimalHasTags': '("AnimalId", "AnimalTagId")',
     'UserWorksAtONGs': '("UserId", "ONGId", "isManager")'
 }
@@ -60,8 +62,8 @@ def rbool():
 def cnpj():
     return ''.join(c for c in fake.cnpj() if c.isdigit())
 
-def fake_animal(id):
-    tp = [id, fake.name(), fake.text(), fake.uuid4(), fake.date(), opt(random() * 80), opt(random() * 40), rbool(), rbool(), choice(['M', 'F', 'N']), randint(1, len(ANIMAL_SPECIES)), None, None, randint(1, CNT_CITIES)]
+def fake_animal():
+    tp = [fake.name(), fake.text(), fake.uuid4(), fake.date(), opt(random() * 80), opt(random() * 40), rbool(), rbool(), choice(['M', 'F', 'N']), randint(1, len(ANIMAL_SPECIES)), None, None, randint(1, CNT_CITIES)]
     if randint(0, 2):  # De ONG - 66%
         tp[-3] = randint(1, CNT_ONGS)
     else:
@@ -69,40 +71,40 @@ def fake_animal(id):
     return tp
 
 
-cities = [(i, fake.city(), fake.state_abbr()) for i in range(1, CNT_CITIES+1)]
+cities = [(fake.city(), fake.state_abbr()) for i in range(1, CNT_CITIES+1)]
 
-contact_info = [(i, fake.email(), opt('@' + fake.name()), opt(fake.name()), opt(numero_cel()), opt(fake.text)) for i in range(1, CNT_USERS+1)]
+contact_info = [(fake.email(), opt('@' + fake.name()), opt(fake.name()), opt(numero_cel()), opt(fake.text)) for i in range(1, CNT_USERS+1)]
 
-users = [(i, fake.name(), fake.email(), PWD_HASH, i, rbool()) for i in range(1, CNT_USERS+1)]
+users = [(fake.name(), fake.email(), PWD_HASH, i, rbool()) for i in range(1, CNT_USERS+1)]
 
-crt_species = [(i+1, specie) for i, specie in enumerate(ANIMAL_SPECIES)]
-crt_tags = [(i+1, tag) for i, tag in enumerate(ANIMAL_TAGS)]
+crt_species = [(specie,) for i, specie in enumerate(ANIMAL_SPECIES)]
+crt_tags = [(tag,) for i, tag in enumerate(ANIMAL_TAGS)]
 
-ongs = [(i, 'ONG de ' + fake.name(), cnpj(), fake.address()) for i in range(1, CNT_ONGS + 1)]
+ongs = [('ONG de ' + fake.name(), cnpj(), fake.address()) for i in range(1, CNT_ONGS + 1)]
 
-animals = [fake_animal(i) for i in range(1, CNT_ANIMALS + 1)]
+animals = [fake_animal() for i in range(1, CNT_ANIMALS + 1)]
 
 animal_has_tag = []
-for animal in animals:
+for i in range(1, len(animals)+1):
     rem_tags = list(range(1, len(ANIMAL_TAGS) + 1))
     for _ in range(randint(*TAG_PER_ANIMAL)):
         tg = choice(rem_tags)
         rem_tags.remove(tg)
-        animal_has_tag.append((animal[0], tg))
+        animal_has_tag.append((i, tg))
 
 user_work_ong = []
-for ong in ongs:
+for i in range(1, len(ongs)+1):
     rem_users = list(range(1, CNT_USERS + 1))
     for _ in range(randint(*NORMAL_WORKER_PER_ONG)):
         us = choice(rem_users)
         rem_users.remove(us)
-        user_work_ong.append((us, ong[0], False))
+        user_work_ong.append((us, i, False))
     for _ in range(randint(*MANAGER_PER_ONG)):
         us = choice(rem_users)
         rem_users.remove(us)
-        user_work_ong.append((us, ong[0], True))
+        user_work_ong.append((us, i, True))
 
-resp = ''
+resp = ''.join(f'ALTER SEQUENCE public."{name}" RESTART WITH 1;\n' for name in seqs_to_reset)
 resp += insert_many('Cities', cities)
 resp += insert_many('ContactInfos', contact_info)
 resp += insert_many('Users', users)
