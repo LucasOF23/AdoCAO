@@ -5,6 +5,7 @@ import AnimalTag from "./animaltag.model.js"
 import ONG from "./ong.model.js"
 import User from "./user.model.js"
 import City from "./city.model.js"
+import AnimalHasTag from "./animalhastag.js"
 
 class Animal extends Model { };
 
@@ -21,7 +22,7 @@ Animal.init({
 	animalGender: { type: DataTypes.CHAR(1), allowNull: true }
 }, { sequelize: sequelize, timestamps: false });
 
-Animal.belongsToMany(AnimalTag, { through: 'AnimalHasAnimalTag' });
+Animal.belongsToMany(AnimalTag, { through: AnimalHasTag });
 Animal.belongsTo(AnimalSpecie);
 Animal.belongsTo(ONG);
 Animal.belongsTo(User);
