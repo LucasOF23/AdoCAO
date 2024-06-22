@@ -1,5 +1,5 @@
 import animalController from "../controllers/animal.controller.js"
-import { imageUploader } from "../upload/image.js"
+import imageUploader from "../upload/image.js"
 
 function addAnimalsRoutes(router, needAuth) {
 	/**
@@ -20,7 +20,7 @@ function addAnimalsRoutes(router, needAuth) {
 	   @returns 403 - error (user does not work at ong)
 	   @returns 500 - error (unknown error)
 	 */
-	router.post('/animals', needAuth, imageUploader.single('photo'), animalController.create);
+	router.post('/animals', needAuth, imageUploader.upload.single('photo'), animalController.create);
 
 	/**
 	   @returns animal object
@@ -43,7 +43,7 @@ function addAnimalsRoutes(router, needAuth) {
 	   @returns 403 - error (user does not own the animal or does not work at ong)
 	   @returns 500 - error (unknown error)
 	 */
-	router.put('/animals/:id', needAuth, imageUploader.single('photo'), animalController.update);
+	router.put('/animals/:id', needAuth, imageUploader.upload.single('photo'), animalController.update);
 
 	/**
 	   @returns 200 - success

@@ -4,7 +4,7 @@ import City from "../models/city.model.js";
 import ONG from "../models/ong.model.js";
 import UserWorksAtONG from "../models/userworksatong.js";
 import AnimalTag from "../models/animaltag.model.js";
-import { eraseFile, eraseRequestFiles } from "../upload/image.js";
+import imageUploader from "../upload/image.js";
 
 const defaultInclude = [
 	{ model: City },
@@ -76,7 +76,7 @@ async function create(request, response) {
 		name: request.body.name,
 		description: request.body.description,
 		birthdate: request.body.birthdate,
-		imagePath: request.file.filename,
+		imagePath: request.file.key,
 		heightInCm: request.body.heightInCm || null,
 		weightInKg: request.body.weightInKg || null,
 		isNeutered: request.body.isNeutered,
@@ -87,7 +87,7 @@ async function create(request, response) {
 	};
 
 	if (request.body.isUserOwned === undefined || request.body.isUserOwned === null) {
-		eraseRequestFiles(request);
+		imageUploader.eraseRequestFiles(request);
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
 
@@ -95,7 +95,7 @@ async function create(request, response) {
 		data.UserId = response.locals.userId;
 	} else {
 		if (!request.body.ongId) {
-			eraseRequestFiles(request);
+			imageUploader.eraseRequestFiles(request);
 			return response.status(400).send('ONG não especificada.');
 		}
 
@@ -107,7 +107,7 @@ async function create(request, response) {
 		});
 
 		if (rel === null) {
-			eraseRequestFiles(request);
+			imageUploader.eraseRequestFiles(request);
 			return response.status(403).send('Usuário não trabalha na ONG.');
 		}
 
@@ -121,7 +121,7 @@ async function create(request, response) {
 			imagePath: res.imagePath
 		});
 	} catch (err) {
-		eraseRequestFiles(request);
+		imageUploader.eraseRequestFiles(request);
 		console.log(err);
 		response.status(500).send();
 	}
@@ -142,7 +142,7 @@ async function deleteByPk(request, response) {
 	model
 		.destroy({ where: { id: request.params.id } })
 		.then(function (res) {
-			eraseFile(filename);
+			imageUploader.eraseFile(filename);
 			response.status(200).send();
 		}).catch(function (err) {
 			console.log(err);
@@ -172,22 +172,22 @@ async function update(request, response) {
 	}
 
 	if (request.file) {
-		updData['imagePath'] = request.file.filename;
+		updData['imagePath'] = request.file.key;
 		oldFilename = animal.imagePath;
-		animal.imagePath = request.file.filename;
+		animal.imagePath = request.file.key;
 	}
 
 	try {
 		const res = await model.update(updData, { where: { id: request.params.id } });
 		if (oldFilename)
-			eraseFile(oldFilename);
+			imageUploader.eraseFile(oldFilename);
 
 		response.status(200).json({
 			id: animal.id,
 			imagePath: animal.imagePath
 		});
 	} catch (err) {
-		eraseRequestFiles(request);
+		imageUploader.eraseRequestFiles(request);
 		console.log(err);
 		response.status(500).send();
 	}
