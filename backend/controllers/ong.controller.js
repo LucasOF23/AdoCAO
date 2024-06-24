@@ -3,9 +3,11 @@ import User from "../models/user.model.js";
 import UserWorksAtONG from "../models/userworksatong.js"
 import Animal from "../models/animal.model.js";
 import City from "../models/city.model.js";
+import ContactInfo from "../models/contactinfo.model.js";
 
 const defaultInclude = [
 	{ model: City },
+	{ model: ContactInfo }
 ];
 const defaultAttr = ['id', 'name', 'address'];
 
@@ -181,6 +183,36 @@ async function unassignWorker(request, response) {
 	}
 }
 
+async function updateContactInfo(request, response) {
+	const allowedKeys = ['email', 'instagramProfile', 'facebookProfile', 'telephoneNumber', 'other'];
+	let updData = {};
+	for (const key of allowedKeys) {
+		if (key in request.body) {
+			updData[key] = request.body[key];
+		}
+	}
+
+	let ongId = request.params.id;
+	if (!ongId)
+		return response.status(400).send('Id de ong não especificado.');
+
+	try {
+		const ong = await model.findByPk(ongId);
+		if(!ong)
+			return response.status(404).send('ONG não encontrada.');
+
+		const workRel = await getWorkRelation(response.locals.userId, ongId);
+		if(!workRel && !response.locals.isSuperAdmin)
+			return response.status(403).send('Usuário não trabalha na ong (nem é super admin).');
+		
+		await ContactInfo.update(updData, { where: { id: ong.ContactInfoId } });
+		response.status(200).send();
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
+}
+
 export default {
 	findAll,
 	findById,
@@ -190,4 +222,5 @@ export default {
 	update,
 	assignWorker,
 	unassignWorker,
+	updateContactInfo
 };

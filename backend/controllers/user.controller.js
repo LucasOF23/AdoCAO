@@ -62,15 +62,17 @@ async function updateContactInfo(request, response) {
 		return response.status(403).send('Apenas super usuários podem editar outros.');
 	}
 
-	ContactInfo.update(updData, {
-		where: {
-			id: userId
-		}
-	}).then(function (res) {
+	try {
+		const user = await model.findByPk(userId);
+		if(!user)
+			return response.status(404).send('Usuário não encontrado.');
+
+		await ContactInfo.update(updData, { where: { id: user.ContactInfoId } });
 		response.status(200).send();
-	}).catch(function (err) {
-		response.status(500).send(err);
-	});
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
 }
 
 async function changeSuperAdminStatus(request, response) {

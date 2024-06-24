@@ -1,6 +1,8 @@
 import ongController from "../controllers/ong.controller.js"
 
 function addOngsRoutes(router, needAuth) {
+	router.put('/ongs/:id/contact-info', needAuth, ongController.updateContactInfo);
+	
 	/**
 	   @returns Array of ONG objects.
 	 */

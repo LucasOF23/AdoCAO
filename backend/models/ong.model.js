@@ -1,6 +1,7 @@
 import {Model, DataTypes } from "sequelize";
 import sequelize from "./dbconfig.js";
-import City from "./city.model.js"
+import City from "./city.model.js";
+import ContactInfo from "./contactinfo.model.js";
 
 class ONG extends Model {};
 
@@ -12,5 +13,6 @@ ONG.init({
 }, {sequelize: sequelize, timestamps: false });
 
 ONG.belongsTo(City);
+ONG.belongsTo(ContactInfo);
 
 export default ONG;

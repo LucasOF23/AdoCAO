@@ -778,10 +778,10 @@ paths:
         "200":
           description: If the user is updated successfully
 
-  /contact-info:
+  /users/contact-info:
     put:
       tags:
-        - Contact Info
+        - Users 
       summary: Update the contact info for the current logged user
       security:
         - Bearer: []
@@ -816,18 +816,63 @@ paths:
         "200":
           description: If the contact info is updated successfully
 
-  /contact-info/{id}:
+  /users/{id}/contact-info:
     put:
       tags:
-        - Contact Info
-      summary: Update the contact info by ID
+        - Users
+      summary: Update the contact info by user ID
       security:
         - Bearer: []
       parameters:
         - name: id
           in: path
           required: true
-          description: ID of the contact info to update
+          description: ID of the user to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: brunaru@icmc.usp.br
+                instagramProfile:
+                  type: string
+                  nullable: true
+                  example: null
+                facebookProfile:
+                  type: string
+                  nullable: true
+                  example: null
+                telephoneNumber:
+                  type: string
+                  nullable: true
+                  example: null
+                other:
+                  type: string
+                  nullable: true
+                  example: null
+      responses:
+        "200":
+          description: If the contact info is updated successfully
+
+  /ongs/{id}/contact-info:
+    put:
+      tags:
+        - Ongs
+      summary: Update the contact info by ong ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ong to update
           schema:
             type: integer
       requestBody:
@@ -1076,6 +1121,8 @@ components:
           type: string
         City:
           $ref: "#/components/schemas/CityResponse"
+        ContactInfo:
+            $ref: "#/components/schemas/ContactInfo"
       required:
         - id
         - name

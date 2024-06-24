@@ -10,6 +10,8 @@ CNT_ONGS = 5
 CNT_CITIES = 40
 ANIMAL_SPECIES = ['Gato', 'Cachorro', 'Papagaio', 'Peixe', 'Macaco']
 ANIMAL_TAGS = ['Gordo', 'Magro', 'Caseiro', 'Viajante', 'Matemático', 'Físico', 'Engenheiro (hur)', 'Pilantra', 'Agiota']
+
+# senha123
 PWD_HASH = '$2a$10$MtXP8e2TXPblpVEXUKURzOFgzCvjMY0qZ5qxH8UeZSk0DeNbRVFzK'
 TAG_PER_ANIMAL = (0, 5)
 NORMAL_WORKER_PER_ONG = (1, 5)
@@ -20,14 +22,17 @@ seqs_to_reset = ['Animals_id_seq', 'AnimalSpecies_id_seq', 'AnimalTags_id_seq', 
 params = {
     'Users': '(name, email, "passwordHash", "ContactInfoId", "isSuperAdmin")',
     'ContactInfos': '(email, "instagramProfile", "facebookProfile", "telephoneNumber", other)',
-    'Animals': '(name, description, "imagePath", birthdate, "heightInCm", "weightInKg", "isNeutered", "isDewormed", "animalGender", "AnimalSpecieId", "ONGId", "UserId", "CityId")',
-    'ONGs': '(name, cnpj, address)',
+    'Animals': '(name, "isAdopted", description, "imagePath", birthdate, "heightInCm", "weightInKg", "isNeutered", "isDewormed", "animalGender", "AnimalSpecieId", "ONGId", "UserId", "CityId")',
+    'ONGs': '(name, cnpj, address, "CityId", "ContactInfoId")',
     'Cities': '(name, state)',
     'AnimalSpecies': '(name)',
     'AnimalTags': '(name)',
     'AnimalHasTags': '("AnimalId", "AnimalTagId")',
     'UserWorksAtONGs': '("UserId", "ONGId", "isManager")'
 }
+
+#ong, cityid contactinfo
+
 
 def format_values(attrs):
     def parse(value):
@@ -63,7 +68,8 @@ def cnpj():
     return ''.join(c for c in fake.cnpj() if c.isdigit())
 
 def fake_animal():
-    tp = [fake.name(), fake.text(), fake.uuid4(), fake.date(), opt(random() * 80), opt(random() * 40), rbool(), rbool(), choice(['M', 'F', 'N']), randint(1, len(ANIMAL_SPECIES)), None, None, randint(1, CNT_CITIES)]
+    is_adopted = randint(1, 10) <= 2
+    tp = [fake.name(), is_adopted, fake.text(), fake.uuid4(), fake.date(), opt(random() * 80), opt(random() * 40), rbool(), rbool(), choice(['M', 'F', 'N']), randint(1, len(ANIMAL_SPECIES)), None, None, randint(1, CNT_CITIES)]
     if randint(0, 2):  # De ONG - 66%
         tp[-3] = randint(1, CNT_ONGS)
     else:
@@ -73,14 +79,14 @@ def fake_animal():
 
 cities = [(fake.city(), fake.state_abbr()) for i in range(1, CNT_CITIES+1)]
 
-contact_info = [(fake.email(), opt('@' + fake.name()), opt(fake.name()), opt(numero_cel()), opt(fake.text())) for i in range(1, CNT_USERS+1)]
+contact_info = [(fake.email(), opt('@' + fake.name()), opt(fake.name()), opt(numero_cel()), opt(fake.text())) for i in range(1, CNT_USERS+CNT_ONGS+1)]
 
 users = [(fake.name(), fake.email(), PWD_HASH, i, rbool()) for i in range(1, CNT_USERS+1)]
 
 crt_species = [(specie,) for i, specie in enumerate(ANIMAL_SPECIES)]
 crt_tags = [(tag,) for i, tag in enumerate(ANIMAL_TAGS)]
 
-ongs = [('ONG de ' + fake.name(), cnpj(), fake.address()) for i in range(1, CNT_ONGS + 1)]
+ongs = [('ONG de ' + fake.name(), cnpj(), fake.address(), randint(1, CNT_CITIES), randint(CNT_USERS+1, CNT_USERS+CNT_ONGS)) for i in range(1, CNT_ONGS + 1)]
 
 animals = [fake_animal() for i in range(1, CNT_ANIMALS + 1)]
 
