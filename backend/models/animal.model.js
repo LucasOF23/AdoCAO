@@ -19,7 +19,8 @@ Animal.init({
 	weightInKg: { type: DataTypes.FLOAT, allowNull: true },
 	isNeutered: { type: DataTypes.BOOLEAN, allowNull: false },
 	isDewormed: { type: DataTypes.BOOLEAN, allowNull: false },
-	animalGender: { type: DataTypes.CHAR(1), allowNull: true }
+	animalGender: { type: DataTypes.CHAR(1), allowNull: true },
+	isAdopted: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 }, { sequelize: sequelize, timestamps: false });
 
 Animal.belongsToMany(AnimalTag, { through: AnimalHasTag });

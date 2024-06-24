@@ -228,7 +228,7 @@ async function deleteByPk(request, response) {
 
 
 async function update(request, response) {
-	const allowedKeys = ['name', 'description', 'birthdate', 'heightInCm', 'weightInKg', 'isNeutered', 'isDewormed', 'animalGender', 'CityId', 'AnimalSpecieId'];
+	const allowedKeys = ['name', 'description', 'birthdate', 'heightInCm', 'weightInKg', 'isNeutered', 'isDewormed', 'animalGender', 'isAdopted', 'CityId', 'AnimalSpecieId'];
 	let updData = {};
 	for (const key of allowedKeys) {
 		if (key in request.body) {

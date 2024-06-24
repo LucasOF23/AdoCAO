@@ -1004,6 +1004,8 @@ components:
           type: number
         CityId:
           type: number
+        isAdopted:
+          type: boolean
         photo:
           type: string
           format: binary
@@ -1105,6 +1107,8 @@ components:
           type: string
         AnimalSpecieId:
           type: number
+        isAdopted:
+          type: boolean
         ONGId:
           type: number
         UserId:

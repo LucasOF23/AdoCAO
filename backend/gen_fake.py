@@ -73,7 +73,7 @@ def fake_animal():
 
 cities = [(fake.city(), fake.state_abbr()) for i in range(1, CNT_CITIES+1)]
 
-contact_info = [(fake.email(), opt('@' + fake.name()), opt(fake.name()), opt(numero_cel()), opt(fake.text)) for i in range(1, CNT_USERS+1)]
+contact_info = [(fake.email(), opt('@' + fake.name()), opt(fake.name()), opt(numero_cel()), opt(fake.text())) for i in range(1, CNT_USERS+1)]
 
 users = [(fake.name(), fake.email(), PWD_HASH, i, rbool()) for i in range(1, CNT_USERS+1)]
 
