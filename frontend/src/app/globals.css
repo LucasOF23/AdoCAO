@@ -9,3 +9,11 @@
 .screen-max-width {
   max-width: 1300px;
 }
+
+.title_filter {
+  text-align: center;
+  font-size: 3rem;
+  line-height: 2.25rem; /* 36px */
+  font-family: "Lucida Handwriting", cursive;
+  padding-top: 10px;
+}

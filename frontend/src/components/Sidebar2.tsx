@@ -12,8 +12,8 @@ type FormsProps = {
 export default function Forms({ onClose }: FormsProps) {
 
   return (
-    <div className="absolute left-0 top-0 border p-4 max-w-96 w-full flex flex-col gap-5 bg-white">
-      <h2 className="text-center text-3xl">FILTRO</h2>
+    <div className="absolute left-0 top-0 border p-4 max-w-96 w-full h-screen overflow-auto flex flex-col gap-5 bg-white">
+      <h2 className="title_filter">Filtros</h2>
 
       {onClose && (
         <button onClick={onClose}>
@@ -23,7 +23,7 @@ export default function Forms({ onClose }: FormsProps) {
           />
         </button>
       )}
-            <div>
+            <div className="overflow-scroll">
                 <Label>Cidade</Label>
                 <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
                     <option></option>

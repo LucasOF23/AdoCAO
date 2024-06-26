@@ -121,18 +121,24 @@ export default function Login({ onClose }: LoginProps) {
         </div>
       )}
 
-      <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
-        Enviar
-      </button>
-
-      <button
-        onClick={() => setIsLogin((prev) => !prev)}
-        className="ml-1 text-xs text-purple-500"
-      >
-        {isLogin
-          ? "Ainda não possui uma conta? Cadastre-se aqui!"
-          : "Já possui uma conta? Entre aqui!"}
-      </button>
+      <div className="flex my-3">
+        <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75
+        hover:scale-[105%] px-5 py-3 rounded-xl">
+          Enviar
+        </button>
+      </div>
+      
+      <div className="flex justify-center">
+        <button
+          onClick={() => setIsLogin((prev) => !prev)}
+          className="ml-1 text-xs align-center text-purple-500"
+        >
+          {isLogin
+            ? "Ainda não possui uma conta? Cadastre-se aqui!"
+            : "Já possui uma conta? Entre aqui!"}
+        </button>
+      </div>
+      
       </form>
     </div>
   );

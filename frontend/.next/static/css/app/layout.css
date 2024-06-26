@@ -614,6 +614,9 @@ video {
 .m-auto {
   margin: auto;
 }
+.m-5 {
+  margin: 1.25rem;
+}
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -645,6 +648,10 @@ video {
 .my-auto {
   margin-top: auto;
   margin-bottom: auto;
+}
+.mx-0 {
+  margin-left: 0px;
+  margin-right: 0px;
 }
 .mb-10 {
   margin-bottom: 2.5rem;
@@ -702,6 +709,36 @@ video {
 }
 .h-full {
   height: 100%;
+}
+.h-screen {
+  height: 100vh;
+}
+.h-3\/5 {
+  height: 60%;
+}
+.h-svh {
+  height: 100svh;
+}
+.h-4\/6 {
+  height: 66.666667%;
+}
+.h-2\/3 {
+  height: 66.666667%;
+}
+.h-4\/5 {
+  height: 80%;
+}
+.h-5\/6 {
+  height: 83.333333%;
+}
+.h-0 {
+  height: 0px;
+}
+.max-h-4 {
+  max-height: 1rem;
+}
+.max-h-96 {
+  max-height: 24rem;
 }
 .min-h-0 {
   min-height: 0px;
@@ -820,8 +857,14 @@ video {
 .gap-5 {
   gap: 1.25rem;
 }
+.overflow-auto {
+  overflow: auto;
+}
 .overflow-hidden {
   overflow: hidden;
+}
+.overflow-scroll {
+  overflow: scroll;
 }
 .overflow-y-scroll {
   overflow-y: scroll;
@@ -919,6 +962,12 @@ video {
 .p-5 {
   padding: 1.25rem;
 }
+.p-10 {
+  padding: 2.5rem;
+}
+.p-6 {
+  padding: 1.5rem;
+}
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -960,6 +1009,9 @@ video {
 }
 .pt-1 {
   padding-top: 0.25rem;
+}
+.pb-20 {
+  padding-bottom: 5rem;
 }
 .text-left {
   text-align: left;
@@ -1119,6 +1171,14 @@ video {
   max-width: 1300px;
 }
 
+.title_filter {
+  text-align: center;
+  font-size: 3rem;
+  line-height: 2.25rem; /* 36px */
+  font-family: "Lucida Handwriting", cursive;
+  padding-top: 10px;
+}
+
 .file\:border-0::file-selector-button {
   border-width: 0px;
 }
@@ -1254,4 +1314,3 @@ video {
     flex-direction: row;
   }
 }
-

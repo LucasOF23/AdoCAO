@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/perfil/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/perfil/page.js"
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -16,10 +16,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/home/page.js"
     ],
-    "/ongs/page": [
+    "/perfil/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/ongs/page.js"
+      "static/chunks/app/perfil/page.js"
+    ],
+    "/postagens/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/postagens/page.js"
     ]
   }
 }
