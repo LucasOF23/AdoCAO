@@ -1,11 +1,62 @@
+"use client";
+
 import AdoptionCard from "@/components/AdoptionCard";
 import { DogInfo } from "@/types/dog";
+
+import Navbar2 from "@/components/Navbar2";
+import Sidebar from "@/components/Sidebar";
+import Lowerbar from "@/components/Lowerbar";
 
 export default function AdoptionPosts() {
   const dogInfos: DogInfo[] = [
     {
+      id: 8,
+      name: "Marie Currie",
+      imageUrl: "https://images.dog.ceo/breeds/lhasa/n02098413_7389.jpg",
+      owner: {
+        kind: "ONG",
+        name: "Cães Felizes",
+      },
+      location: {
+        city: "Rio de Janeiro",
+        state: "RJ",
+      },
+      gender: "female",
+      ageInYears: 2,
+      weightInKg: 8,
+      heightInCm: 25,
+      species: "Cachorro",
+      breed: "Labrador Retriever",
+      isNeutered: true,
+      isDewormed: true,
+      tags: ["Energética", "Amável", "Vacinação em dia"],
+    },
+    {
+      id: 12,
+      name: "Lisa Randall",
+      imageUrl:
+        "https://images.dog.ceo/breeds/spaniel-irish/n02102973_3220.jpg",
+      owner: {
+        kind: "user",
+        name: "Massimo Bottura",
+      },
+      location: {
+        city: "Milano",
+        state: "IT",
+      },
+      gender: "female",
+      ageInYears: 2,
+      weightInKg: 8,
+      heightInCm: 25,
+      species: "Cachorro",
+      breed: "Labrador Retriever",
+      isNeutered: true,
+      isDewormed: true,
+      tags: ["Energética", "Amável", "Vacinação em dia"],
+    },
+    {
       id: 1,
-      name: "Bolinha",
+      name: "Max Planck",
       imageUrl:
         "https://images.dog.ceo/breeds/poodle-standard/n02113799_1316.jpg",
       owner: { kind: "user", name: "José Silva" },
@@ -22,11 +73,11 @@ export default function AdoptionPosts() {
     },
     {
       id: 2,
-      name: "Mel",
+      name: "Erwin Schrodinger",
       imageUrl: "https://images.dog.ceo/breeds/dane-great/n02109047_17874.jpg",
       owner: { kind: "ONG", name: "Patitas Felizes" },
       location: { city: "Rio de Janeiro", state: "RJ" },
-      gender: "female",
+      gender: "male",
       ageInYears: 3,
       weightInKg: 8,
       heightInCm: 25,
@@ -38,7 +89,7 @@ export default function AdoptionPosts() {
     },
     {
       id: 3,
-      name: "Thor",
+      name: "Niels Bohr",
       imageUrl: "https://images.dog.ceo/breeds/shiba/shiba-17.jpg",
       owner: { kind: "user", name: "Maria Oliveira" },
       location: { city: "Belo Horizonte", state: "MG" },
@@ -53,8 +104,30 @@ export default function AdoptionPosts() {
       tags: ["brincalhão", "inteligente", "protetor"],
     },
     {
+      id: 11,
+      name: "Ada Lovelace",
+      imageUrl: "https://images.dog.ceo/breeds/coonhound/n02089078_3340.jpg",
+      owner: {
+        kind: "ONG",
+        name: "Cães Lindos",
+      },
+      location: {
+        city: "Goianinha",
+        state: "RN",
+      },
+      gender: "female",
+      ageInYears: 2,
+      weightInKg: 8,
+      heightInCm: 25,
+      species: "Cachorro",
+      breed: "Labrador Retriever",
+      isNeutered: true,
+      isDewormed: true,
+      tags: ["Energética", "Amável", "Vacinação em dia"],
+    },
+    {
       id: 4,
-      name: "Max",
+      name: "Albert Einstein",
       imageUrl:
         "https://images.dog.ceo/breeds/sheepdog-shetland/n02105855_742.jpg",
       owner: { kind: "user", name: "Ana Silva" },
@@ -70,12 +143,34 @@ export default function AdoptionPosts() {
       tags: ["Brincalhão", "Carinhoso", "Ativo"],
     },
     {
+      id: 10,
+      name: "Katherine Johnson",
+      imageUrl: "https://images.dog.ceo/breeds/mastiff-english/3.jpg",
+      owner: {
+        kind: "ONG",
+        name: "Felizcao",
+      },
+      location: {
+        city: "Serra da Saudade",
+        state: "MG",
+      },
+      gender: "female",
+      ageInYears: 2,
+      weightInKg: 8,
+      heightInCm: 25,
+      species: "Cachorro",
+      breed: "Labrador Retriever",
+      isNeutered: true,
+      isDewormed: true,
+      tags: ["Energética", "Amável", "Vacinação em dia"],
+    },
+    {
       id: 5,
-      name: "Bela",
+      name: "Werner Heisenberg",
       imageUrl: "https://images.dog.ceo/breeds/labradoodle/Cali.jpg",
       owner: { kind: "ONG", name: "Amigos dos Animais" },
       location: { city: "Rio de Janeiro", state: "RJ" },
-      gender: "female",
+      gender: "male",
       ageInYears: 3,
       weightInKg: 8,
       heightInCm: 25,
@@ -87,7 +182,7 @@ export default function AdoptionPosts() {
     },
     {
       id: 6,
-      name: "Thor",
+      name: "Paul Dirac",
       imageUrl:
         "https://images.dog.ceo/breeds/setter-english/n02100735_4051.jpg",
       owner: { kind: "user", name: "Carlos Oliveira" },
@@ -104,7 +199,7 @@ export default function AdoptionPosts() {
     },
     {
       id: 7,
-      name: "Max",
+      name: "Max Born",
       imageUrl: "https://images.dog.ceo/breeds/labrador/pic1_l.jpg",
       owner: {
         kind: "user",
@@ -125,37 +220,39 @@ export default function AdoptionPosts() {
       tags: ["Brincalhão", "Amigável", "Castrado"],
     },
     {
-      id: 8,
-      name: "Luna",
-      imageUrl: "https://images.dog.ceo/breeds/lhasa/n02098413_7389.jpg",
+      id: 9,
+      name: "J. Robert Oppenheimer",
+      imageUrl: "https://images.dog.ceo/breeds/boxer/n02108089_2791.jpg",
       owner: {
         kind: "ONG",
-        name: "Cães Felizes",
+        name: "Cães Atômicos",
       },
       location: {
-        city: "Rio de Janeiro",
-        state: "RJ",
+        city: "Zurich",
+        state: "SW",
       },
-      gender: "female",
-      ageInYears: 2,
-      weightInKg: 8,
-      heightInCm: 25,
+      gender: "male",
+      ageInYears: 1,
+      weightInKg: 4,
+      heightInCm: 20,
       species: "Cachorro",
-      breed: "Labrador Retriever",
+      breed: "Boxer",
       isNeutered: true,
       isDewormed: true,
-      tags: ["Energética", "Amável", "Vacinação em dia"],
+      tags: ["Energético", "Amável", "Explosivo"],
     },
   ];
 
   return (
     <>
-      <div>AdoptionPosts</div>
-      <div className="p-4 grid justify-items-center grid-autofit gap-4">
+      <Navbar2 />
+      <Sidebar />
+      <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {dogInfos.map((info) => (
           <AdoptionCard key={info.id} info={info} />
         ))}
       </div>
+      <Lowerbar />
     </>
   );
 }
