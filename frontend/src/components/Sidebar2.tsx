@@ -25,13 +25,16 @@ export default function Forms({ onClose, updateAnimals }: FormsProps) {
     event.preventDefault();
 
     const keys = ['genders', 'cityIds', 'speciesIds', 'ownerKind', 'isVerm', 'isCast', 'heightMin', 'heightMax', 'weightMin', 'weightMax', 'ageMin', 'ageMax'];
-
+    const toArrayKeys = ['genders', 'cityIds', 'speciesIds']
+    
     let filters = {};
     for(const key of keys) {
       const el = event.target[key];
       const value = (el.type === 'checkbox' ? el.checked : el.value);
 
-      if(value || el.type === "checkbox")
+      if(value && toArrayKeys.includes(key)) 
+        filters[key] = [value];
+      else if(value || el.type === "checkbox")
         filters[key] = value;
     }
 
