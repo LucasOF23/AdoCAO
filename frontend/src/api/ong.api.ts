@@ -1,4 +1,4 @@
-import { getAnom, post, put, delete } from './general.api.ts';
+import { getAnom, post, put, remove } from './general.api.ts';
 
 export function getAll() {
   return getAnom('ongs');
@@ -25,7 +25,7 @@ export function assignWorker(ongId, email, isManager) {
 }
 
 export function unassignWorker(ongId, email) {
-  return delete(`ongs/${id}/users`, { email });
+  return remove(`ongs/${id}/users`, { email });
 }
 
 export function getAnimals(id) {

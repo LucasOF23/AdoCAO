@@ -4,6 +4,7 @@ import City from "../models/city.model.js";
 import ONG from "../models/ong.model.js";
 import UserWorksAtONG from "../models/userworksatong.js";
 import AnimalTag from "../models/animaltag.model.js";
+import AnimalSpecie from "../models/animalspecie.model.js";
 import imageUploader from "../upload/image.js";
 import { Op } from "sequelize";
 
@@ -11,7 +12,8 @@ const defaultInclude = [
 	{ model: City },
 	{ model: User, attributes: ['id', 'name'] },
 	{ model: ONG, attributes: ['id', 'name', 'address'], include: City },
-	{ model: AnimalTag, through: { attributes: [] } }
+	{ model: AnimalTag, through: { attributes: [] } },
+	{ model: AnimalSpecie }
 ];
 
 function _minMaxQuery(minv, maxv) {
@@ -76,10 +78,10 @@ async function findWithFilter(request, response) {
 			return response.status(400).send('Atributo ownerKind incorreto.');
 		}
 	}
-	if(request.body.isVerm !== undefined) 
-		queryData.isDewormed = request.body.isVerm === 'true' || request.body.isVerm;
-	if(request.body.isCast !== undefined)
-		queryData.isNeutered = request.body.isCast === 'true' || request.body.isCast;
+	if(request.body.isVerm && request.body.isVerm !== 'false') 
+		queryData.isDewormed = true;
+	if(request.body.isCast && request.body.isCast !== 'false')
+		queryData.isNeutered = true;
 	
 	if(request.body.heightMin || request.body.heightMax)
 		queryData.heightInCm = _minMaxQuery(request.body.heightMin, request.body.heightMax);

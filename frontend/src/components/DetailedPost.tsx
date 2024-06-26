@@ -33,9 +33,6 @@ function renderOwnerKind(kind: DogOwnerKind) {
 export default function DetailedPost({ info, onClose }: DetailedPostProps) {
   const imageAlt = `Imagem do cachorro "${info.name}"`;
 
-  const descricaoHardcoded =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
   return (
     <div className="border rounded-t-2xl overflow-hidden max-w-4xl flex min-h-80 flex-col sm:flex-row bg-white">
       <div className="max-w-1/2 sm:w-1/2">
@@ -66,11 +63,11 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         <div className="flex flex-row max-w-72 justify-between ">
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Peso</span>
-            <span>{info.weightInKg} kg</span>
+            <span>{info.weightInKg ? `${info.weightInKg} kg` : '---' }</span>
           </div>
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Altura</span>
-            <span>{info.heightInCm} cm</span>
+            <span>{info.heightInCm ? `${info.heightInCm} cm` : '---' }</span>
           </div>
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Idade</span>
@@ -82,7 +79,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         <div className="flex flex-row max-w-72 justify-between">
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Espécie</span>
-            <span>{info.species}</span>
+            <span>{info.species.name}</span>
           </div>
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Castrado</span>
@@ -94,10 +91,6 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
           </div>
         </div>
         <div className="mt-2 flex flex-col">
-          <span className="font-semibold text-xs">Raça</span>
-          <span>{info.breed}</span>
-        </div>
-        <div className="mt-2 flex flex-col">
           <span className="font-semibold text-xs">
             {renderOwnerKind(info.owner.kind)} Responsável
           </span>
@@ -106,7 +99,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         <div className="mt-2 flex flex-col">
           <span className="font-semibold text-xs">Local</span>
           <span>
-            {info.location.city} ({info.location.state})
+            {info.location.name} ({info.location.state})
           </span>
         </div>
         <div className="mt-2 flex flex-col">
@@ -115,7 +108,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
             {info.tags.map((tag, index) => (
               <TagContainer
                 key={index}
-                text={tag}
+                text={tag.name}
                 className="hover:scale-[104%] shadow-sm text-xs bg-purple-300"
               />
             ))}
@@ -123,7 +116,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         </div>
         <div className="mt-2 flex flex-col">
           <span className="font-semibold text-xs">Descrição</span>
-          <span className="text-sm text-wrap">{descricaoHardcoded}</span>
+          <span className="text-sm text-wrap">{info.description}</span>
         </div>
       </div>
     </div>

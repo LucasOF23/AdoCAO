@@ -57,7 +57,7 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
           <p>
             em{" "}
             <span className="font-bold">
-              {info.location.city} ({info.location.state})
+              {info.location.name} ({info.location.state})
             </span>
           </p>
         </div>
