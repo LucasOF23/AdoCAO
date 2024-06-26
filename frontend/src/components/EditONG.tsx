@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ProfileInfo } from "@/types/profile";
 
+import { useState } from "react";
+
 export type DetailedPostProps = {
   info: ProfileInfo;
   onClose?: () => void;
@@ -15,25 +17,91 @@ export type DetailedPostProps = {
 
 export default function EditONG({ info, onClose }: DetailedPostProps) {
 
+    const [emailNotExist, setEmailNotExist] = useState(false);
+
+    const [differentEmail, setDifferentEmail] = useState(false);
+
   const descricaoHardcoded =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
   return (
-    <div className="forms-shape">
+    <div className="forms-shape2">
 
-      <div className="p-4 flex flex-col">
-        <div className="flex flex-row justify-between">
-          {onClose && (
-            <button onClick={onClose}>
-              <FontAwesomeIcon
-                className="mt-[0.1rem] h-[1.5rem] text-gray-400"
-                icon={faXmark}
-              />
-            </button>
-          )}
+      <div>
+        <div className="px-5">
+            <div>
+            {onClose && (
+                <button onClick={onClose}>
+                <FontAwesomeIcon
+                    className="mt-[0.1rem] h-[1.5rem] text-gray-400"
+                    icon={faXmark}
+                />
+                </button>
+            )}
+            </div>
+
+            <Label className="text-2xl w-full text-center">Formulário de Adição de Colaborador</Label>
+
+            <div className="flex flex-col">
+
+                <div>
+                    <Label>Email</Label>
+                    <Input type="contato" placeholder="email"/>
+                </div>
+            </div>
+
+            {emailNotExist && (
+                <Label className="text-red-400 text-xs">Email não existe!!!</Label>
+            )}
+
+            <div className="text-center p-4">
+                {onClose && (
+                    <button className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto" onClick={onClose}>
+                    Enviar
+                    </button>
+                )}
+            </div>
         </div>
 
-        <div>
+        <hr className="py-10" />
+
+        <div className="px-5">
+
+            <Label className="text-2xl text-center mb-10">Formulário de Remoção de Colaborador</Label>
+
+            <div className="flex flex-col">
+                <div>
+                    <Label>Email</Label>
+                    <Input type="contato" placeholder="email"/>
+                </div>
+
+                <div>
+                    <Label>Confirmação do Email</Label>
+                    <Input type="contato" placeholder="email"/>
+                </div>
+            </div>
+            
+            {differentEmail && (
+                <Label className="text-red-400 text-xs">Emails diferentes</Label>
+            )}
+
+            <div className="text-center p-4">
+                {onClose && (
+                    <button className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto" onClick={onClose}>
+                    Enviar
+                    </button>
+                )}
+            </div>
+        </div>
+
+        <hr className="py-10" />
+
+        </div>
+        <div className="px-5">
+
+        <Label className="text-2xl text-center pb-10">Formulário de Edição da ONG</Label>
+
+            <div>
                 <Label>Nome da ONG - {info.name}</Label>
                 <Input type="nome" placeholder={info.name}/>
             </div>

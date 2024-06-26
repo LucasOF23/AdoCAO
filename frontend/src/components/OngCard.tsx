@@ -21,7 +21,7 @@ export default function OngCard({ info }: OngCardProps) {
   const openModal = () => setIsModalVisible(true);
   const closeModal = () => setIsModalVisible(false);
 
-  const [isUserAdmin, setAllonONG] = useState(false);
+  const [isUserAdmin, setAllonONG] = useState(true);
 
   const [isONGMember, setAllowONG2] = useState(false);
 
