@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Lowerbar() {
     return (
       <>
-        <div className="border-b-2 bg-purple-500">
+        <div className="border-b-2 bg-purple-300">
           <div className="my-20 mx-auto min-mx-5 screen-max-width grid justify-items-center grid-autofit items-center">
             <div>
                 <h1 className="font-bold text-2xl text-center my-10">Sobre o Projeto</h1>

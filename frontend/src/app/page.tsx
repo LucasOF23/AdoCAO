@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 import AdoptionCard from "@/components/AdoptionCard";
 import { DogInfo } from "@/types/dog";
 
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar2";
 import Lowerbar from "@/components/Lowerbar";
 
 export default function AdoptionPosts() {
@@ -245,10 +246,29 @@ export default function AdoptionPosts() {
     },
   ];
 
+  const [isAuthVisible, setAuthVisible] = useState(false);
+
+  const closeModal = () => setAuthVisible(false);
+  const openModal = () => setAuthVisible(true);
+
+  const hiddenClass = isAuthVisible ? "hidden" : "";
+
   return (
     <>
       <Navbar />
-      <Sidebar />
+      <button onClick={openModal} className="cursor-pointer flex items-center justify-center w-60 rounded-b-xl
+       border mx-auto sticky top-20 p-4 shadow-sm bg-white">
+        FILTROS
+      </button>
+      {isAuthVisible &&
+        createPortal(
+          <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
+            <div className="mx-auto my-auto p-4 w-full">
+              <Sidebar onClose={closeModal} />
+            </div>
+          </div>,
+          document.body
+        )}
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {dogInfos.map((info) => (
           <AdoptionCard key={info.id} info={info} />

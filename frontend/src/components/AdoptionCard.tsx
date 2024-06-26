@@ -34,7 +34,7 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
     <>
       <button
         onClick={openModal}
-        className="border rounded-t-2xl overflow-hidden w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50"
+        className="border rounded-t-2xl overflow-hidden w-full max-w-96 bg-white hover:shadow-md hover:scale-[101%] transition delay-50"
       >
         <div className="w-full h-72">
           <Image
