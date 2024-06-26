@@ -2,8 +2,10 @@
 
 import AdoptionCard from "@/components/AdoptionCard";
 
+import React, { useState } from "react";
+import { createPortal } from "react-dom";
+import Forms from "@/components/Forms";
 import Navbar2 from "@/components/Navbar2";
-import PageForms from "@/components/PageForms";
 import Sidebar from "@/components/Sidebar";
 import Lowerbar from "@/components/Lowerbar";
 import { ProfileInfo } from "@/types/profile";
@@ -43,6 +45,13 @@ export default function AdoptionPosts() {
         }
     ;
 
+  const [isAuthVisible, setAuthVisible] = useState(false);
+
+  const closeModal = () => setAuthVisible(false);
+  const openModal = () => setAuthVisible(true);
+
+  const hiddenClass = isAuthVisible ? "hidden" : "";
+
   return (
     <>
         <Navbar2 />
@@ -51,17 +60,22 @@ export default function AdoptionPosts() {
             {profileInfo.animals.map((info) => (
             <AdoptionCard key={info.id} info={info} />
             ))}
-            <button className="btn text-9xl text-center content-center border rounded-2xl overflow-hidden
-            w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50" 
-            onClick={()=>document.getElementById('my_modal_2').showModal()}>+</button>
-            <dialog id="my_modal_2" className="modal w-1000">
-                <div className="modal-box">
-                <PageForms />
-                </div>
-                <form method="dialog" className="modal-backdrop">
-                <button>FECHAR</button>
-                </form>
-            </dialog>
+            <button
+              onClick={openModal}
+              className="btn text-9xl text-center content-center border rounded-2xl overflow-hidden
+            w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50"
+            >
+              +
+            </button>
+            {isAuthVisible &&
+              createPortal(
+                <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
+                  <div className="mx-auto my-auto p-4 w-full">
+                    <Forms onClose={closeModal} />
+                  </div>
+                </div>,
+                document.body
+              )}
         </div>
         <Lowerbar />
     </>
