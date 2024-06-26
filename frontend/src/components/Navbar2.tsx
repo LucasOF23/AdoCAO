@@ -7,15 +7,15 @@ export default function Navbar2() {
         <div className="mx-auto screen-max-width px-4 h-full flex flex-row justify-between align-middle">
           <Image alt="AdoCÃO logo" src="/logo.svg" width={200} height={200} />
           <details className="dropdown content-center">
-            <summary className="btn hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl m-auto">Menu</summary>
-            <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-52">
-              <li className="hover:bg-gray-500"><a href="/perfil" className="home px-2">PERFIL</a></li>
+            <summary className="btn hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl transition ease-in-out delay-150 dropdown-content m-auto">Menu</summary>
+            <ul className="p-1 shadow menu z-[1] bg-white rounded-box">
+              <li className="hover:bg-gray-500"><a href="/perfil" className="perfil"><button className="w-full p-2">Perfil</button></a></li>
               <hr />
-              <li className="hover:bg-gray-500"><a href="/home" className="home px-2">Home</a></li>
+              <li className="hover:bg-gray-500"><a href="/home" className="home"><button className="w-full p-2">Home</button></a></li>
               <hr />
-              <li className="hover:bg-gray-500"><a href="/postagens" className="postagens px-2">Minhas Postagens</a></li>
+              <li className="hover:bg-gray-500"><a href="/postagens" className="postagens"><button className="w-full p-2">Minhas Postagens</button></a></li>
               <hr />
-              <li className="hover:bg-gray-500"><a href="/ongs" className="ongs px-2">ONG's</a></li>
+              <li className="hover:bg-gray-500"><a href="/ongs" className="ongs"><button className="w-full p-2">ONG's</button></a></li>
             </ul>
           </details>
         </div>
