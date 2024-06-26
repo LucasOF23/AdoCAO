@@ -1,6 +1,8 @@
 import userController from "../controllers/user.controller.js"
 
 function addUserRoutes(router, needAuth) {
+	router.get('/users/ongs', needAuth, userController.getOngs);
+	
 	router.put('/users/:id/contact-info', needAuth, userController.updateContactInfo);
 	router.put('/users/contact-info', needAuth, userController.updateContactInfo);
 

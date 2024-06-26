@@ -1,5 +1,6 @@
 import model from "../models/user.model.js"
 import ContactInfo from "../models/contactinfo.model.js"
+import ONG from "../models/ong.model.js"
 
 // ==================
 // === NEEDS AUTH ===
@@ -95,5 +96,25 @@ async function changeSuperAdminStatus(request, response) {
 	});
 }
 
-const userController = { findByPk, update, updateContactInfo, changeSuperAdminStatus };
+async function getOngs(request, response) {
+	try{
+		const res = await model.findByPk(response.locals.userId, {
+			attributes: [],
+			include: { model: ONG, through: { attributes: ['isManager'] } }
+		});
+
+		response.status(200).send(res.ONGs.map(ong => {
+			ong = ong.get({ plain: true });
+			ong.isManager = ong.UserWorksAtONG.isManager;
+			delete ong.UserWorksAtONG;
+
+			return ong;
+		}));
+	} catch(err) {
+		console.log(err);
+		response.status(500).send();
+	}
+}
+
+const userController = { findByPk, update, updateContactInfo, changeSuperAdminStatus, getOngs };
 export default userController;

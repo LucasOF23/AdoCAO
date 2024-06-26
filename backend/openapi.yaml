@@ -221,6 +221,23 @@ paths:
                 items:
                   $ref: "#/components/schemas/AnimalResponse"
 
+  /users/ongs:
+    get:
+      tags:
+        - Ongs
+      security:
+        - Bearer: []
+      summary: Retrieve ongs which the logged in user works on
+      responses:
+        "200":
+          description: Array of animal objects belonging to the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ONGResponse"
+
   /animals/{id}/tag:
     post:
       tags:
