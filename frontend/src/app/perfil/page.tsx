@@ -15,10 +15,21 @@ export default function AdoptionPosts() {
           id: 1,
           user_type: "user",
           name: "Zeca",
-          location: { city: "São Carlos", state: "São Paulo" , type_loc: 'casa'},
-          imageUrl: "https://images.dog.ceo/breeds/lhasa/n02098413_7389.jpg",
-          cellphone: "(16) 9xxxx-xxxx",
-          email: "zeca@estadual.com.br",
+          location: { city: "São Carlos", state: "São Paulo"},
+          contato: {
+            telefone: "(16) 9xxxx-xxxx",
+            email: "zeca@estadual.com.br",
+            insta: "",
+            face: "",
+            outro: "",
+          },
+          adress: "",
+          cnpj: "",
+          membersEmail: [
+            "",
+          ],
+          managerEmail: "",
+          Description: "",
           animals: [{
             id: 9,
             name: "J. Robert Oppenheimer",
@@ -50,13 +61,6 @@ export default function AdoptionPosts() {
     <>
       <Navbar />
       <div className="p-4 screen-max-width grid justify-items-center grid-autofit ">
-        <Image
-            alt={`Imagem do Perfil ${profileInfo.name}`}
-            className="object-cover"
-            src={profileInfo.imageUrl}
-            width={400}
-            height={400}
-          />
         <div className="w-full">
             <h1 className="text-5xl font-bold text-center p-5">Meu Perfil</h1>
             <hr />
@@ -66,11 +70,10 @@ export default function AdoptionPosts() {
                     <div className="p-5">
                         <ul>
                             <li>Nome: {profileInfo.name}</li>
-                            <li>Email: {profileInfo.email}</li>
-                            <li>Celular: {profileInfo.cellphone}</li>
+                            <li>Email: {profileInfo.contato.email}</li>
+                            <li>Celular: {profileInfo.contato.telefone}</li>
                             <li>Estado: {profileInfo.location.state}</li>
                             <li>Cidade: {profileInfo.location.city}</li>
-                            <li>Tipo de moradia: {profileInfo.location.type_loc}</li>
                         </ul>
                     </div>
                 </div>

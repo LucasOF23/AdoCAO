@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 type FormsProps = {
-  onClose?: () => void;
+    onClose?: () => void;
 };
 
 export default function Forms({ onClose }: FormsProps) {

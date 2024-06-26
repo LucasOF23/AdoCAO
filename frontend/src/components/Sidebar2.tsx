@@ -10,7 +10,7 @@ type FormsProps = {
   onClose?: () => void;
 };
 
-export default function Forms({ onClose }: FormsProps) {
+export default function Sidebar({ onClose }: FormsProps) {
 
   return (
     <div className="absolute left-0 top-0 border p-4 max-w-96 w-full h-screen overflow-auto flex flex-col gap-5 bg-white">
