@@ -14,6 +14,9 @@ type LoginProps = {
 export default function Login({ onClose }: LoginProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [differentPassword, setDifferentPassword] = useState(false);
+  const [emailExist, setEmailExist] = useState(false);
+  const [emailNotExist, setEmailNotExist] = useState(false);
 
   async function sendLogin(event) {
     const { email, password } = event.target;
@@ -25,7 +28,7 @@ export default function Login({ onClose }: LoginProps) {
     } catch(err) {
       const statusCode = err.response.status;
       switch(statusCode) {
-        case 404: console.log('Email não cadastrado.');
+        case 404: setEmailNotExist(true);
           break;
         default: console.log('Erro desconhecido.');
       }
@@ -36,7 +39,7 @@ export default function Login({ onClose }: LoginProps) {
     const { name, email, password, confirmPassword } = event.target;
 
     if(password.value !== confirmPassword.value) {
-      console.log('Senhas não batem!');
+      setDifferentPassword(true);
       return;
     }
 
@@ -47,7 +50,7 @@ export default function Login({ onClose }: LoginProps) {
     } catch(err) {
       const statusCode = err.response.status;
       switch(statusCode) {
-        case 400: console.log('Email já cadastrado.');
+        case 400: setEmailExist(true);
           break;
         default: console.log('Erro desconhecido.');
       }
@@ -104,6 +107,12 @@ export default function Login({ onClose }: LoginProps) {
         </button>
       </div>
 
+      {isLogin && (
+        <div className="text-center text-red-400">
+          {emailExist ? "O email ou senha estão incorretos!!!" : ""}
+        </div>
+      )}
+
       {!isLogin && (
         <div>
           <Label>Confirma Senha</Label>
@@ -118,6 +127,18 @@ export default function Login({ onClose }: LoginProps) {
           >
             {passwordVisible ? "Esconder senha" : "Ver senha"}
           </button>
+        </div>
+      )}
+
+      {!isLogin && (
+        <div className="text-center text-red-400 text-xs pb-5">
+          {differentPassword ? "As senhas são diferentes!!!" : ""}
+        </div>
+      )}
+
+      {!isLogin && (
+        <div className="text-center text-red-400">
+          {emailExist ? "O email já existe!!!" : ""}
         </div>
       )}
 
