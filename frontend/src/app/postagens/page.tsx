@@ -20,9 +20,14 @@ export default function AdoptionPosts() {
           user_type: "user",
           name: "Zeca",
           location: { city: "São Carlos", state: "São Paulo" },
-          imageUrl: "https://images.dog.ceo/breeds/lhasa/n02098413_7389.jpg",
-          cellphone: "(16) 9xxxx-xxxx",
-          email: "zeca@estadual.com.br",
+          contato: {telefone: "(16) 9xxxx-xxxx", email: "zeca@estadual.com.br", face:"", insta:"", outro:"",},
+          adress: "",
+          cnpj: "",
+          membersEmail: [
+            "",
+          ],
+          managerEmail: "",
+          Description: "",
           animals: [{
             id: 9,
             name: "J. Robert Oppenheimer",

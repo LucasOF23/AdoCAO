@@ -8,11 +8,12 @@ import { createPortal } from "react-dom";
 import Navbar2 from "@/components/Navbar2";
 import Lowerbar from "@/components/Lowerbar";
 import Forms from "@/components/Forms_Ong";
-import Sidebar from "@/components/Sidebar2";
+import Sidebar from "@/components/Sidebar";
 import { ProfileInfo } from "@/types/profile";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser} from "@fortawesome/free-solid-svg-icons";
 
 export default function AdoptionPosts() {
     const profileInfos: [ProfileInfo] = [
@@ -21,9 +22,7 @@ export default function AdoptionPosts() {
         user_type: "ONG",
         name: "S.O.S. Doguinhos",
         location: { city: "São Carlos", state: "São Paulo" },
-        imageUrl: "https://images.dog.ceo/breeds/poodle-standard/n02113799_1316.jpg",
-        cellphone: "(12) 3 4567-8910",
-        email: "aaa",
+        contato: {telefone: "(12) 3 4567-8910", email: "aaa",},
         animals: [],
       },
       {
@@ -31,9 +30,7 @@ export default function AdoptionPosts() {
         user_type: "ONG",
         name: "Dogões S.A.",
         location: { city: "São Carlos", state: "São Paulo" },
-        imageUrl: "https://images.dog.ceo/breeds/shiba/shiba-17.jpg",
-        cellphone: "(12) 3 4567-8910",
-        email: "aaa",
+        contato: {telefone: "(12) 3 4567-8910", email: "bbb",},
         animals: [],
       },
       {
@@ -41,9 +38,7 @@ export default function AdoptionPosts() {
         user_type: "user",
         name: "Zeca",
         location: { city: "São Carlos", state: "São Paulo" },
-        imageUrl: "",
-        cellphone: "aaa",
-        email: "aaa",
+        contato: {telefone: "aaa", email:"ccc",},
         animals: [],
       },
     ];
@@ -57,16 +52,41 @@ export default function AdoptionPosts() {
   
     const hiddenClass = isAuthVisible ? "hidden" : "";
   
-    const [isAuthVisible2, setAuthVisible2] = useState(false);
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
   
-    const closeModal2 = () => setAuthVisible2(false);
-    const openModal2 = () => setAuthVisible2(true);
+    const closeSidebar = () => setSidebarVisible(false);
+    const openSidebar = () => setSidebarVisible(true);
   
-    const hiddenClass2 = isAuthVisible2 ? "hidden" : "";
+    const hiddenClass2 = isSidebarVisible ? "hidden" : "";
+
+    const [isONGMember, setAllowONG] = useState(false);
+
+    const [isEditionVisible, setEditionVisible] = useState(false);
+  
+    const closeEdition = () => setEditionVisible(false);
+    const openEdition = () => setEditionVisible(true);
+  
+    const hiddenClass3 = isEditionVisible ? "hidden" : "";
 
   return (
     <>
       <Navbar2 />
+        <button onClick={openSidebar} className="cursor-pointer itens-top absolute top-20 left-0 justify-center w-20 rounded-br-xl
+          border mx-auto p-3 shadow-sm bg-white">
+            <FontAwesomeIcon
+                className="mt-[0.1rem] h-[1.5rem] text-gray-400"
+                icon={faSearch}
+              />
+        </button>
+          {isSidebarVisible &&
+            createPortal(
+              <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
+                <div className="mx-auto my-auto p-4 w-full">
+                  <Sidebar onClose={closeSidebar} />
+                </div>
+              </div>,
+              document.body
+            )}
         <div className="text-center text-5xl font-bold m-10 mt-14">Conheça nossas ONG's parceiras!</div>
       
       
