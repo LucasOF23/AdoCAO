@@ -4,9 +4,6 @@ import { Op } from "sequelize";
 async function findAllMixed(request, response) {
 	const { state, name } = request.query;
 
-	if (!state && !name)
-		return response.status(400).send('Estado ou nome não especificados.');
-
 	let queryData = {};
 
 	if (name) {

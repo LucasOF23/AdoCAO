@@ -1,18 +1,24 @@
-import { getAnom, post, delete } from './general.api.ts';
+import { getAnom, post, remove } from './general.api.ts';
 
-export function getAll() {
-  return getAnom('animal-tags');
+async function getAll() {
+  const res = await getAnom('animal-tags');
+  return res.data;
 }
 
-export function getByName(name) {
-  return getAnom('animal-tags/name/' + name);
+async function getByName(name) {
+  const res = await getAnom('animal-tags/name/' + name);
+  return res.data;
 }
 
-export function create(name) {
+function create(name) {
   return post('animal-tags', { name });
 }
 
-export function remove(id) {
-  return delete(`animal-tags/${id}`);
+function removeTag(id) {
+  return remove(`animal-tags/${id}`);
+}
+
+export default {
+  getAll, getByName, create, removeTag 
 }
 

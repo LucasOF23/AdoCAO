@@ -1,34 +1,69 @@
-import { getAnom, post, put, delete } './general.api.ts';
+import { baseImageUrl, getAnom, post, postAnom, put, remove } from './general.api';
+import { DogInfo } from '@/types/dog';
+import { calculateAge } from '@/lib/utils';
 
-export function getAll() {
-  return getAnom('animals');
+function convertToInfo(d): DogInfo {
+  let owner = {};
+  if(d.User !== null) 
+    owner = { kind: 'user', name: d.User.name, id: d.User.id }
+  else
+    owner = { kind: 'ONG', name: d.ONG.name, id: d.ONG.id }
+
+  return {
+    id: d.id,
+    name: d.name,
+    description: d.description,
+    imageUrl: baseImageUrl + d.imagePath,
+    owner: owner,
+    location: d.City,
+    gender: (d.animalGender === 'M') ? 'male' : 'female',
+    ageInYears: calculateAge(d.birthdate, new Date()),
+    weightInKg: d.weightInKg,
+    heightInCm: d.heightInCm,
+    species: d.AnimalSpecie,
+    isNeutered: d.isNeutered,
+    isDewormed: d.isDewormed,
+    tags: d.AnimalTags
+  }
 }
 
-export function create(formData) {
+async function getAll(): DogInfo[] {
+  const res = await getAnom('animals');
+  console.log('Chamou todos animais');
+
+  return res.data.map(convertToInfo);
+}
+
+function create(formData) {
   return post('animals', formData);
 }
 
-export function getById(id) {
+function getById(id) {
   return getAnom(`animals/${id}`);
 }
 
-export function update(id, formData) {
+function update(id, formData) {
   return put(`animals/${id}`, formData);
 }
 
-export function remove(id) {
-  return delete(`animals/${id}`);
+function removeAnimal(id) {
+  return remove(`animals/${id}`);
 }
 
-export function addTag(animalId, tagId) {
+function addTag(animalId, tagId) {
   return post(`animals/${animalId}/tag`, { tagId });
 }
 
-export function removeTag(animalId, tagId) {
-  return delete(`animals/${animalId}/tag`, { tagId });
+function removeTag(animalId, tagId) {
+  return remove(`animals/${animalId}/tag`, { tagId });
 }
 
-export function searchWithFilter(filters) {
-  return post('animals/search', filters);
+async function searchWithFilter(filters): DogInfo[] {
+  const res = await postAnom('animals/search', filters);
+  return res.data.map(convertToInfo);
+}
+
+export default {
+  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter
 }
 

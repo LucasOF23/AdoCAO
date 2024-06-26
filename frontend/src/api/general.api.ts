@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiUrl = 'http://localhost:8080/';
-const baseImageUrl = 'http://192.168.0.14:9000/fotos-adocao/';
+const baseImageUrl = 'http://localhost:9000/fotos-adocao/';
 
 export {
   apiUrl as url,
@@ -50,7 +50,7 @@ export function put(url, data?, config?) {
   return axios.put(apiUrl + url, data, addTokenConfig(config));
 }
 
-export function delete(url, config?) {
+export function remove(url, config?) {
   return axios.delete(apiUrl + url, addTokenConfig(config));
 }
 
