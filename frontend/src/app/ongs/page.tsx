@@ -59,15 +59,6 @@ export default function AdoptionPosts() {
   
     const hiddenClass2 = isSidebarVisible ? "hidden" : "";
 
-    const [isONGMember, setAllowONG] = useState(false);
-
-    const [isEditionVisible, setEditionVisible] = useState(false);
-  
-    const closeEdition = () => setEditionVisible(false);
-    const openEdition = () => setEditionVisible(true);
-  
-    const hiddenClass3 = isEditionVisible ? "hidden" : "";
-
   return (
     <>
       <Navbar2 />
