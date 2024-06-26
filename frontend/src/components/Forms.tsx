@@ -13,14 +13,14 @@ export default function Forms({ onClose }: FormsProps) {
   const [isForms, setIsForms] = useState(true);
 
   return (
-    <div className="mx-auto my-auto relative border top-0 rounded-t-2xl p-6 m-5 max-w-96 overflow-auto flex flex-col gap-5 bg-white">
-        <div className={isForms ? "": "h-screen"}>
+    <div className="forms-shape">
+        <div className="relative">
             <h2 className="text-center text-3xl">{isForms ? "Formulário Dono" : "Formulário Animal"}</h2>
 
             {onClose && (
                 <button onClick={onClose}>
                 <FontAwesomeIcon
-                    className="mt-[0.1rem] h-[1.5rem] text-gray-400 absolute top-5 right-5"
+                    className="mt-[0.1rem] h-[1.5rem] text-gray-400 absolute top-2 right-3"
                     icon={faXmark}
                 />
                 </button>

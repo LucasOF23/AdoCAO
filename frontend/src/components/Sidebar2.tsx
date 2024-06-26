@@ -13,7 +13,7 @@ export default function Forms({ onClose }: FormsProps) {
 
   return (
     <div className="absolute left-0 top-0 border p-4 max-w-96 w-full h-screen overflow-auto flex flex-col gap-5 bg-white">
-      <h2 className="title_filter">Filtros</h2>
+      <h2 className="title-filter">Filtros</h2>
 
       {onClose && (
         <button onClick={onClose}>
