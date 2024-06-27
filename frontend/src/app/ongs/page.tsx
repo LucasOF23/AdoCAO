@@ -1,6 +1,7 @@
 "use client";
 
 import OngCard from "@/components/OngCard";
+import OngCard2 from "@/components/OngCard2";
 
 import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
@@ -59,14 +60,14 @@ export default function AdoptionPosts() {
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {profileInfos.map((info) => (
           info.user_type === "ONG" 
-            ? (<OngCard key={info.id} info={info} />)
+            ? (isUserAdmin ? <OngCard2 key={info.id} info={info} /> : (<OngCard key={info.id} info={info} />)  )
             : null
         ))}
         <button onClick={openModal}
           className={isUserAdmin ? "btn text-9xl text-center content-center border rounded-2xl overflow-hidden w-full max-w-96 hover:shadow-md hover:scale-[101%] transition delay-50" : "hidden"}>
           +
         </button>
-        {isAuthVisible &&
+        {isAuthVisible &&  
           createPortal(
             <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
               <div className="mx-auto my-auto p-4 w-full content-center flex justify-center">

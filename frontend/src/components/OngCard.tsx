@@ -18,18 +18,6 @@ export type OngCardProps = {
 export default function OngCard({ info } : OngCardProps) {
   const imageAlt = `Imagem da ONG "${info.name}"`;
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  
-  const openModal = () => setIsModalVisible(true);
-  const closeModal = () => setIsModalVisible(false);
-
-  const token = getToken();
-  useEffect(() => {
-    const token = getToken();
-    setIsSuperAdmin(token ? token.payload.isSuperAdmin : false);
-  }, []);
-
   return (
     <>
       <button className="border rounded-t-2xl overflow-hidden w-full max-w-96 bg-white hover:shadow-md hover:scale-[101%] transition delay-50">
