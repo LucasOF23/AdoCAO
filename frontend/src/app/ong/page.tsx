@@ -48,7 +48,7 @@ export default function ONGPosts() {
       <EditONG ongId={id} />
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {dogInfos.map((info) => (
-          <AdoptionCard tipo={true} key={info.id} info={info} />
+          <AdoptionCard tipo={true} key={info.id} info={info} isFromOng={true} />
         ))}
         <button
           onClick={openModal}

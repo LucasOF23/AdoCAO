@@ -37,6 +37,12 @@ async function getFromOng(id) {
   return res.data.map(convertToInfo);
 }
 
+async function getFromUser(id) {
+  const res = await getAnom(`users/${id}/animals`);
+  console.log('Got', res.data);
+  return res.data.map(convertToInfo);
+}
+
 function create(formData) {
   return post('animals', formData);
 }
@@ -67,6 +73,6 @@ async function searchWithFilter(filters): DogInfo[] {
 }
 
 export default {
-  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter, getFromOng
+  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter, getFromOng, getFromUser
 }
 

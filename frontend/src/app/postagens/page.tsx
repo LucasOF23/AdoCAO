@@ -2,7 +2,7 @@
 
 import AdoptionCard from "@/components/AdoptionCard";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Forms from "@/components/Forms";
 import Navbar2 from "@/components/Navbar2";
@@ -13,51 +13,12 @@ import { ProfileInfo } from "@/types/profile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export default function AdoptionPosts() {
-  const profileInfo: ProfileInfo = 
-    {
-      id: 1,
-      user_type: "user",
-      name: "Zeca",
-      location: { city: "São Carlos", state: "São Paulo" },
-      contato: {telefone: "(16) 9xxxx-xxxx", email: "zeca@estadual.com.br", face:"", insta:"", outro:"",},
-      adress: "",
-      cnpj: "",
-      membersEmail: [
-        "",
-      ],
-      managerEmail: "",
-      Description: "",
-      animals: [{
-        id: 9,
-        name: "J. Robert Oppenheimer",
-        imageUrl: "https://images.dog.ceo/breeds/boxer/n02108089_2791.jpg",
-        owner: {
-          id:1,
-          kind: "user",
-          name: "Zeca",
-        },
-        location: {
-          id: 3,
-          name: "São Carlos",
-          state: "SP",
-        },
-        gender: "male",
-        ageInYears: 1,
-        weightInKg: 4,
-        heightInCm: 20,
-        species: {
-          id: 1,
-          name: "Cachorro",
-        },
-        description: "oi",
-        isNeutered: true,
-        isDewormed: true,
-        tags: [],
-      }]
-    }
-    ;
+import animalApi from "@/api/animal.api";
+import { getToken } from "@/api/general.api";
 
+export default function AdoptionPosts() {
+  const [userId, setUserId] = useState(null);
+  const [dogInfos, setDogInfos] = useState([]);
   const [isAuthVisible, setAuthVisible] = useState(false);
 
   const closeModal = () => setAuthVisible(false);
@@ -72,6 +33,16 @@ export default function AdoptionPosts() {
 
   const hiddenClass2 = isAuthVisible2 ? "hidden" : "";
 
+  useEffect(() => {
+    const token = getToken();
+    if(token) setUserId(token.payload.sub);
+  }, []);
+
+  useEffect(() => {
+    if(userId)
+      animalApi.getFromUser(userId).then(res => setDogInfos(res));
+  }, [userId]);
+  
   return (
     <>
       <Navbar2 />
@@ -92,8 +63,8 @@ export default function AdoptionPosts() {
           document.body
         )}
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
-        {profileInfo.animals.map((info) => (
-          <AdoptionCard tipo={true} key={info.id} info={info} />
+        {dogInfos.map((info) => (
+          <AdoptionCard tipo={true} key={info.id} info={info} isFromOng={false} />
         ))}
         <button
           onClick={openModal}
