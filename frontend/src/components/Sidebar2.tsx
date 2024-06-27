@@ -145,7 +145,7 @@ export default function Sidebar({ onClose, updateAnimals }: FormsProps) {
             />
           </button>
         )}
-        <div className="overflow-scroll">
+        <div>
           <Label>Cidade</Label>
           <select
             name="cityIds"
