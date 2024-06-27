@@ -64,11 +64,19 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
       setTags(
         res.map((tag) => {
           tag.isMarked = false;
+          for(const infoTag of info.tags) {
+            if(infoTag.id === tag.id) {
+              tag.isMarked = true;
+              break;
+            }
+          }
+          
           return tag;
         })
       )
     );
   }, []);
+  
   useEffect(() => {
     specieApi.getAll().then(res => setSpecies(res));
   }, []);
@@ -122,6 +130,30 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
     }
   }
 
+  async function handleTagMark(event, idx) {
+    const isMarked = event.target.checked;
+    const tagId = tags[idx].id;
+    
+    try {
+      if(isMarked) {
+        await animalApi.addTag(info.id, tagId);
+        console.log('Tag', tags[idx].name, 'adicionada com sucesso');
+      } else {
+        await animalApi.removeTag(info.id, tagId);
+        console.log('Tag', tags[idx].name, 'removida com sucesso');
+      }
+
+      const newArr = [...tags];
+      newArr[idx].isMarked = isMarked;
+      setTags(newArr);
+    } catch(err) {
+      switch(err.response.status) {
+      default:
+        console.log('Erro inesperado');
+      }
+    }
+  }
+
   function renderTags(tags) {
     const cntPerLine = 2;
     const lines = [];
@@ -142,19 +174,19 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
           </summary>
           <ul className="p-1 shadow menu z-[1] flex flex-col bg-white rounded-box">
             {lines.map((line, indexLine) => (
-              <li className="flex">
+              <li key={indexLine} className="flex">
                 {line.map((tag, index) => (
-                  <>
+                  <div key={index}>
                     <Label className="w-1/3">{tag.name}</Label>
-                    <Input
+                    <Input 
                       type="checkbox"
-                      value={tag.isMarked}
+                      checked={tag.isMarked}
                       onChange={(event) =>
                         handleTagMark(event, indexLine * cntPerLine + index)
                       }
                       className="h-5 hover:cursor-pointer w-1/6"
                     />
-                  </>
+                  </div>
                 ))}
               </li>
             ))}

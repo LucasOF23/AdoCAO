@@ -66,7 +66,7 @@ function addTag(animalId, tagId) {
 }
 
 function removeTag(animalId, tagId) {
-  return remove(`animals/${animalId}/tag`, { tagId });
+  return remove(`animals/${animalId}/tag`, { data: { tagId }});
 }
 
 async function searchWithFilter(filters): DogInfo[] {
