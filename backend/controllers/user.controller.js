@@ -1,6 +1,7 @@
 import model from "../models/user.model.js"
 import ContactInfo from "../models/contactinfo.model.js"
 import ONG from "../models/ong.model.js"
+import City from "../models/city.model.js"
 
 // ==================
 // === NEEDS AUTH ===

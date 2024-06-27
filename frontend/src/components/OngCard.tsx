@@ -32,7 +32,7 @@ export default function OngCard({ info }: OngCardProps) {
 
   return (
     <>
-      <button onClick={ (isSuperAdmin || info.isManager ) ? openModal : null}
+      <button onClick={ (isSuperAdmin || info.isManager !== undefined ) ? openModal : null}
         className="border rounded-t-2xl overflow-hidden w-full max-w-96 bg-white hover:shadow-md hover:scale-[101%] transition delay-50">
       <div className="border rounded-t-2xl overflow-hidden w-full max-w-lg hover:shadow-md hover:scale-[101%] transition delay-50 flex">
       <FontAwesomeIcon

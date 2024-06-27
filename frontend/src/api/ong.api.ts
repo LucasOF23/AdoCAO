@@ -15,7 +15,8 @@ function convertToProfileInfo(d) {
       face: c.facebookProfile,
       telefone: c.telephoneNumber,
       outro: c.other
-    }
+    },
+    isManager: d.isManager
   }
 }
 
@@ -25,7 +26,7 @@ async function getAll() {
 }
 
 async function getUserActualOngs() {
-  const res = await get('ongs/users');
+  const res = await get('users/ongs');
   return res.data.map(d => convertToProfileInfo(d));
 }
 
