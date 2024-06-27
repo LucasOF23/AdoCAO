@@ -173,12 +173,21 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
       {isModalVisible &&
         createPortal(
           <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
-            <div className="mx-auto my-auto p-4">
-              <DetailedPost tipo={tipo} info={info} onClose={closeModal} />
-            </div>
+            {!tipo && (
+              <div className="mx-auto my-auto p-4">
+                <DetailedPost info={info} onClose={closeModal} />
+              </div>
+            )}
             {(tipo) && (
-              <div className="mx-auto my-auto p-4 border rounded-t-2xl  overflow-scroll max-w-4xl flex h-screen flex-col sm:flex-row bg-white">
-                <div className="">
+              <div className="mx-auto my-auto p-4 border rounded-t-2xl overflow-scroll max-w-4xl h-screen sm:flex-row bg-white">
+                <div className="py-5">
+                  <Label className="text-2xl text-center">Confirmar Adoção</Label>
+                  <div className="mt-2 justify-center flex">
+                    <button className="font-semibold bg-blue-600 rounded-full h-12 w-40 border text-xs">Já foi Adotado!!!</button>
+                  </div>
+                </div>
+                <hr />
+                <div className="py-5">
                   <Label className="text-2xl text-center">Editar Postagem</Label>
                   <form onSubmit={editAnimal}>                 
                     <div>
