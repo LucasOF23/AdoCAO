@@ -199,8 +199,6 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
               <Input name="heightInCm" type="peso" placeholder="3 m" />
             </div>
 
-            { renderTags(tags) }
-                    
             <div className="flex flex-row p-4 justify-start">
               <div className="basis-1/2 flex flex-row">
                 <Label>Vermifugado</Label>
