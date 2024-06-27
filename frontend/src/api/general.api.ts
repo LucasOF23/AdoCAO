@@ -9,11 +9,13 @@ export {
 };
 
 export function storeToken(token) {
-  window.sessionStorage.setItem('token-adocao', token);
+  window.sessionStorage.setItem('token-adocao', JSON.stringify(token));
 }
 
 export function getToken() {
-  return window.sessionStorage.getItem('token-adocao');
+  if(!window) return null;
+  const data = window.sessionStorage.getItem('token-adocao');
+  return data ? JSON.parse(data) : null;
 }
 
 export function getAnom(url, config?) {

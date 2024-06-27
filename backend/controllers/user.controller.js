@@ -100,7 +100,14 @@ async function getOngs(request, response) {
 	try{
 		const res = await model.findByPk(response.locals.userId, {
 			attributes: [],
-			include: { model: ONG, through: { attributes: ['isManager'] } }
+			include: {
+				model: ONG,
+				through: { attributes: ['isManager'] },
+				include: [
+					{ model: City },
+					{ model: ContactInfo }
+				]
+			}
 		});
 
 		response.status(200).send(res.ONGs.map(ong => {

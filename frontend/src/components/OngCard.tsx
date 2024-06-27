@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import { ProfileInfo } from "@/types/profile";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import EditONG from "./EditONG";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser} from "@fortawesome/free-solid-svg-icons";
+
+import { getToken } from "@/api/general.api";
 
 export type OngCardProps = {
   info: ProfileInfo;
@@ -17,17 +19,20 @@ export default function OngCard({ info }: OngCardProps) {
   const imageAlt = `Imagem da ONG "${info.name}"`;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  
   const openModal = () => setIsModalVisible(true);
   const closeModal = () => setIsModalVisible(false);
 
-  const [isUserAdmin, setAllonONG] = useState(true);
-
-  const [isONGMember, setAllowONG2] = useState(false);
+  const token = getToken();
+  useEffect(() => {
+    const token = getToken();
+    setIsSuperAdmin(token ? token.payload.isSuperAdmin : false);
+  }, []);
 
   return (
     <>
-      <button onClick={isUserAdmin ? openModal : isONGMember ? openModal : closeModal}
+      <button onClick={ (isSuperAdmin || info.isManager ) ? openModal : null}
         className="border rounded-t-2xl overflow-hidden w-full max-w-96 bg-white hover:shadow-md hover:scale-[101%] transition delay-50">
       <div className="border rounded-t-2xl overflow-hidden w-full max-w-lg hover:shadow-md hover:scale-[101%] transition delay-50 flex">
       <FontAwesomeIcon
@@ -39,7 +44,7 @@ export default function OngCard({ info }: OngCardProps) {
           <p>
             em{" "}
             <span className="font-bold">
-              {info.location.city} ({info.location.state})
+              {info.location.name} ({info.location.state})
             </span>
           </p>
           <p>Contato: {info.contato.telefone}</p>
