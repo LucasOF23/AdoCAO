@@ -19,7 +19,6 @@ import { siglasEstados } from "@/lib/utils";
 
 export type AdoptionCardProps = {
   tipo: boolean;
-  isFromOng: boolean;
   info: DogInfo;
 };
 
@@ -32,7 +31,7 @@ function getOwnerPrefix(kind: DogOwnerKind) {
   }
 }
 
-export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProps) {
+export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
   const imageAlt = `Imagem do cachorro "${info.name}"`;
   const ownerPrefix = getOwnerPrefix(info.owner.kind);
 
@@ -82,10 +81,6 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
       } else
         formData.append(key, '0');
     }
-
-    formData.append('isUserOwned', isFromOng ? '0' : '1');
-    if(isFromOng)
-      formData.append('ongId', ongId);
     
     console.log(formData);
 
@@ -142,7 +137,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
       </div>
     );
   }
-  
+
   return (
     <>
       <button
@@ -228,7 +223,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
 
                     <div>
                       <Label>Sexo</Label>
-                      <select name="animalGender" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.gender} required>
+                      <select name="animalGender" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.gender === 'male' ? 'M' : 'F'} required>
                         <option value="M">Macho</option>
                         <option value="F">Fêmea</option>
                       </select>

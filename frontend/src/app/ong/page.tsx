@@ -61,7 +61,7 @@ export default function ONGPosts() {
           createPortal(
             <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
               <div className="mx-auto my-auto p-4 w-full content-center flex justify-center">
-                <Forms tipo={false} onClose={closeModal} />
+                <Forms isFromOng={true} ongId={id} onClose={closeModal} />
               </div>
             </div>,
             document.body
