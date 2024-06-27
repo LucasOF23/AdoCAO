@@ -4,6 +4,8 @@ import UserWorksAtONG from "../models/userworksatong.js"
 import Animal from "../models/animal.model.js";
 import City from "../models/city.model.js";
 import ContactInfo from "../models/contactinfo.model.js";
+import AnimalSpecie from "../models/animalspecie.model.js";
+import AnimalTag from "../models/animaltag.model.js";
 
 const defaultInclude = [
 	{ model: City },
@@ -67,7 +69,7 @@ async function findWorkers(request, response) {
 
 async function findAnimals(request, response) {
 	try {
-		const res = await Animal.findAll( { where: { ONGId: request.params.id }});
+		const res = await Animal.findAll( { where: { ONGId: request.params.id }, include: [ model, City, AnimalSpecie, AnimalTag ]});
 		response.status(200).json( (res) ? res : [] );
 	} catch(err) {
 		console.log(err);
@@ -113,8 +115,8 @@ async function update(request, response) {
 			if(!workRel)
 				return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
 
-			if(!workRel.isManager)
-				return response.status(403).send('Usuário não é administrador da ONG.');
+			//if(!workRel.isManager)
+			//	return response.status(403).send('Usuário não é administrador da ONG.');
 		}
 
 		await model.update(updData, {where: { id: request.params.id }});

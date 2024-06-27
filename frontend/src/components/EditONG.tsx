@@ -15,17 +15,14 @@ import ongApi from "@/api/ong.api";
 import { siglasEstados } from "@/lib/utils";
 import { getToken } from "@/api/general.api"; 
 
-export type DetailedPostProps = {
-  info: ProfileInfo;
-  onClose?: () => void;
-};
 
-export default function EditONG({ info, onClose }: DetailedPostProps) {
-
+export default function EditONG({ ongId }) {
   const [emailNotExist, setEmailNotExist] = useState(false);
 
   const [differentEmail, setDifferentEmail] = useState(false);
 
+  const [info, setInfo] = useState({location: {}, contato: {}});
+  
   const [cities, setCities] = useState([]);
   const [estado, setEstado] = useState('');
 
@@ -35,11 +32,55 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
   }
   
   useEffect(getCities, [estado]);
+  useEffect(() => {
+    if(ongId)
+      ongApi.getById(ongId).then(res => {
+        setInfo(res);
+        setEstado(res.location.state);
+      });
+  }, [ongId])
+  
+  async function updateContact(event) {
+    const keys = ['email', 'phoneNumber', 'instagramProfile', 'facebookProfile', 'other'];
+    let data = {};
+    for(const key of keys) {
+      const value = event.target[`contact_${key}`].value;
+      if(value) data[key] = value;
+    }
 
-  function editOng(event) {
+    try {
+      await ongApi.updateContactInfo(ongId, data);
+    } catch(err) {
+      switch(err.response.status) {
+      default:
+        console.log('Erro desconhecido.');
+      }
+    }
+  }
+  
+  async function editOng(event) {
     event.preventDefault();
+    const keys = ['name', 'cnpj', 'CityId', 'address'];
+    
+    let data = {};
+    for(const key of keys) {
+      const value = event.target[key].value;
+      if(value) data[key] = value;
+    }
 
-    // TODO: Terminar depois, talvez tenha um melhor jeito?
+    try {
+      await ongApi.edit(ongId, data);
+      await updateContact(event);
+
+      console.log('Dados alterados com sucesso!');
+    } catch(err) {
+      console.log(err);
+      
+      switch(err.response.status) {
+      default:
+        console.log('Erro desconhecido.');
+      }
+    }
   }
 
   async function assignWorker(event) {
@@ -48,10 +89,10 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
     const email = event.target.email.value;
     const ongId = info.id;
 
-    // const isManager = event.target.isManager.checked;
+    // TODO: const isManager = event.target.isManager.checked;
     const isManager = false;
     if(isManager && (!info.isManager && !getToken().isSuperAdmin)) {
-      console.log('Você não pode adicionar outro manager');
+      console.log('Você não pode adicionar outro gerente');
       return;
     }
 
@@ -98,22 +139,11 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
       }
     }
   }
-
+  
   return (
     <div className="forms-shape2">
       <div>
         <div className="px-5">
-          <div>
-            {onClose && (
-              <button type="button" onClick={onClose}>
-                <FontAwesomeIcon
-                  className="mt-[0.1rem] h-[1.5rem] text-gray-400"
-                  icon={faXmark}
-                />
-              </button>
-            )}
-          </div>
-
           <Label className="text-2xl w-full text-center">Formulário de Adição de Colaborador</Label>
           <form onSubmit={assignWorker}>
             <div className="flex flex-col">
@@ -121,16 +151,16 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
                 <Label>Email</Label>
                 <Input name="email" type="contato" placeholder="email"/>
               </div>
-            </div>
 
-            {emailNotExist && (
-              <Label className="text-red-400 text-xs">Email não existe!!!</Label>
-            )}
+              {emailNotExist && (
+                <Label className="text-red-400 text-xs">Email não existe!!!</Label>
+              )}
 
-            <div className="text-center p-4">
-              <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
-                Enviar
-              </button>
+              <div className="text-center p-4">
+                <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+                  Enviar
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -173,13 +203,13 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
         <Label className="text-2xl text-center pb-10">Formulário de Edição da ONG</Label>
         <form onSubmit={editOng}>
           <div>
-            <Label>Nome da ONG - {info.name}</Label>
-            <Input name="name" type="nome" placeholder={info.name}/>
+            <Label>Nome da ONG</Label>
+            <Input name="name" type="nome" defaultValue={info.name}/>
           </div>
             
           <div>
-            <Label>Estado - {info.location.state}</Label>
-            <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+            <Label>Estado</Label>
+            <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.location.state}>
               <option></option>
               {siglasEstados.map(sigla => (
                 <option key={sigla} value={sigla}>{sigla}</option>
@@ -188,8 +218,8 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
           </div>
 
           <div>
-            <Label>Cidade - {info.location.name}</Label>
-            <select name="cityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+            <Label>Cidade</Label>
+            <select name="CityId" defaultValue={info.location.id} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
               <option></option>
               {cities.map((city) => (
                 <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
@@ -198,38 +228,38 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
           </div>
 
           <div>
-            <Label>Endereço - {info.address}</Label>
-            <Input name="address" type="email" placeholder="Rua ..." />
+            <Label>Endereço</Label>
+            <Input name="address" type="contato" defaultValue={info.address} />
           </div>
 
           <div>
-            <Label>CNPJ - {info.cnpj}</Label>
-            <Input name="cnpj" type="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" />
+            <Label>CNPJ</Label>
+            <Input name="cnpj" type="cnpj" defaultValue={info.cnpj} />
           </div>
 
           <div>
-            <Label>Email de Contato - {info.contato.email}</Label>
-            <Input name="contact_email" type="contato" placeholder="email" />
+            <Label>Email de Contato</Label>
+            <Input name="contact_email" type="contato" defaultValue={info.contato.email} />
           </div>
 
           <div>
-            <Label>Telefone - {info.contato.telefone}</Label>
-            <Input name="contact_phoneNumber" type="contato" placeholder="(XX) XXXXX-XXXX" />
+            <Label>Telefone</Label>
+            <Input name="contact_phoneNumber" type="contato" defaultValue={info.contato.telefone} />
           </div>
 
           <div>
-            <Label>Facebook - {info.contato.face}</Label>
-            <Input name="contac_facebookProfile" type="contato" placeholder="facebook" />
+            <Label>Facebook</Label>
+            <Input name="contact_facebookProfile" type="contato" defaultValue={info.contato.face} />
           </div>
 
           <div>
-            <Label>Instagram - {info.contato.insta}</Label>
-            <Input name="contact_instagramProfile" type="contato" placeholder="instagram" />
+            <Label>Instagram</Label>
+            <Input name="contact_instagramProfile" type="contato" defaultValue={info.contato.insta} />
           </div>
 
           <div>
-            <Label>Outro Contato - {info.contato.outro}</Label>
-            <Input name="contact_other" type="contato" placeholder="" />
+            <Label>Outro Contato</Label>
+            <Input name="contact_other" type="contato" defaultValue={info.contato.outro} />
           </div>
 
           <div className="text-center p-4">

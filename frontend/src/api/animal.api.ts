@@ -4,7 +4,7 @@ import { calculateAge } from '@/lib/utils';
 
 function convertToInfo(d): DogInfo {
   let owner = {};
-  if(d.User !== null) 
+  if(d.User) 
     owner = { kind: 'user', name: d.User.name, id: d.User.id }
   else
     owner = { kind: 'ONG', name: d.ONG.name, id: d.ONG.id }
@@ -29,8 +29,11 @@ function convertToInfo(d): DogInfo {
 
 async function getAll(): DogInfo[] {
   const res = await getAnom('animals');
-  console.log('Chamou todos animais');
+  return res.data.map(convertToInfo);
+}
 
+async function getFromOng(id) {
+  const res = await getAnom(`ongs/${id}/animals`);
   return res.data.map(convertToInfo);
 }
 
@@ -64,6 +67,6 @@ async function searchWithFilter(filters): DogInfo[] {
 }
 
 export default {
-  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter
+  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter, getFromOng
 }
 

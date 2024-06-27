@@ -34,8 +34,9 @@ function create(name, address, cnpj) {
   return post('ongs', { name, address, cnpj });
 }
 
-function getById(id) {
-  return getAnom(`ongs/${id}`);
+async function getById(id) {
+  const res = await getAnom(`ongs/${id}`);
+  return convertToProfileInfo(res.data);
 }
 
 function edit(id, opt) {
@@ -56,13 +57,10 @@ async function unassignWorker(ongId, email) {
   return res.status;
 }
 
-function getAnimals(id) {
-  return getAnom(`ongs/${id}/animals`);
-}
 
 function updateContactInfo(id, data) {
-  return put(`/ongs/${id}/contact-info`, data);
+  return put(`ongs/${id}/contact-info`, data);
 }
 
-export default { getAll, getUserActualOngs, create, getById, edit, getWorkers, assignWorker, unassignWorker, getAnimals, updateContactInfo }
+export default { getAll, getUserActualOngs, create, getById, edit, getWorkers, assignWorker, unassignWorker, updateContactInfo }
 

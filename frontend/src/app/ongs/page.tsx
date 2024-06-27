@@ -22,13 +22,9 @@ import ongApi from "@/api/ong.api";
 import { getToken } from "@/api/general.api";
 
 export default function AdoptionPosts() {
-  const [isWorker, setIsWorker] = useState(false);
-  
   const [profileInfos, setProfileInfos] = useState([]);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
   const [isAuthVisible, setAuthVisible] = useState(false);
-
-  const [showOnlyWorkOngs, setShowOnlyWorkOngs] = useState(false);
 
   const closeModal = () => setAuthVisible(false);
   const openModal = () => setAuthVisible(true);
@@ -43,53 +39,19 @@ export default function AdoptionPosts() {
   const hiddenClass2 = isSidebarVisible ? "hidden" : "";
 
   function getOngs() {
-    if(showOnlyWorkOngs)
-      ongApi.getUserActualOngs().then(res => setProfileInfos(res)); 
-    else 
-      ongApi.getAll().then(res => setProfileInfos(res));
+    //ongApi.getUserActualOngs().then(res => setProfileInfos(res));
+    ongApi.getAll().then(res => setProfileInfos(res));
   }
 
-  useEffect(getOngs, [showOnlyWorkOngs]);
+  useEffect(getOngs, []);
   useEffect(() => {
     const token = getToken();
-    setIsWorker(token ? token.payload.isOngWorker : false);
     setIsUserAdmin(token ? token.payload.isSuperAdmin : false);
   }, []);
 
   return (
     <>
       <Navbar2 />
-      {isWorker &&
-        <button onClick={openSidebar} className="cursor-pointer itens-top absolute top-20 left-0 justify-center w-20 rounded-br-xl border mx-auto p-3 shadow-sm bg-white">
-          <FontAwesomeIcon
-            className="mt-[0.1rem] h-[1.5rem] text-gray-400"
-            icon={faSearch}
-          />
-        </button>}
-      {isSidebarVisible &&
-        createPortal(
-          <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
-            <div className="mx-auto my-auto p-4 w-full">
-              <div className="absolute left-0 top-0 border p-4 max-w-96 w-full h-screen overflow-auto flex flex-col gap-5 bg-white">
-                <h2 className="title-filter">Filtros</h2>
-
-                <button onClick={closeSidebar}>
-                  <FontAwesomeIcon
-                    className="mt-[0.1rem] h-[1.5rem] text-gray-400 absolute top-5 right-5"
-                    icon={faXmark}
-                  />
-                </button>
-                <div className="flex flex-row p-4">
-                  <div className="flex flex-row mx-auto my-auto">
-                    <Label className="text-xl">Minhas ONG's</Label>
-                    <Input type="checkbox" onChange={event => setShowOnlyWorkOngs(event.target.checked)} className="self-center h-5 hover:cursor-pointer"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
       <div className="text-center text-5xl font-bold m-10 mt-14">Conheça nossas ONG's parceiras!</div>
         
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
