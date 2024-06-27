@@ -1,20 +1,8 @@
 "use client";
 
-import Image from "next/image";
-
-import { useState } from "react";
-
-import { CopyText } from "@/components/CopyText";
 import Navbar from "@/components/Navbar2";
-import HrefButton from "@/components/HrefButton";
-import { ProfileInfo } from "@/types/profile";
-import { DogInfo } from "@/types/dog";
-import { unescape } from "querystring";
 import Lowerbar from "@/components/Lowerbar";
-import EditableLabel from "@/components/EditableLabel";
-import EditableImg from "@/components/EditableImg";
 import FormsEditProfile from "@/components/Forms-Edit-Profile";
-import { profile } from "console";
 
 export default function EditPerfil() {
   return (
