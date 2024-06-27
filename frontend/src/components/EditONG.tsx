@@ -14,6 +14,7 @@ import cityApi from "@/api/city.api";
 import ongApi from "@/api/ong.api";
 import { siglasEstados } from "@/lib/utils";
 import { getToken } from "@/api/general.api"; 
+import { toast } from "react-toastify";
 
 
 export default function EditONG({ ongId }) {
@@ -73,6 +74,7 @@ export default function EditONG({ ongId }) {
       await updateContact(event);
 
       console.log('Dados alterados com sucesso!');
+      toast('Dados alterados com sucesso!');
     } catch(err) {
       console.log(err);
       

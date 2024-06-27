@@ -174,7 +174,7 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
           </summary>
           <ul className="p-1 shadow menu z-[1] flex flex-col bg-white rounded-box">
             {lines.map((line, indexLine) => (
-              <li key={indexLine} className="flex">
+              <li key={indexLine} className="flex m-1">
                 {line.map((tag, index) => (
                   <div key={index}>
                     <Label className="w-1/3">{tag.name}</Label>
