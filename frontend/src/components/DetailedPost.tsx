@@ -8,7 +8,6 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import GenderIcon from "./GenderIcon";
 
 export type DetailedPostProps = {
-  tipo: boolean;
   info: DogInfo;
   onClose?: () => void;
 };
@@ -31,7 +30,7 @@ function renderOwnerKind(kind: DogOwnerKind) {
   }
 }
 
-export default function DetailedPost({ tipo, info, onClose }: DetailedPostProps) {
+export default function DetailedPost({ info, onClose }: DetailedPostProps) {
   const imageAlt = `Imagem do cachorro "${info.name}"`;
 
   return (
@@ -118,13 +117,7 @@ export default function DetailedPost({ tipo, info, onClose }: DetailedPostProps)
         <div className="mt-2 flex flex-col">
           <span className="font-semibold text-xs">Descrição</span>
           <span className="text-sm text-wrap">{info.description}</span>
-        </div>
-        {(tipo) && (
-          <div className="mt-2 justify-center flex">
-            <button className="font-semibold bg-blue-600 rounded-full h-12 w-40 border text-xs">Já foi Adotado!!!</button>
-          </div>
-        )}
-        
+        </div>       
       </div>
     </div>
   );
