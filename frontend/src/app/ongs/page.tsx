@@ -17,6 +17,8 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser} from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
+import FormsOng from "@/components/Forms_Ong";
+
 
 import ongApi from "@/api/ong.api";
 import { getToken } from "@/api/general.api";
@@ -68,7 +70,7 @@ export default function AdoptionPosts() {
           createPortal(
             <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
               <div className="mx-auto my-auto p-4 w-full content-center flex justify-center">
-                <Forms onClose={closeModal} />
+                <FormsOng onClose={closeModal} />
               </div>
             </div>,
             document.body

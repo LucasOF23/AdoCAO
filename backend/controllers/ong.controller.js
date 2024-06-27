@@ -82,6 +82,8 @@ async function findAnimals(request, response) {
 // ==================
 
 async function create(request, response) {
+	console.log(request.body);
+	
 	let data = {
 		name: request.body.name,
 		cnpj: request.body.cnpj,
@@ -94,6 +96,12 @@ async function create(request, response) {
 	}
 
 	try {
+		const emptyContactInfo = await ContactInfo.create();
+		if (emptyContactInfo === null) {
+			return response.status(500).send('Erro inesperado.');
+		}
+
+		data.ContactInfoId = emptyContactInfo.id;
 		const res = await model.create(data);
 		response.status(201).json(res);
 	} catch(err) {

@@ -30,8 +30,8 @@ async function getUserActualOngs() {
   return res.data.map(d => convertToProfileInfo(d));
 }
 
-function create(name, address, cnpj) {
-  return post('ongs', { name, address, cnpj });
+function create(data) {
+  return post('ongs', data);
 }
 
 async function getById(id) {

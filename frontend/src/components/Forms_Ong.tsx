@@ -1,116 +1,111 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import ongApi from "@/api/ong.api";
+import cityApi from "@/api/city.api";
+import { siglasEstados } from "@/lib/utils";
 
 type FormsProps = {
   onClose?: () => void;
 };
 
-export default function Forms({ onClose }: FormsProps) {
-  const [isForms, setIsForms] = useState(true);
+export default function FormsOng({ onClose }: FormsProps) {
+  const [cities, setCities] = useState([]);
+  const [estado, setEstado] = useState('');
 
+  function getCities() {                
+    if(estado)
+      cityApi.getByState(estado).then(res => setCities(res));
+  }
+  
+  useEffect(getCities, [estado]);
+
+  async function addOng(event) {
+    event.preventDefault();
+    const keys = ['name', 'cnpj', 'CityId', 'address'];
+
+    let data = {}
+    for(const key of keys) {
+      const value = event.target[key].value;
+      if(value) data[key] = value;
+    }
+
+    
+    try {
+      await ongApi.create(data);
+      console.log('ONG cadastrada com sucesso!');
+    } catch(err) {
+      switch(err.response.status) {
+      default:
+        console.log('Erro desconhecido.');
+      }
+    }
+  }
+  
   return (
     <div className="forms-shape">
       <div className="relative">
-        <h2 className="text-center text-3xl">{isForms ? "Formulário ONG" : "Formulário Gerente"}</h2>
+        <h2 className="text-center text-3xl">Formulário ONG</h2>
+        <form onSubmit={addOng}>
 
-        {onClose && (
-          <button onClick={onClose}>
-            <FontAwesomeIcon
-              className="mt-[0.1rem] h-[1.5rem] text-gray-400 absolute top-2 right-3"
-              icon={faXmark}
-            />
-          </button>
-        )}
+          {onClose && (
+            <button type="button" onClick={onClose}>
+              <FontAwesomeIcon
+                className="mt-[0.1rem] h-[1.5rem] text-gray-400 absolute top-2 right-3"
+                icon={faXmark}
+              />
+            </button>
+          )}
 
-        {isForms && (
           <div>
             <div>
               <Label>Nome da ONG</Label>
-              <Input type="nome" placeholder="Arca de São Francisco" />
+              <Input name="name" type="nome" placeholder="Arca de São Francisco" required />
             </div>
-                    
+                      
             <div>
               <Label>Estado</Label>
-              <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
-                <option>ES</option>
-                <option>MG</option>
-                <option>RJ</option>
-                <option>SC</option>
-                <option>SP</option>
+              <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required >
+                <option disabled></option>
+                {siglasEstados.map(sigla => (
+                  <option key={sigla} value={sigla}>{sigla}</option>
+                ))}
               </select>
             </div>
 
             <div>
               <Label>Cidade</Label>
-              <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
-                <option>Analândia</option>
-                <option>Araraquara</option>
-                <option>Araras</option>
-                <option>Belo Horizonte</option>
-                <option>Brotas</option>
-                <option>Descalvado</option>
-                <option>Florianópolis</option>
-                <option>Ibaté</option>
-                <option>Itirapina</option>
-                <option>Pirassununga</option>
-                <option>Ribeirão Bonito</option>
-                <option>Rio Claro</option>
-                <option>Rio de Janeiro</option>
-                <option>São Carlos</option>
-                <option>São Paulo</option>
-                <option>Vitória</option>
-                <option>Outra</option>
+              <select name="CityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required>
+                <option disabled></option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
+                ))}
               </select>
             </div>
 
             <div>
               <Label>Endereço</Label>
-              <Input type="email" placeholder="Rua ..." />
+              <Input name="address" type="contato" placeholder="Rua ..." required />
             </div>
 
             <div>
               <Label>CNPJ</Label>
-              <Input type="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" />
+              <Input name="cnpj" type="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" required />
             </div>
 
             <div className="text-center p-4">
-              <button
-                onClick={() => setIsForms((prev) => !prev)}
+              <button type="submit"
                 className="bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto"
               >
-                Próximo
+                Cadastrar
               </button>
             </div>
           </div>
-        )}
-
-            
-
-        {!isForms && (
-          <div>
-            <div>
-              <Label>Email</Label>
-              <Input type="nome" placeholder="Zeca" />
-            </div>
-
-            <div >
-              <Label>Descrição</Label>
-              <Input type="descricao" className="h-20"/>
-            </div>
-
-            <div className="text-center p-4">
-              <a href="/postagens" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
-                Enviar
-              </a>
-            </div>
-          </div>
-
-        )}
-
+        </form>
       </div>
     </div>
     
