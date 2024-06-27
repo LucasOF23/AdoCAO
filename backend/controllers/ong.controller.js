@@ -158,18 +158,19 @@ async function assignWorker(request, response) {
 
 async function unassignWorker(request, response) {
 	try {
+		const user = await User.findOne({ where: { email: request.body.email } });
+		if(!user)
+			return response.status(400).send('Usuário a ser removido não encontrado.');
+
 		if(!response.locals.isSuperAdmin) {
 			const workRel = await getWorkRelation(response.locals.userId, request.params.id);
 			if(!workRel) 
 				return response.status(403).send('Usuário não trabalha na ONG (ou ela não existe).');
 
-			if(!workRel.isManager) 
+			const toRemWorkRel = await getWorkRelation(user.id, request.params.id);
+			if(!workRel.isManager && toRemWorkRel.isManager) 
 				return response.status(403).send('Usuário não é administrador da ONG.');
 		}
-
-		const user = await User.findOne({ where: { email: request.body.email } });
-		if(!user)
-			return response.status(400).send('Usuário a ser adicionado não encontrado.');
 		
 		await UserWorksAtONG.destroy({ where: {
 			UserId: user.id,

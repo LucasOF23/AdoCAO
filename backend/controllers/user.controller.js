@@ -1,6 +1,7 @@
 import model from "../models/user.model.js"
 import ContactInfo from "../models/contactinfo.model.js"
 import ONG from "../models/ong.model.js"
+import City from "../models/city.model.js"
 
 // ==================
 // === NEEDS AUTH ===
@@ -100,7 +101,14 @@ async function getOngs(request, response) {
 	try{
 		const res = await model.findByPk(response.locals.userId, {
 			attributes: [],
-			include: { model: ONG, through: { attributes: ['isManager'] } }
+			include: {
+				model: ONG,
+				through: { attributes: ['isManager'] },
+				include: [
+					{ model: City },
+					{ model: ContactInfo }
+				]
+			}
 		});
 
 		response.status(200).send(res.ONGs.map(ong => {

@@ -1,9 +1,10 @@
 import { DogInfo } from "./dog";
 
 export type ProfileLocation = {
-  city: string;
+  id: number;
+  name: string;
   state: string;
-};
+}
 
 export type ProfileContato = {
   email: string;
@@ -23,6 +24,6 @@ export type ProfileInfo = {
   animals: DogInfo[];
   membersEmail: string[];
   managerEmail: string;
-  Description: string;
   contato: ProfileContato;
-};
+}
+
