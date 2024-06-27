@@ -1,26 +1,50 @@
 import { getAnom, get, post, put } from './general.api.ts';
 
-export function updateContactInfo(data, id?) {
+function convertToProfileInfo(d) {
+  const c = d.ContactInfo;
+  return {
+    id: d.id,
+    user_type: 'user',
+    name: d.name,
+    email: d.email,
+    contato: {
+      email: c.email,
+      insta: c.instagramProfile,
+      face: c.facebookProfile,
+      telefone: c.telephoneNumber,
+      outro: c.other
+    },
+  }
+}
+
+
+function updateContactInfo(data, id?) {
   return put('users/' + (id ? `${id}/` : '') + 'contact-info', data);
 }
 
-export function getCurrent() {
-  return get('users');
+async function getCurrent() {
+  const res = await get('users');
+  return convertToProfileInfo(res.data);
 }
 
-export function getById(id) {
-  return getAnom(`users/${id}`);
+async function getById(id) {
+  const res = await getAnom(`users/${id}`);
+  return convertToProfileInfo(res.data);
 }
 
-export function update(data, id?) {
+function update(data, id?) {
   return put('users' + (id ? `/${id}` : ''), data);
 }
 
-export function changeSuperAdmin(id, newStatus) {
+function changeSuperAdmin(id, newStatus) {
   return post(`users/${id}/change-super-admin`, { newStatus });
 }
 
-export function getAnimals(id) {
+function getAnimals(id) {
   return getAnom(`users/${id}/animals`);
+}
+
+export default {
+  updateContactInfo, getCurrent, getById, update, changeSuperAdmin, getAnimals
 }
 

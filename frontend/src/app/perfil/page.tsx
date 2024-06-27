@@ -17,29 +17,6 @@ import FormsEditProfile from "@/components/Forms-Edit-Profile";
 import { profile } from "console";
 
 export default function EditPerfil() {
-  const profileInfo: ProfileInfo = {
-    id: 1,
-    user_type: "user",
-    name: "Tonhão",
-    location: {
-      city: "São Carlos",
-      state: "SP",
-    },
-    adress: "Rua dos bobos numero zero",
-    cnpj: "123.456.789-00",
-    animals: [],
-    membersEmail: [],
-    managerEmail: "",
-    contato: {
-      email: "toinhodosfoguetes@nasa.gov",
-      insta: "@tonhaomalucao",
-      face: "Antonio da Silva",
-      telefone: "(01) 2345 - 7890",
-      outro: "Meu twitter: @tonhaotwitteroficial",
-    },
-    Description: "",
-  };
-
   return (
     <>
       <Navbar />
@@ -51,7 +28,7 @@ export default function EditPerfil() {
           
           <hr />
           <div className="pt-4 mx-auto max-w-fit">
-            <FormsEditProfile info_perfil={profileInfo}></FormsEditProfile>
+            <FormsEditProfile></FormsEditProfile>
           </div>
         </div>
       </div>
