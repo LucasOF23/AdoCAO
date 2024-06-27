@@ -21,11 +21,12 @@ export default function Forms() {
   }
 
   async function updateContact(event) {
-    const keys = ['email', 'phoneNumber', 'instagramProfile', 'facebookProfile', 'other'];
+    const keys = ['email', 'telephoneNumber', 'instagramProfile', 'facebookProfile', 'other'];
     let data = {};
     for(const key of keys) {
       const value = event.target[`contact_${key}`].value;
       if(value) data[key] = value;
+      else data[key] = '';
     }
 
     try {
@@ -83,7 +84,7 @@ export default function Forms() {
 
           <div>
             <Label>Telefone</Label>
-            <Input name="contact_phoneNumber" type="phone" defaultValue={info_perfil.contato.telefone} />
+            <Input name="contact_telephoneNumber" type="phone" defaultValue={info_perfil.contato.telefone} />
           </div>
 
           <div>

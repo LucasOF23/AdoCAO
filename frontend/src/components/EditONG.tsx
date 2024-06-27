@@ -41,15 +41,17 @@ export default function EditONG({ ongId }) {
   }, [ongId])
   
   async function updateContact(event) {
-    const keys = ['email', 'phoneNumber', 'instagramProfile', 'facebookProfile', 'other'];
+    const keys = ['email', 'telephoneNumber', 'instagramProfile', 'facebookProfile', 'other'];
     let data = {};
     for(const key of keys) {
       const value = event.target[`contact_${key}`].value;
       if(value) data[key] = value;
+      else data[key] = '';
     }
 
     try {
       await ongApi.updateContactInfo(ongId, data);
+      console.log('Ong api dados contato atualizados', data);
     } catch(err) {
       switch(err.response.status) {
       default:
@@ -244,7 +246,7 @@ export default function EditONG({ ongId }) {
 
           <div>
             <Label>Telefone</Label>
-            <Input name="contact_phoneNumber" type="contato" defaultValue={info.contato.telefone} />
+            <Input name="contact_telephoneNumber" type="contato" defaultValue={info.contato.telefone} />
           </div>
 
           <div>
