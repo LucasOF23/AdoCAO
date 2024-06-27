@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser} from "@fortawesome/free-solid-svg-icons";
 
-export default function AdoptionPosts() {
+export default function ONGs() {
     const profileInfos: [ProfileInfo] = [
       {
         id: 1,
