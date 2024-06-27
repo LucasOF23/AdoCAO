@@ -48,7 +48,7 @@ export default function EditPerfil() {
           <div>
             <h1 className="text-5xl font-bold text-center pt-5">Meu Perfil</h1>
           </div>
-
+          
           <hr />
           <div className="pt-4 mx-auto max-w-fit">
             <FormsEditProfile info_perfil={profileInfo}></FormsEditProfile>

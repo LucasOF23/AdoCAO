@@ -260,11 +260,11 @@ export default function AdoptionPosts() {
     <>
       <Navbar />
       <button onClick={openModal} className="cursor-pointer items-center justify-center w-20 rounded-br-xl
-       border mx-auto sticky top-20 p-3 shadow-sm bg-white">
+      border mx-auto sticky top-20 p-3 shadow-sm bg-white">
         <FontAwesomeIcon
-            className="mt-[0.1rem] h-[1.5rem] text-gray-400"
-            icon={faSearch}
-          />
+          className="mt-[0.1rem] h-[1.5rem] text-gray-400"
+          icon={faSearch}
+        />
       </button>
       {isAuthVisible &&
         createPortal(

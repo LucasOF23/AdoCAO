@@ -13,7 +13,7 @@ export function InfoB({ children }: InfoBProps) {
     <div className="w-4 h-5 flex justify-center align-items">
       <button
         className="btn btn-circle btn-xs btn-ghost btn-outline
-      min-w-0 min-h-0 h-5 w-5"
+        min-w-0 min-h-0 h-5 w-5"
         onClick={() => {
           setShowPopUp(true);
         }}

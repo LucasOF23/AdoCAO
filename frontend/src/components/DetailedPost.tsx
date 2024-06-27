@@ -14,19 +14,19 @@ export type DetailedPostProps = {
 
 function renderBoolean(value: boolean) {
   switch (value) {
-    case true:
-      return "Sim";
-    case false:
-      return "Não";
+  case true:
+    return "Sim";
+  case false:
+    return "Não";
   }
 }
 
 function renderOwnerKind(kind: DogOwnerKind) {
   switch (kind) {
-    case "ONG":
-      return "ONG";
-    case "user":
-      return "Usuário";
+  case "ONG":
+    return "ONG";
+  case "user":
+    return "Usuário";
   }
 }
 

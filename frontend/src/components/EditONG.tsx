@@ -62,10 +62,10 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
       console.log(err);
       const status = err.response.status;
       switch(status) {
-        case 400: console.log('Email não encontrado');
-          break
-        default:
-          console.log('Erro inesperado.');
+      case 400: console.log('Email não encontrado');
+        break
+      default:
+        console.log('Erro inesperado.');
       }
     }
   }
@@ -87,14 +87,14 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
       console.log('Removido com sucesso!');
     } catch(err) {      
       switch(err.response.status) {
-        case 400:
-          console.log('Email não encontrado.');
-          break;
-        case 403:
-          console.log('Você não tem permissão (o outro usuário é um gerente)');
-          break;
-        default:
-          console.log('Erro inesperado.');
+      case 400:
+        console.log('Email não encontrado.');
+        break;
+      case 403:
+        console.log('Você não tem permissão (o outro usuário é um gerente)');
+        break;
+      default:
+        console.log('Erro inesperado.');
       }
     }
   }
@@ -103,141 +103,141 @@ export default function EditONG({ info, onClose }: DetailedPostProps) {
     <div className="forms-shape2">
       <div>
         <div className="px-5">
-            <div>
+          <div>
             {onClose && (
-                <button type="button" onClick={onClose}>
+              <button type="button" onClick={onClose}>
                 <FontAwesomeIcon
-                    className="mt-[0.1rem] h-[1.5rem] text-gray-400"
-                    icon={faXmark}
+                  className="mt-[0.1rem] h-[1.5rem] text-gray-400"
+                  icon={faXmark}
                 />
-                </button>
+              </button>
             )}
+          </div>
+
+          <Label className="text-2xl w-full text-center">Formulário de Adição de Colaborador</Label>
+          <form onSubmit={assignWorker}>
+            <div className="flex flex-col">
+              <div>
+                <Label>Email</Label>
+                <Input name="email" type="contato" placeholder="email"/>
+              </div>
             </div>
 
-            <Label className="text-2xl w-full text-center">Formulário de Adição de Colaborador</Label>
-            <form onSubmit={assignWorker}>
-              <div className="flex flex-col">
-                <div>
-                    <Label>Email</Label>
-                    <Input name="email" type="contato" placeholder="email"/>
-                </div>
-              </div>
-
             {emailNotExist && (
-                <Label className="text-red-400 text-xs">Email não existe!!!</Label>
+              <Label className="text-red-400 text-xs">Email não existe!!!</Label>
             )}
 
             <div className="text-center p-4">
-                    <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
-                    Enviar
-                    </button>
+              <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+                Enviar
+              </button>
             </div>
-            </form>
+          </form>
         </div>
 
         <hr className="py-10" />
 
         <div className="px-5">
 
-            <Label className="text-2xl text-center mb-10">Formulário de Remoção de Colaborador</Label>
-            <form onSubmit={unassignWorker}>
-              <div className="flex flex-col">
-                <div>
-                    <Label>Email</Label>
-                    <Input name="email" type="contato" placeholder="email"/>
-                </div>
-
-                <div>
-                    <Label>Confirmação do Email</Label>
-                    <Input name="confirmEmail" type="contato" placeholder="email"/>
-                </div>
+          <Label className="text-2xl text-center mb-10">Formulário de Remoção de Colaborador</Label>
+          <form onSubmit={unassignWorker}>
+            <div className="flex flex-col">
+              <div>
+                <Label>Email</Label>
+                <Input name="email" type="contato" placeholder="email"/>
               </div>
+
+              <div>
+                <Label>Confirmação do Email</Label>
+                <Input name="confirmEmail" type="contato" placeholder="email"/>
+              </div>
+            </div>
             
             {differentEmail && (
-                <Label className="text-red-400 text-xs">Emails diferentes</Label>
+              <Label className="text-red-400 text-xs">Emails diferentes</Label>
             )}
 
             <div className="text-center p-4">
-                    <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
-                    Enviar
-                    </button>
+              <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+                Enviar
+              </button>
             </div>
           </form>            
         </div>
 
         <hr className="py-10" />
 
-        </div>
-        <div className="px-5">
+      </div>
+      <div className="px-5">
 
         <Label className="text-2xl text-center pb-10">Formulário de Edição da ONG</Label>
-          <form onSubmit={editOng}>
-            <div>
-                <Label>Nome da ONG - {info.name}</Label>
-                <Input name="name" type="nome" placeholder={info.name}/>
-            </div>
+        <form onSubmit={editOng}>
+          <div>
+            <Label>Nome da ONG - {info.name}</Label>
+            <Input name="name" type="nome" placeholder={info.name}/>
+          </div>
             
-            <div>
-                <Label>Estado - {info.location.state}</Label>
-                <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
-                    <option></option>
-                    {siglasEstados.map(sigla => (
-                      <option key={sigla} value={sigla}>{sigla}</option>
-                    ))}
-                </select>
-            </div>
+          <div>
+            <Label>Estado - {info.location.state}</Label>
+            <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+              <option></option>
+              {siglasEstados.map(sigla => (
+                <option key={sigla} value={sigla}>{sigla}</option>
+              ))}
+            </select>
+          </div>
 
-            <div>
-                <Label>Cidade - {info.location.name}</Label>
-                <select name="cityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
-                    <option></option>
-                    {cities.map((city) => (
-                      <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
-                    ))}
-                </select>
-            </div>
+          <div>
+            <Label>Cidade - {info.location.name}</Label>
+            <select name="cityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+              <option></option>
+              {cities.map((city) => (
+                <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
+              ))}
+            </select>
+          </div>
 
-            <div>
-                <Label>Endereço - {info.address}</Label>
-                <Input name="address" type="email" placeholder="Rua ..." />
-            </div>
+          <div>
+            <Label>Endereço - {info.address}</Label>
+            <Input name="address" type="email" placeholder="Rua ..." />
+          </div>
 
-            <div>
-                <Label>CNPJ - {info.cnpj}</Label>
-                <Input name="cnpj" type="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" />
-            </div>
+          <div>
+            <Label>CNPJ - {info.cnpj}</Label>
+            <Input name="cnpj" type="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" />
+          </div>
 
-            <div>
-                <Label>Email de Contato - {info.contato.email}</Label>
-                <Input name="contact_email" type="contato" placeholder="email" />
-            </div>
+          <div>
+            <Label>Email de Contato - {info.contato.email}</Label>
+            <Input name="contact_email" type="contato" placeholder="email" />
+          </div>
 
-            <div>
-                <Label>Telefone - {info.contato.telefone}</Label>
-                <Input name="contact_phoneNumber" type="contato" placeholder="(XX) XXXXX-XXXX" />
-            </div>
+          <div>
+            <Label>Telefone - {info.contato.telefone}</Label>
+            <Input name="contact_phoneNumber" type="contato" placeholder="(XX) XXXXX-XXXX" />
+          </div>
 
-            <div>
-                <Label>Facebook - {info.contato.face}</Label>
-                <Input name="contac_facebookProfile" type="contato" placeholder="facebook" />
-            </div>
+          <div>
+            <Label>Facebook - {info.contato.face}</Label>
+            <Input name="contac_facebookProfile" type="contato" placeholder="facebook" />
+          </div>
 
-            <div>
-                <Label>Instagram - {info.contato.insta}</Label>
-                <Input name="contact_instagramProfile" type="contato" placeholder="instagram" />
-            </div>
+          <div>
+            <Label>Instagram - {info.contato.insta}</Label>
+            <Input name="contact_instagramProfile" type="contato" placeholder="instagram" />
+          </div>
 
-            <div>
-                <Label>Outro Contato - {info.contato.outro}</Label>
-                <Input name="contact_other" type="contato" placeholder="" />
-            </div>
+          <div>
+            <Label>Outro Contato - {info.contato.outro}</Label>
+            <Input name="contact_other" type="contato" placeholder="" />
+          </div>
 
-            <div className="text-center p-4">
-                <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
-                    Enviar
-                </button>
-            </div>
-         </form>
+          <div className="text-center p-4">
+            <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+              Enviar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export function Popup({ children, on_close }: PopupProps) {
         <button
           onClick={closePopup}
           className="btn btn-circle btn-xs btn-ghost btn-outline
-      min-w-0 min-h-0 h-6 w-6"
+          min-w-0 min-h-0 h-6 w-6"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -6,19 +6,19 @@ import React from "react";
 
 function renderGender(gender: DogGender) {
   switch (gender) {
-    case "female":
-      return faVenus;
-    case "male":
-      return faMars;
+  case "female":
+    return faVenus;
+  case "male":
+    return faMars;
   }
 }
 
 function renderColor(gender: DogGender) {
   switch (gender) {
-    case "female":
-      return "text-red-500";
-    case "male":
-      return "text-blue-500";
+  case "female":
+    return "text-red-500";
+  case "male":
+    return "text-blue-500";
   }
 }
 

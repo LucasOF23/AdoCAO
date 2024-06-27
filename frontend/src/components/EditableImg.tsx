@@ -19,9 +19,9 @@ const EditableImg: React.FC<EditableImgProps> = ({ url,onChange }) => {
       reader.onload = (e) => {
         
         if (e.target?.result) {
-            onChange(e.target.result as string); 
-            // Se chegou até aqui, ele envia pra estrutura de trás pra lidar com a url
-            // por questão de ter que atualizar com o backend
+          onChange(e.target.result as string); 
+          // Se chegou até aqui, ele envia pra estrutura de trás pra lidar com a url
+          // por questão de ter que atualizar com o backend
         }
       };
       reader.readAsDataURL(file);
@@ -41,10 +41,10 @@ const EditableImg: React.FC<EditableImgProps> = ({ url,onChange }) => {
         
         {/* Detecta quando o usuário clica na imagem */}
         <input 
-            type="file"
-            accept="image/*"
-            className="absolute top-2 right-2 bg-white p-1 rounded opacity-0 w-full h-full cursor-pointer"
-            onChange={handleImageChange}
+          type="file"
+          accept="image/*"
+          className="absolute top-2 right-2 bg-white p-1 rounded opacity-0 w-full h-full cursor-pointer"
+          onChange={handleImageChange}
         />  
       </div>
     </div>
