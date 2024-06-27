@@ -277,7 +277,7 @@ export default function AdoptionPosts() {
         )}
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {dogInfos.map((info) => (
-          <AdoptionCard key={info.id} info={info} />
+          <AdoptionCard tipo={false}key={info.id} info={info} />
         ))}
       </div>
       <Lowerbar />

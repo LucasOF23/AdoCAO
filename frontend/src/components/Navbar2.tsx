@@ -16,6 +16,8 @@ export default function Navbar2() {
               <li className="hover:bg-gray-500"><a href="/postagens" className="postagens"><button className="w-full p-2">Minhas Postagens</button></a></li>
               <hr />
               <li className="hover:bg-gray-500"><a href="/ongs" className="ongs"><button className="w-full p-2">ONG's</button></a></li>
+              <hr />
+              <li className="hover:bg-gray-500"><a href="/my_ongs" className="my_ongs"><button className="w-full p-2">Minhas ONG's</button></a></li>
             </ul>
           </details>
         </div>
