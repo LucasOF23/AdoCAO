@@ -50,7 +50,7 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
   async function addAnimal(event) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
 
     const boolKeys = ['isNeutered', 'isDewormed'];
     for(const key of boolKeys) {
@@ -65,7 +65,10 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
     if(isFromOng)
       formData.append('ongId', ongId);
 
-    console.log('Form data:', formData);
+    console.log('Form data:');
+    for (var [key, value] of formData.entries()) { 
+      console.log(key, value);
+    }    
 
     try {
       const res = await animalApi.create(formData);
