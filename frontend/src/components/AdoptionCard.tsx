@@ -198,10 +198,12 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
       </button>
       {isModalVisible &&
         createPortal(
-          <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
+          <div className="fixed top-0 left-0 w-screen h-screen justify-center bg-black/40 flex overflow-y-scroll z-20">
             {!tipo && (
-              <div className="mx-auto my-auto p-4">
-                <DetailedPost info={info} onClose={closeModal} />
+              <div className="self-center mx-auto w-11/12">
+                <div className="flex p-4">
+                  <DetailedPost info={info} onClose={closeModal} />
+                </div>
               </div>
             )}
             {(tipo) && (
