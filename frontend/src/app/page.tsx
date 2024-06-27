@@ -48,7 +48,7 @@ export default function AdoptionPosts() {
       },
       location: {
         city: "Milano",
-        state: "IT",
+        state: "SP",
       },
       gender: "female",
       ageInYears: 2,
@@ -235,7 +235,7 @@ export default function AdoptionPosts() {
       },
       location: {
         city: "Zurich",
-        state: "SW",
+        state: "RS",
       },
       gender: "male",
       ageInYears: 1,
