@@ -255,6 +255,11 @@ async function update(request, response) {
 		animal.imagePath = request.file.key;
 	}
 
+	if(!updData.weightInKg)
+		updData.weightInKg = null;
+	if(!updData.heightInCm)
+		updData.heightInCm = null;
+
 	try {
 		const res = await model.update(updData, { where: { id: request.params.id } });
 		if (oldFilename)

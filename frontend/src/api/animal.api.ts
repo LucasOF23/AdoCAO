@@ -18,6 +18,7 @@ function convertToInfo(d): DogInfo {
     location: d.City,
     gender: (d.animalGender === 'M') ? 'male' : 'female',
     ageInYears: calculateAge(d.birthdate, new Date()),
+    birthdate: d.birthdate,
     weightInKg: d.weightInKg,
     heightInCm: d.heightInCm,
     species: d.AnimalSpecie,

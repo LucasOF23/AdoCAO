@@ -77,7 +77,7 @@ export default function AdoptionPosts() {
           createPortal(
             <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
               <div className="mx-auto my-auto p-4 w-full content-center flex justify-center">
-                <Forms tipo={true} onClose={closeModal} />
+                <Forms isFromOng={false} onClose={closeModal} />
               </div>
             </div>,
             document.body

@@ -44,7 +44,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
   const [isOwner, setIsOwner] = useState(false);
 
   const [cities, setCities] = useState([]);
-  const [estado, setEstado] = useState('');
+  const [estado, setEstado] = useState(info.location.state);
 
   const [tags, setTags] = useState([]);
   const [species, setSpecies] = useState([]);
@@ -69,7 +69,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
     specieApi.getAll().then(res => setSpecies(res));
   }, []);
   
-  async function addAnimal(event) {
+  async function editAnimal(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
@@ -84,12 +84,14 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
     }
 
     formData.append('isUserOwned', isFromOng ? '0' : '1');
+    if(isFromOng)
+      formData.append('ongId', ongId);
     
     console.log(formData);
 
     try {
-      const res = await animalApi.create(formData);
-      console.log('Cadastro feito com sucesso!');
+      const res = await animalApi.update(info.id, formData);
+      console.log('Atuailização feita com sucesso!');
     } catch(err) {
       console.log(err);
       switch(err.response.status) {
@@ -183,25 +185,15 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
               <div className="mx-auto my-auto p-4 border rounded-t-2xl  overflow-scroll max-w-4xl flex h-screen flex-col sm:flex-row bg-white">
                 <div className="">
                   <Label className="text-2xl text-center">Editar Postagem</Label>
-                  <form onSubmit={addAnimal}>
-                  
-                    {isFromOng && (
-                      <>
-                        <div>
-                          <Label>Nome da ONG</Label>
-                          <Input type="nome" placeholder="arca de sao francisco" />
-                        </div>
-                      </>)
-                    }
-
+                  <form onSubmit={editAnimal}>                 
                     <div>
                       <Label>Nome do Animal</Label>
-                      <Input name="name" type="nome" placeholder="Zeca" required />
+                      <Input name="name" type="nome" placeholder="Zeca" defaultValue={info.name} required />
                     </div>
                  
                     <div>
                       <Label>Estado</Label>
-                      <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required >
+                      <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.location.state} required >
                         <option disabled></option>
                         {siglasEstados.map(sigla => (
                           <option key={sigla} value={sigla}>{sigla}</option>
@@ -211,7 +203,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
 
                     <div>
                       <Label>Cidade</Label>
-                      <select name="CityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required>
+                      <select name="CityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.location.id} required>
                         <option disabled></option>
                         {cities.map((city) => (
                           <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
@@ -224,7 +216,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
                       <select
                         name="AnimalSpecieId"
                         className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
-                        required>
+                        defaultValue={info.species.id} required>
                         <option disabled></option>
                         {species.map((specie) => (
                           <option key={specie.id} value={specie.id}>
@@ -236,7 +228,7 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
 
                     <div>
                       <Label>Sexo</Label>
-                      <select name="animalGender" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required>
+                      <select name="animalGender" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.gender} required>
                         <option value="M">Macho</option>
                         <option value="F">Fêmea</option>
                       </select>
@@ -244,17 +236,17 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
 
                     <div>
                       <Label>Nascimento</Label>
-                      <Input name="birthdate" type="date" placeholder="22/12/22" required />
+                      <Input name="birthdate" type="date" placeholder="22/12/22" defaultValue={info.birthdate} required />
                     </div>
 
                     <div>
                       <Label>Peso</Label>
-                      <Input name="weightInKg" type="peso" placeholder="30 kg" />
+                      <Input name="weightInKg" type="peso" placeholder="30 kg" defaultValue={info.weightInKg} />
                     </div>
 
                     <div>
                       <Label>Altura</Label>
-                      <Input name="heightInCm" type="peso" placeholder="3 m" />
+                      <Input name="heightInCm" type="peso" placeholder="3 cm" defaultValue={info.heightInCm} />
                     </div>
 
                     { renderTags(tags) }
@@ -262,22 +254,22 @@ export default function AdoptionCard({ tipo, isFromOng, info }: AdoptionCardProp
                     <div className="flex flex-row p-4 justify-start">
                       <div className="basis-1/2 flex flex-row">
                         <Label>Vermifugado</Label>
-                        <Input name="isDewormed" type="checkbox" className="h-5 hover:cursor-pointer"/>
+                        <Input name="isDewormed" type="checkbox" className="h-5 hover:cursor-pointer" defaultChecked={info.isDewormed} />
                       </div>
                       <div className="basis-1/2 flex flex-row">
                         <Label>Castrado</Label>
-                        <Input name="isNeutered" type="checkbox" className="h-5 hover:cursor-pointer"/>
+                        <Input name="isNeutered" type="checkbox" className="h-5 hover:cursor-pointer" defaultChecked={info.isNeutered}/>
                       </div>
                     </div>
 
                     <div >
                       <Label>Descrição</Label>
-                      <Input name="description" type="descricao" className="h-20" required />
+                      <Input name="description" type="descricao" className="h-20" defaultValue={info.description} required />
                     </div>
 
                     <div>
-                      <Label>Imagem</Label>
-                      <Input name="photo" type="file" className="hover:bg-purple-300 hover:cursor-pointer" required />
+                      <Label>Trocar Imagem</Label>
+                      <Input name="photo" type="file" className="hover:bg-purple-300 hover:cursor-pointer"  />
                     </div>
                     
                     <div className="text-center p-4">
