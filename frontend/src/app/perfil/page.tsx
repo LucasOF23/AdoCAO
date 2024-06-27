@@ -4,95 +4,62 @@ import Image from "next/image";
 
 import { useState } from "react";
 
+import { CopyText } from "@/components/CopyText";
 import Navbar from "@/components/Navbar2";
+import HrefButton from "@/components/HrefButton";
 import { ProfileInfo } from "@/types/profile";
+import { DogInfo } from "@/types/dog";
 import { unescape } from "querystring";
 import Lowerbar from "@/components/Lowerbar";
+import EditableLabel from "@/components/EditableLabel";
+import EditableImg from "@/components/EditableImg";
+import FormsEditProfile from "@/components/Forms-Edit-Profile";
+import { profile } from "console";
 
-export default function AdoptionPosts() {
-    const profileInfo: ProfileInfo = 
-        {
-          id: 1,
-          user_type: "user",
-          name: "Zeca",
-          location: { city: "São Carlos", state: "São Paulo"},
-          contato: {
-            telefone: "(16) 9xxxx-xxxx",
-            email: "zeca@estadual.com.br",
-            insta: "",
-            face: "",
-            outro: "",
-          },
-          adress: "",
-          cnpj: "",
-          membersEmail: [
-            "",
-          ],
-          managerEmail: "",
-          Description: "",
-          animals: [{
-            id: 9,
-            name: "J. Robert Oppenheimer",
-            imageUrl: "https://images.dog.ceo/breeds/boxer/n02108089_2791.jpg",
-            owner: {
-              kind: "user",
-              name: "Zeca",
-            },
-            location: {
-              city: "São Carlos",
-              state: "São Paulo",
-            },
-            gender: "male",
-            ageInYears: 1,
-            weightInKg: 4,
-            heightInCm: 20,
-            species: "Cachorro",
-            breed: "Boxer",
-            isNeutered: true,
-            isDewormed: true,
-            tags: ["Energético", "Amável", "Explosivo"],
-          }]
-        }
-    ;
+export default function EditPerfil() {
+  const profileInfo: ProfileInfo = {
+    id: 1,
+    user_type: "user",
+    name: "Tonhão",
+    location: {
+      city: "São Carlos",
+      state: "SP",
+    },
+    adress: "Rua dos bobos numero zero",
+    cnpj: "123.456.789-00",
+    animals: [],
+    membersEmail: [],
+    managerEmail: "",
+    contato: {
+      email: "toinhodosfoguetes@nasa.gov",
+      insta: "@tonhaomalucao",
+      face: "Antonio da Silva",
+      telefone: "(01) 2345 - 7890",
+      outro: "Meu twitter: @tonhaotwitteroficial",
+    },
+    Description: "",
+  };
 
-    const [mobile, setMobile] = useState(false);
-
-    return (
+  return (
     <>
       <Navbar />
-      <div className="p-4 screen-max-width grid justify-items-center grid-autofit ">
+      <div className="mx-auto pt-[2vw] screen-max-width">
         <div className="w-full">
-            <h1 className="text-5xl font-bold text-center p-5">Meu Perfil</h1>
-            <hr />
-            <div className="p-4 screen-max-width grid justify-items-center grid-autofit">
-                <div>
-                    <h2 className="text-2xl font-bold p-5">Dados Pessoais:</h2>
-                    <div className="p-5">
-                        <ul>
-                            <li>Nome: {profileInfo.name}</li>
-                            <li>Email: {profileInfo.contato.email}</li>
-                            <li>Celular: {profileInfo.contato.telefone}</li>
-                            <li>Estado: {profileInfo.location.state}</li>
-                            <li>Cidade: {profileInfo.location.city}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <h2 className="text-2xl font-bold p-5">Animais para Doação:</h2>
-                    <div className="p-5">
-                        {profileInfo.animals.map((info) => (
-                        <h3>Nome: {info.name}</h3>
-                        ))}
-                    </div>
-                </div>
-            </div>   
+          <div>
+            <h1 className="text-5xl font-bold text-center pt-5">Meu Perfil</h1>
+          </div>
+
+          <hr />
+          <div className="pt-4 mx-auto max-w-fit">
+            <FormsEditProfile info_perfil={profileInfo}></FormsEditProfile>
+          </div>
         </div>
       </div>
       <hr />
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
-        <button className="py-7 px-10 bg-purple-600 rounded-md">Editar Perfil</button>
-        <button className="py-7 px-10 bg-purple-600 rounded-md">Trocar Senha</button>
-        <button className="py-7 px-10 bg-rose-600 rounded-md">Apagar Perfil</button>
+        {/* <div className="py-7 px-10 bg-purple-600 rounded-md"><HrefButton href='/edit_perfil'>Editar Perfil</HrefButton></div>
+        <div className="py-7 px-10 bg-purple-600 rounded-md"><HrefButton href='/trocar_senha'>Trocar Senha</HrefButton></div>
+        <div className="py-7 px-10 bg-rose-600 rounded-md"><HrefButton href='/confirmar_apagar'>Apagar Perfil</HrefButton></div> */}
       </div>
       <Lowerbar />
     </>
