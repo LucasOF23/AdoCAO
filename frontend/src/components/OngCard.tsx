@@ -13,7 +13,7 @@ export type OngCardProps = {
   info: ProfileInfo;
 };
 
-export default function OngCard({ info }: OngCardProps) {
+export default function OngCard({ info } : OngCardProps) {
   const imageAlt = `Imagem da ONG "${info.name}"`;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -27,24 +27,24 @@ export default function OngCard({ info }: OngCardProps) {
 
   return (
     <>
-      <button onClick={isUserAdmin ? openModal : isONGMember ? openModal : closeModal}
+      <button onClick={(isUserAdmin || isONGMember) ? openModal : closeModal}
         className="border rounded-t-2xl overflow-hidden w-full max-w-96 bg-white hover:shadow-md hover:scale-[101%] transition delay-50">
-      <div className="border rounded-t-2xl overflow-hidden w-full max-w-lg hover:shadow-md hover:scale-[101%] transition delay-50 flex">
-      <FontAwesomeIcon
-          className="mt-[0.1rem] h-32 text-gray-400"
-          icon={faCircleUser}
-        />
-        <div className="px-3 pb-3 pt-1">
-          <h3 className="text-lg font-bold">{info.name}</h3>
-          <p>
-            em{" "}
-            <span className="font-bold">
-              {info.location.city} ({info.location.state})
-            </span>
-          </p>
-          <p>Contato: {info.contato.telefone}</p>
+        <div className="border rounded-t-2xl overflow-hidden w-full max-w-lg hover:shadow-md hover:scale-[101%] transition delay-50 flex">
+        <FontAwesomeIcon
+            className="mt-[0.1rem] h-32 text-gray-400"
+            icon={faCircleUser}
+          />
+          <div className="px-3 pb-3 pt-1">
+            <h3 className="text-lg font-bold">{info.name}</h3>
+            <p>
+              em{" "}
+              <span className="font-bold">
+                {info.location.city} ({info.location.state})
+              </span>
+            </p>
+            <p>Contato: {info.contato.telefone}</p>
+          </div>
         </div>
-      </div>
       </button>
       {isModalVisible &&
         createPortal(

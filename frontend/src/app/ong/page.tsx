@@ -9,55 +9,16 @@ import Navbar2 from "@/components/Navbar2";
 import Sidebar from "@/components/Sidebar2";
 import Lowerbar from "@/components/Lowerbar";
 import { ProfileInfo } from "@/types/profile";
+import { Route, Link, Routes, useLocation } from 'react-router-dom';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export default function AdoptionPosts() {
-  const profileInfo: ProfileInfo = 
-        {
-          id: 1,
-          user_type: "user",
-          name: "Zeca",
-          location: { city: "São Carlos", state: "São Paulo" },
-          contato: {telefone: "(16) 9xxxx-xxxx", email: "zeca@estadual.com.br", face:"", insta:"", outro:"",},
-          adress: "",
-          cnpj: "",
-          membersEmail: [
-            "",
-          ],
-          managerEmail: "",
-          Description: "",
-          animals: [{
-            id: 9,
-            name: "J. Robert Oppenheimer",
-            imageUrl: "https://images.dog.ceo/breeds/boxer/n02108089_2791.jpg",
-            owner: {
-              id:1,
-              kind: "user",
-              name: "Zeca",
-            },
-            location: {
-              id: 3,
-              name: "São Carlos",
-              state: "SP",
-            },
-            gender: "male",
-            ageInYears: 1,
-            weightInKg: 4,
-            heightInCm: 20,
-            species: {
-              id: 1,
-              name: "Cachorro",
-            },
-            description: "oi",
-            isNeutered: true,
-            isDewormed: true,
-            tags: [],
-          }]
-        }
-    ;
+export type OngPostProps = {
+    info: ProfileInfo;
+};
 
+export default function ONGPosts({info}: OngPostProps) {
   const [isAuthVisible, setAuthVisible] = useState(false);
 
   const closeModal = () => setAuthVisible(false);

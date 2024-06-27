@@ -44,6 +44,14 @@ export default function Forms({ onClose }: FormsProps) {
                     </div>
 
                     <div>
+                        <Label>Pessoa Física ou ONG?</Label>
+                        <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+                            <option>Pessoa Física</option>
+                            <option>ONG</option>
+                        </select>
+                    </div>
+
+                    <div>
                         <Label>Estado</Label>
                         <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
                             <option>ES</option>
@@ -112,11 +120,6 @@ export default function Forms({ onClose }: FormsProps) {
                     </div>
 
                     <div>
-                        <Label>Raça</Label>
-                        <Input type="raca" placeholder="dálmata" />
-                    </div>
-
-                    <div>
                         <Label>Sexo</Label>
                         <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
                             <option>Macho</option>
@@ -125,8 +128,8 @@ export default function Forms({ onClose }: FormsProps) {
                     </div>
 
                     <div>
-                        <Label>Idade</Label>
-                        <Input type="idade" placeholder="5 anos" />
+                        <Label>Nascimento</Label>
+                        <Input type="idade" placeholder="22/12/22" />
                     </div>
 
                     <div>
@@ -135,13 +138,8 @@ export default function Forms({ onClose }: FormsProps) {
                     </div>
 
                     <div>
-                        <Label>Porte</Label>
-                        <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
-                            <option>Pequeno</option>
-                            <option>Médio</option>
-                            <option>Grande</option>
-                            <option>Gigante</option>
-                        </select>
+                        <Label>Altura</Label>
+                        <Input type="peso" placeholder="3 m" />
                     </div>
 
                     <div>

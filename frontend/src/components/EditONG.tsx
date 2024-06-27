@@ -17,7 +17,7 @@ export type DetailedPostProps = {
 
 export default function EditONG({ info, onClose }: DetailedPostProps) {
 
-    const [emailNotExist, setEmailNotExist] = useState(false);
+    const [emailNotExist, setEmailNotExist] = useState(true);
 
     const [differentEmail, setDifferentEmail] = useState(false);
 
