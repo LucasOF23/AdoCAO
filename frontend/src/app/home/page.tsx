@@ -24,7 +24,7 @@ export default function AdoptionPosts() {
   const hiddenClass = isAuthVisible ? "hidden" : "";
 
   function getAllAnimals() {
-    animalApi.getAll().then((res) => setDogInfos(res));
+    animalApi.searchWithFilter({ isAdopted: false }).then((res) => setDogInfos(res));
   }
   
   useEffect(getAllAnimals, []);
