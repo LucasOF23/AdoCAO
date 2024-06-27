@@ -7,13 +7,23 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    env_file:
-      - .env
+    environment:
+      PGHOST: $PGHOST
+      PGUSER: $PGUSER
+      PGDATABASE: $PGDATABASE
+      PGPASSWORD: $PGPASSWORD
+      AUTHSECRET: $AUTHSECRET
+      S3_URL: $S3_URL
+      S3_ACCESS_KEY: $S3_ACCESS_KEY
+      S3_SECRET_KEY: $S3_SECRET_KEY
+      S3_BUCKET: $S3_BUCKET
   db:
     image: postgres:latest
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: $PGDATABASE
       POSTGRES_USER: $PGUSER
       POSTGRES_PASSWORD: $PGPASSWORD
-    ports:
-      - "5432:5432"
+    volumes:
+      - ./.tmp/volumes/db/data:/var/lib/postgresql/data
