@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -17,18 +17,17 @@ import specieApi from "@/api/animalspecie.api";
 import animalApi from "@/api/animal.api";
 import { siglasEstados } from "@/lib/utils";
 
-export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
+export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
   const [isForms, setIsForms] = useState(true);
 
   const [cities, setCities] = useState([]);
-  const [estado, setEstado] = useState('');
+  const [estado, setEstado] = useState("");
 
   const [tags, setTags] = useState([]);
   const [species, setSpecies] = useState([]);
 
-  function getCities() {                
-    if(estado)
-      cityApi.getByState(estado).then(res => setCities(res));
+  function getCities() {
+    if (estado) cityApi.getByState(estado).then((res) => setCities(res));
   }
 
   useEffect(getCities, [estado]);
@@ -43,37 +42,35 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
     );
   }, []);
   useEffect(() => {
-    specieApi.getAll().then(res => setSpecies(res));
+    specieApi.getAll().then((res) => setSpecies(res));
   }, []);
-  
+
   async function addAnimal(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
 
-    const boolKeys = ['isNeutered', 'isDewormed'];
-    for(const key of boolKeys) {
-      if(formData.get(key)) {
+    const boolKeys = ["isNeutered", "isDewormed"];
+    for (const key of boolKeys) {
+      if (formData.get(key)) {
         formData.delete(key);
-        formData.append(key, '1');
-      } else
-        formData.append(key, '0');
+        formData.append(key, "1");
+      } else formData.append(key, "0");
     }
 
-    formData.append('isUserOwned', isFromOng ? '0' : '1');
-    if(isFromOng)
-      formData.append('ongId', ongId);
-    
+    formData.append("isUserOwned", isFromOng ? "0" : "1");
+    if (isFromOng) formData.append("ongId", ongId);
+
     console.log(formData);
 
     try {
       const res = await animalApi.create(formData);
-      console.log('Cadastro feito com sucesso!');
-    } catch(err) {
+      console.log("Cadastro feito com sucesso!");
+    } catch (err) {
       console.log(err);
-      switch(err.response.status) {
-      default:
-        console.log('Erro desconhecido');      
+      switch (err.response.status) {
+        default:
+          console.log("Erro desconhecido");
       }
     }
   }
@@ -119,9 +116,25 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
       </div>
     );
   }
-  
+
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
-    <div className="forms-shape">
+    <div ref={ref} className="forms-shape">
       <div className="relative">
         <h2 className="text-center text-3xl">Formulário Animal</h2>
 
@@ -135,28 +148,40 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
         )}
 
         <div className="">
-          <form onSubmit={addAnimal}>                 
+          <form onSubmit={addAnimal}>
             <div>
               <Label>Nome do Animal</Label>
               <Input name="name" type="nome" placeholder="Zeca" required />
             </div>
-                 
+
             <div>
               <Label>Estado</Label>
-              <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required >
+              <select
+                onChange={(event) => setEstado(event.target.value)}
+                className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
+                required
+              >
                 <option disabled></option>
-                {siglasEstados.map(sigla => (
-                  <option key={sigla} value={sigla}>{sigla}</option>
+                {siglasEstados.map((sigla) => (
+                  <option key={sigla} value={sigla}>
+                    {sigla}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
               <Label>Cidade</Label>
-              <select name="CityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required>
+              <select
+                name="CityId"
+                className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
+                required
+              >
                 <option disabled></option>
                 {cities.map((city) => (
-                  <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
+                  <option key={city.id} value={city.id}>
+                    {city.name} ({city.state})
+                  </option>
                 ))}
               </select>
             </div>
@@ -166,7 +191,8 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
               <select
                 name="AnimalSpecieId"
                 className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
-                required>
+                required
+              >
                 <option disabled></option>
                 {species.map((specie) => (
                   <option key={specie.id} value={specie.id}>
@@ -178,7 +204,11 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
 
             <div>
               <Label>Sexo</Label>
-              <select name="animalGender" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" required>
+              <select
+                name="animalGender"
+                className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
+                required
+              >
                 <option value="M">Macho</option>
                 <option value="F">Fêmea</option>
               </select>
@@ -186,7 +216,12 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
 
             <div>
               <Label>Nascimento</Label>
-              <Input name="birthdate" type="date" placeholder="22/12/22" required />
+              <Input
+                name="birthdate"
+                type="date"
+                placeholder="22/12/22"
+                required
+              />
             </div>
 
             <div>
@@ -202,34 +237,53 @@ export default function Forms({tipo, isFromOng, ongId, onClose }: FormsProps) {
             <div className="flex flex-row p-4 justify-start">
               <div className="basis-1/2 flex flex-row">
                 <Label>Vermifugado</Label>
-                <Input name="isDewormed" type="checkbox" className="h-5 hover:cursor-pointer"/>
+                <Input
+                  name="isDewormed"
+                  type="checkbox"
+                  className="h-5 hover:cursor-pointer"
+                />
               </div>
               <div className="basis-1/2 flex flex-row">
                 <Label>Castrado</Label>
-                <Input name="isNeutered" type="checkbox" className="h-5 hover:cursor-pointer"/>
+                <Input
+                  name="isNeutered"
+                  type="checkbox"
+                  className="h-5 hover:cursor-pointer"
+                />
               </div>
             </div>
 
-            <div >
+            <div>
               <Label>Descrição</Label>
-              <Input name="description" type="descricao" className="h-20" required />
+              <Input
+                name="description"
+                type="descricao"
+                className="h-20"
+                required
+              />
             </div>
 
             <div>
               <Label>Imagem</Label>
-              <Input name="photo" type="file" className="hover:bg-purple-300 hover:cursor-pointer" required />
+              <Input
+                name="photo"
+                type="file"
+                className="hover:bg-purple-300 hover:cursor-pointer"
+                required
+              />
             </div>
-                    
+
             <div className="text-center p-4">
-              <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+              <button
+                type="submit"
+                className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto"
+              >
                 Enviar
               </button>
             </div>
-
           </form>
         </div>
       </div>
     </div>
-    
   );
 }
