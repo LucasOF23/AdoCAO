@@ -6,16 +6,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 type FormsProps = {
+  tipo: boolean;
   onClose?: () => void;
 };
 
-export default function Forms({ onClose }: FormsProps) {
+export default function Forms({tipo, onClose }: FormsProps) {
   const [isForms, setIsForms] = useState(true);
 
   return (
     <div className="forms-shape">
       <div className="relative">
-        <h2 className="text-center text-3xl">{isForms ? "Formulário Dono" : "Formulário Animal"}</h2>
+        <h2 className="text-center text-3xl">{isForms ? (tipo ? "Formulário Dono" : "Formulário ONG") : "Formulário Animal"}</h2>
 
         {onClose && (
           <button onClick={onClose}>
@@ -26,7 +27,7 @@ export default function Forms({ onClose }: FormsProps) {
           </button>
         )}
 
-        {isForms && (
+        {(isForms && tipo) && (
           <div>
             <div>
               <Label>Nome do Responsável</Label>
@@ -41,14 +42,6 @@ export default function Forms({ onClose }: FormsProps) {
             <div>
               <Label>Celular</Label>
               <Input type="telefone" placeholder="(XX) XXXXX-XXXX" />
-            </div>
-
-            <div>
-              <Label>Pessoa Física ou ONG?</Label>
-              <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
-                <option>Pessoa Física</option>
-                <option>ONG</option>
-              </select>
             </div>
 
             <div>
@@ -96,7 +89,67 @@ export default function Forms({ onClose }: FormsProps) {
           </div>
         )}
 
-            
+        {(isForms && !tipo) && (
+          <div>
+            <div>
+              <Label>Nome da ONG</Label>
+              <Input type="nome" placeholder="joao pedro de alcantra" />
+            </div>
+
+            <div>
+              <Label>Email</Label>
+              <Input type="email" placeholder="joao@example.com" />
+            </div>
+
+            <div>
+              <Label>CNPJ</Label>
+              <Input type="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" />
+            </div>
+
+            <div>
+              <Label>Estado</Label>
+              <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+                <option>ES</option>
+                <option>MG</option>
+                <option>RJ</option>
+                <option>SC</option>
+                <option>SP</option>
+              </select>
+            </div>
+
+            <div>
+              <Label>Cidade</Label>
+              <select className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm">
+                <option>Analândia</option>
+                <option>Araraquara</option>
+                <option>Araras</option>
+                <option>Belo Horizonte</option>
+                <option>Brotas</option>
+                <option>Descalvado</option>
+                <option>Florianópolis</option>
+                <option>Ibaté</option>
+                <option>Itirapina</option>
+                <option>Pirassununga</option>
+                <option>Ribeirão Bonito</option>
+                <option>Rio Claro</option>
+                <option>Rio de Janeiro</option>
+                <option>São Carlos</option>
+                <option>São Paulo</option>
+                <option>Vitória</option>
+                <option>Outra</option>
+              </select>
+            </div>
+
+            <div className="text-center p-4">
+              <button
+                onClick={() => setIsForms((prev) => !prev)}
+                className="bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto"
+              >
+                Próximo
+              </button>
+            </div>
+          </div>
+        )}
 
         {!isForms && (
           <div>

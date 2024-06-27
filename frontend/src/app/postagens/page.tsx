@@ -93,7 +93,7 @@ export default function AdoptionPosts() {
         )}
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {profileInfo.animals.map((info) => (
-          <AdoptionCard key={info.id} info={info} />
+          <AdoptionCard tipo={true} key={info.id} info={info} />
         ))}
         <button
           onClick={openModal}
@@ -106,7 +106,7 @@ export default function AdoptionPosts() {
           createPortal(
             <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
               <div className="mx-auto my-auto p-4 w-full content-center flex justify-center">
-                <Forms onClose={closeModal} />
+                <Forms tipo={true} onClose={closeModal} />
               </div>
             </div>,
             document.body

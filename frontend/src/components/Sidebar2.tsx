@@ -16,7 +16,7 @@ type FormsProps = {
   updateAnimals;
 };
 
-export default function Forms({ onClose, updateAnimals }: FormsProps) {
+export default function Sidebar({ onClose, updateAnimals }: FormsProps) {
   const [cities, setCities] = useState([]);
   const [species, setSpecies] = useState([]);
   const [tags, setTags] = useState([]);

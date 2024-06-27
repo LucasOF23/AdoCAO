@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export type AdoptionCardProps = {
+  tipo: boolean;
   info: DogInfo;
 };
 
@@ -24,7 +25,7 @@ function getOwnerPrefix(kind: DogOwnerKind) {
   }
 }
 
-export default function AdoptionCard({ info }: AdoptionCardProps) {
+export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
   const imageAlt = `Imagem do cachorro "${info.name}"`;
   const ownerPrefix = getOwnerPrefix(info.owner.kind);
 
@@ -34,7 +35,6 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
   const closeModal = () => setIsModalVisible(false);
 
   const [isOwner, setIsOwner] = useState(false);
-  const [isONGOwner, setIsONGOwner] = useState(false);
 
   return (
     <>
@@ -74,23 +74,38 @@ export default function AdoptionCard({ info }: AdoptionCardProps) {
             <div className="mx-auto my-auto p-4">
               <DetailedPost info={info} onClose={closeModal} />
             </div>
-            {(isOwner || isONGOwner) && (
+            {(tipo) && (
               <div className="mx-auto my-auto p-4 border rounded-t-2xl  overflow-scroll max-w-4xl flex h-screen flex-col sm:flex-row bg-white">
                 <div className="">
                   <Label className="text-2xl text-center">Editar Postagem</Label>
+
+                  {isOwner && (<>
                   <div>
                     <Label>Nome do Responsável</Label>
                     <Input type="nome" placeholder="joao pedro de alcantra" />
                   </div>
 
                   <div>
-                    <Label>Email</Label>
-                    <Input type="email" placeholder="joao@example.com" />
+                    <Label>Celular</Label>
+                    <Input type="telefone" placeholder="(XX) XXXXX-XXXX" />
+                  </div>
+                  </>)}
+
+                  {!isOwner&& (<>
+                  <div>
+                    <Label>Nome da ONG</Label>
+                    <Input type="nome" placeholder="arca de sao francisco" />
                   </div>
 
                   <div>
-                    <Label>Celular</Label>
-                    <Input type="telefone" placeholder="(XX) XXXXX-XXXX" />
+                    <Label>CNPJ</Label>
+                    <Input type="telefone" placeholder="XX.XXX.XXX/XXXX-XX" />
+                  </div>
+                  </>)}
+                  
+                  <div>
+                    <Label>Email</Label>
+                    <Input type="email" placeholder="joao@example.com" />
                   </div>
 
                   <div>
