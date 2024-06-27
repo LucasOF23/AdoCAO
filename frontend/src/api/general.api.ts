@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiUrl = 'http://localhost:8080/';
-const baseImageUrl = 'http://localhost:9000/fotos-adocao/';
+const baseImageUrl = 'http://localhost:9000/adocao-fotos/';
 
 export {
   apiUrl as url,

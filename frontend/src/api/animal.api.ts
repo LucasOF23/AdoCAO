@@ -18,6 +18,7 @@ function convertToInfo(d): DogInfo {
     location: d.City,
     gender: (d.animalGender === 'M') ? 'male' : 'female',
     ageInYears: calculateAge(d.birthdate, new Date()),
+    birthdate: d.birthdate,
     weightInKg: d.weightInKg,
     heightInCm: d.heightInCm,
     species: d.AnimalSpecie,
@@ -34,6 +35,12 @@ async function getAll(): DogInfo[] {
 
 async function getFromOng(id) {
   const res = await getAnom(`ongs/${id}/animals`);
+  return res.data.map(convertToInfo);
+}
+
+async function getFromUser(id) {
+  const res = await getAnom(`users/${id}/animals`);
+  console.log('Got', res.data);
   return res.data.map(convertToInfo);
 }
 
@@ -67,6 +74,6 @@ async function searchWithFilter(filters): DogInfo[] {
 }
 
 export default {
-  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter, getFromOng
+  getAll, create, getById, update, removeAnimal, addTag, removeTag, searchWithFilter, getFromOng, getFromUser
 }
 

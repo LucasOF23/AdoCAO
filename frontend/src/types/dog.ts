@@ -33,6 +33,7 @@ export type DogInfo = {
   location: DogLocation,
   gender: DogGender,
   ageInYears: number,
+  birthdate,
   weightInKg: number,
   heightInCm: number,
   species: DogSpecies,
