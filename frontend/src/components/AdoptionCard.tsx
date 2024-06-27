@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { DogInfo, DogOwnerKind } from "@/types/dog";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DetailedPost from "./DetailedPost";
 import Modal from "react-modal";
 import { createPortal } from "react-dom";
@@ -28,10 +28,10 @@ export type AdoptionCardProps = {
 
 function getOwnerPrefix(kind: DogOwnerKind) {
   switch (kind) {
-  case "ONG":
-    return "da ONG";
-  case "user":
-    return "do usuário";
+    case "ONG":
+      return "da ONG";
+    case "user":
+      return "do usuário";
   }
 }
 
@@ -54,9 +54,8 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
 
   const [isAdopted, setIsAdopted] = useState(info.isAdopted);
 
-  function getCities() {                
-    if(estado)
-      cityApi.getByState(estado).then(res => setCities(res));
+  function getCities() {
+    if (estado) cityApi.getByState(estado).then((res) => setCities(res));
   }
 
   useEffect(getCities, [estado]);
@@ -65,47 +64,46 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
       setTags(
         res.map((tag) => {
           tag.isMarked = false;
-          for(const infoTag of info.tags) {
-            if(infoTag.id === tag.id) {
+          for (const infoTag of info.tags) {
+            if (infoTag.id === tag.id) {
               tag.isMarked = true;
               break;
             }
           }
-          
+
           return tag;
         })
       )
     );
   }, []);
-  
+
   useEffect(() => {
-    specieApi.getAll().then(res => setSpecies(res));
+    specieApi.getAll().then((res) => setSpecies(res));
   }, []);
-  
+
   async function editAnimal(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
 
-    const boolKeys = ['isNeutered', 'isDewormed'];
-    for(const key of boolKeys) {
-      if(formData.get(key)) {
+    const boolKeys = ["isNeutered", "isDewormed"];
+    for (const key of boolKeys) {
+      if (formData.get(key)) {
         formData.delete(key);
-        formData.append(key, '1');
-      } else
-        formData.append(key, '0');
+        formData.append(key, "1");
+      } else formData.append(key, "0");
     }
-    
+
     console.log(formData);
 
     try {
       const res = await animalApi.update(info.id, formData);
-      console.log('Atuailização feita com sucesso!');
-    } catch(err) {
+      console.log("Atuailização feita com sucesso!");
+    } catch (err) {
       console.log(err);
-      switch(err.response.status) {
-      default:
-        console.log('Erro desconhecido');      
+      switch (err.response.status) {
+        default:
+          console.log("Erro desconhecido");
       }
     }
   }
@@ -115,18 +113,18 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
 
     const newAdop = !info.isAdopted;
     let formData = new FormData();
-    formData.append('isAdopted', newAdop);
-    
-    try {      
+    formData.append("isAdopted", newAdop);
+
+    try {
       await animalApi.update(info.id, formData);
       info.isAdopted = newAdop;
       setIsAdopted(newAdop);
 
-      console.log('Status alterado com sucesso!');
-    } catch(err) {
-      switch(err.response.status) {
-      default:
-        console.log('Erro inesperado');
+      console.log("Status alterado com sucesso!");
+    } catch (err) {
+      switch (err.response.status) {
+        default:
+          console.log("Erro inesperado");
       }
     }
   }
@@ -134,23 +132,23 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
   async function handleTagMark(event, idx) {
     const isMarked = event.target.checked;
     const tagId = tags[idx].id;
-    
+
     try {
-      if(isMarked) {
+      if (isMarked) {
         await animalApi.addTag(info.id, tagId);
-        console.log('Tag', tags[idx].name, 'adicionada com sucesso');
+        console.log("Tag", tags[idx].name, "adicionada com sucesso");
       } else {
         await animalApi.removeTag(info.id, tagId);
-        console.log('Tag', tags[idx].name, 'removida com sucesso');
+        console.log("Tag", tags[idx].name, "removida com sucesso");
       }
 
       const newArr = [...tags];
       newArr[idx].isMarked = isMarked;
       setTags(newArr);
-    } catch(err) {
-      switch(err.response.status) {
-      default:
-        console.log('Erro inesperado');
+    } catch (err) {
+      switch (err.response.status) {
+        default:
+          console.log("Erro inesperado");
       }
     }
   }
@@ -179,7 +177,7 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
                 {line.map((tag, index) => (
                   <div key={index}>
                     <Label className="w-1/3">{tag.name}</Label>
-                    <Input 
+                    <Input
                       type="checkbox"
                       checked={tag.isMarked}
                       onChange={(event) =>
@@ -196,6 +194,22 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
       </div>
     );
   }
+
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closeModal]);
 
   return (
     <>
@@ -239,9 +253,11 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
                 </div>
               </div>
             )}
-            {(tipo) && (
-              
-              <div className="mx-auto my-auto p-4 border rounded-t-2xl overflow-scroll max-w-4xl h-screen sm:flex-row bg-white">
+            {tipo && (
+              <div
+                className="mx-auto my-auto p-4 border rounded-t-2xl overflow-scroll max-w-4xl h-screen sm:flex-row bg-white"
+                ref={ref}
+              >
                 {closeModal && (
                   <button onClick={closeModal}>
                     <FontAwesomeIcon
@@ -252,42 +268,70 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
                 )}
                 <div className="py-5">
                   <div className="justify-center flex">
-                    <Label className="text-3xl text-center">{isAdopted ? "Recolocar para" : "Confirmar"} Adoção</Label>
+                    <Label className="text-3xl text-center">
+                      {isAdopted ? "Recolocar para" : "Confirmar"} Adoção
+                    </Label>
                   </div>
                   <div className="mt-2 justify-center flex">
-                    <button onClick={changeAdopted} type="button" className="font-semibold bg-blue-600 rounded-full h-12 w-40 border text-xs">
+                    <button
+                      onClick={changeAdopted}
+                      type="button"
+                      className="font-semibold bg-blue-600 rounded-full h-12 w-40 border text-xs"
+                    >
                       <FontAwesomeIcon
-                      className="mt-[0.1rem] h-[1.5rem] text-gray-400 relative top-1 right-1"
-                      icon={faThumbsUp}
-                    />
+                        className="mt-[0.1rem] h-[1.5rem] text-gray-400 relative top-1 right-1"
+                        icon={faThumbsUp}
+                      />
                     </button>
                   </div>
                 </div>
                 <hr />
                 <div className="py-5">
-                  <Label className="text-2xl text-center">Editar Postagem</Label>
-                  <form onSubmit={editAnimal}>                 
+                  <Label className="text-2xl text-center">
+                    Editar Postagem
+                  </Label>
+                  <form onSubmit={editAnimal}>
                     <div>
                       <Label>Nome do Animal</Label>
-                      <Input name="name" type="nome" placeholder="Zeca" defaultValue={info.name} required />
+                      <Input
+                        name="name"
+                        type="nome"
+                        placeholder="Zeca"
+                        defaultValue={info.name}
+                        required
+                      />
                     </div>
-                 
+
                     <div>
                       <Label>Estado</Label>
-                      <select onChange={event => setEstado(event.target.value)} className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.location.state} required >
+                      <select
+                        onChange={(event) => setEstado(event.target.value)}
+                        className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
+                        defaultValue={info.location.state}
+                        required
+                      >
                         <option disabled></option>
-                        {siglasEstados.map(sigla => (
-                          <option key={sigla} value={sigla}>{sigla}</option>
+                        {siglasEstados.map((sigla) => (
+                          <option key={sigla} value={sigla}>
+                            {sigla}
+                          </option>
                         ))}
                       </select>
                     </div>
 
                     <div>
                       <Label>Cidade</Label>
-                      <select name="CityId" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.location.id} required>
+                      <select
+                        name="CityId"
+                        className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
+                        defaultValue={info.location.id}
+                        required
+                      >
                         <option disabled></option>
                         {cities.map((city) => (
-                          <option key={city.id} value={city.id}>{city.name} ({city.state})</option>
+                          <option key={city.id} value={city.id}>
+                            {city.name} ({city.state})
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -297,7 +341,9 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
                       <select
                         name="AnimalSpecieId"
                         className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
-                        defaultValue={info.species.id} required>
+                        defaultValue={info.species.id}
+                        required
+                      >
                         <option disabled></option>
                         {species.map((specie) => (
                           <option key={specie.id} value={specie.id}>
@@ -309,7 +355,12 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
 
                     <div>
                       <Label>Sexo</Label>
-                      <select name="animalGender" className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm" defaultValue={info.gender === 'male' ? 'M' : 'F'} required>
+                      <select
+                        name="animalGender"
+                        className="border rounded-2xl p-2 w-full flex flex-col grid-rows-2 gap-5 bg-white text-sm"
+                        defaultValue={info.gender === "male" ? "M" : "F"}
+                        required
+                      >
                         <option value="M">Macho</option>
                         <option value="F">Fêmea</option>
                       </select>
@@ -317,48 +368,86 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
 
                     <div>
                       <Label>Nascimento</Label>
-                      <Input name="birthdate" type="date" placeholder="22/12/22" defaultValue={info.birthdate} required />
+                      <Input
+                        name="birthdate"
+                        type="date"
+                        placeholder="22/12/22"
+                        defaultValue={info.birthdate}
+                        required
+                      />
                     </div>
 
                     <div>
                       <Label>Peso</Label>
-                      <Input name="weightInKg" type="peso" placeholder="30 kg" defaultValue={info.weightInKg} />
+                      <Input
+                        name="weightInKg"
+                        type="peso"
+                        placeholder="30 kg"
+                        defaultValue={info.weightInKg}
+                      />
                     </div>
 
                     <div>
                       <Label>Altura</Label>
-                      <Input name="heightInCm" type="peso" placeholder="3 cm" defaultValue={info.heightInCm} />
+                      <Input
+                        name="heightInCm"
+                        type="peso"
+                        placeholder="3 cm"
+                        defaultValue={info.heightInCm}
+                      />
                     </div>
 
-                    { renderTags(tags) }
-                    
+                    {renderTags(tags)}
+
                     <div className="flex flex-row p-4 justify-start">
                       <div className="basis-1/2 flex flex-row">
                         <Label>Vermifugado</Label>
-                        <Input name="isDewormed" type="checkbox" className="h-5 hover:cursor-pointer" defaultChecked={info.isDewormed} />
+                        <Input
+                          name="isDewormed"
+                          type="checkbox"
+                          className="h-5 hover:cursor-pointer"
+                          defaultChecked={info.isDewormed}
+                        />
                       </div>
                       <div className="basis-1/2 flex flex-row">
                         <Label>Castrado</Label>
-                        <Input name="isNeutered" type="checkbox" className="h-5 hover:cursor-pointer" defaultChecked={info.isNeutered}/>
+                        <Input
+                          name="isNeutered"
+                          type="checkbox"
+                          className="h-5 hover:cursor-pointer"
+                          defaultChecked={info.isNeutered}
+                        />
                       </div>
                     </div>
 
-                    <div >
+                    <div>
                       <Label>Descrição</Label>
-                      <Input name="description" type="descricao" className="h-20" defaultValue={info.description} required />
+                      <Input
+                        name="description"
+                        type="descricao"
+                        className="h-20"
+                        defaultValue={info.description}
+                        required
+                      />
                     </div>
 
                     <div>
                       <Label>Trocar Imagem</Label>
-                      <Input name="photo" type="file" className="hover:bg-purple-300 hover:cursor-pointer"  />
+                      <Input
+                        name="photo"
+                        type="file"
+                        className="hover:bg-purple-300 hover:cursor-pointer"
+                      />
                     </div>
-                    
+
                     <div className="text-center p-4">
-                      <button type="submit" className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto">
+                      <button
+                        type="submit"
+                        className="mx-auto w-full max-w-60 bg-purple-300 hover:bg-purple-400 duration-75 hover:scale-[105%] px-5 py-3 rounded-xl my-auto"
+                      >
                         Enviar
                       </button>
                     </div>
-
                   </form>
                 </div>
               </div>

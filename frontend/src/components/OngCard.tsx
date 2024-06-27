@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ProfileInfo } from "@/types/profile";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import EditONG from "./EditONG";
 import { Label } from "@/components/ui/label";
@@ -31,6 +31,22 @@ export default function OngCard({ info }: OngCardProps) {
     setIsSuperAdmin(token ? token.payload.isSuperAdmin : false);
   }, []);
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closeModal]);
+
   return (
     <>
       <button
@@ -57,7 +73,10 @@ export default function OngCard({ info }: OngCardProps) {
       {isModalVisible &&
         createPortal(
           <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
-            <div className="mx-auto my-auto p-4 border rounded-t-2xl max-w-screen-md sm:flex-row bg-white">
+            <div
+              className="mx-auto my-auto p-4 border rounded-t-2xl max-w-screen-md sm:flex-row bg-white"
+              ref={ref}
+            >
               <div className="py-5">
                 <div className="mb-1 flex flex-row justify-between">
                   <div>

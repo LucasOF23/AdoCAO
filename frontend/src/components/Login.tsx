@@ -2,7 +2,7 @@ import authApi from "@/api/auth.api";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -40,7 +40,7 @@ export default function Login({ onClose }: LoginProps) {
     }
 
     setDifferentPassword(false);
-  
+
     console.log(
       `Criando usuário ${name.value} com email ${email.value} e senha ${password.value}`
     );
@@ -60,8 +60,27 @@ export default function Login({ onClose }: LoginProps) {
     else await sendRegister(event);
   }
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
-    <div className="mx-auto my-auto relative border rounded-t-2xl p-4 max-w-96 flex flex-col gap-5 bg-white">
+    <div
+      className="mx-auto my-auto relative border rounded-t-2xl p-4 max-w-96 flex flex-col gap-5 bg-white"
+      ref={ref}
+    >
       <form onSubmit={send}>
         <h2 className="text-center text-3xl">
           {isLogin ? "Login" : "Cadastro"}
