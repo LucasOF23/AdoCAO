@@ -1,7 +1,7 @@
 import Image from "next/image";
 import TagContainer from "./TagContainer";
 import { DogInfo, DogOwnerKind } from "@/types/dog";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -14,27 +14,46 @@ export type DetailedPostProps = {
 
 function renderBoolean(value: boolean) {
   switch (value) {
-  case true:
-    return "Sim";
-  case false:
-    return "Não";
+    case true:
+      return "Sim";
+    case false:
+      return "Não";
   }
 }
 
 function renderOwnerKind(kind: DogOwnerKind) {
   switch (kind) {
-  case "ONG":
-    return "ONG";
-  case "user":
-    return "Usuário";
+    case "ONG":
+      return "ONG";
+    case "user":
+      return "Usuário";
   }
 }
 
 export default function DetailedPost({ info, onClose }: DetailedPostProps) {
   const imageAlt = `Imagem do cachorro "${info.name}"`;
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
-    <div className="border rounded-t-2xl overflow-hidden max-w-4xl flex min-h-80 flex-col sm:flex-row bg-white">
+    <div
+      ref={ref}
+      className="border rounded-t-2xl overflow-hidden max-w-4xl flex min-h-80 flex-col sm:flex-row bg-white"
+    >
       <div className="max-w-1/2 sm:w-1/2">
         <Image
           alt={imageAlt}
@@ -49,7 +68,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-3">
             <h2 className="font-semibold text-2xl">{info.name}</h2>
-            <GenderIcon gender={info.gender}/>
+            <GenderIcon gender={info.gender} />
           </div>
           {onClose && (
             <button onClick={onClose}>
@@ -63,11 +82,11 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         <div className="flex flex-row max-w-72 justify-between ">
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Peso</span>
-            <span>{info.weightInKg ? `${info.weightInKg} kg` : '---' }</span>
+            <span>{info.weightInKg ? `${info.weightInKg} kg` : "---"}</span>
           </div>
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Altura</span>
-            <span>{info.heightInCm ? `${info.heightInCm} cm` : '---' }</span>
+            <span>{info.heightInCm ? `${info.heightInCm} cm` : "---"}</span>
           </div>
           <div className="mt-2 flex flex-col">
             <span className="font-semibold text-xs">Idade</span>
@@ -117,7 +136,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
         <div className="mt-2 flex flex-col">
           <span className="font-semibold text-xs">Descrição</span>
           <span className="text-sm text-wrap">{info.description}</span>
-        </div>       
+        </div>
       </div>
     </div>
   );
