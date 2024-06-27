@@ -10,7 +10,7 @@ import { Op } from "sequelize";
 
 const defaultInclude = [
 	{ model: City },
-	{ model: User, attributes: ['id', 'name'] },
+	{ model: User, attributes: ['id', 'name', 'email'] },
 	{ model: ONG, attributes: ['id', 'name', 'address'], include: City },
 	{ model: AnimalTag, through: { attributes: [] } },
 	{ model: AnimalSpecie }

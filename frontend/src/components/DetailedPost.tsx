@@ -113,7 +113,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
           <span className="font-semibold text-xs">
             {renderOwnerKind(info.owner.kind)} Responsável
           </span>
-          <span>{info.owner.name}</span>
+          <span>{info.owner.name} {info.owner.email ? `(${info.owner.email})` : ""}</span>
         </div>
         <div className="mt-2 flex flex-col">
           <span className="font-semibold text-xs">Local</span>

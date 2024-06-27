@@ -5,7 +5,7 @@ import { calculateAge } from '@/lib/utils';
 function convertToInfo(d): DogInfo {
   let owner = {};
   if(d.User) 
-    owner = { kind: 'user', name: d.User.name, id: d.User.id }
+    owner = { kind: 'user', name: d.User.name, email: d.User.email, id: d.User.id }
   else
     owner = { kind: 'ONG', name: d.ONG.name, id: d.ONG.id }
 
