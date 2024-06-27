@@ -8,6 +8,9 @@ import Modal from "react-modal";
 import { createPortal } from "react-dom";
 import GenderIcon from "./GenderIcon";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -179,7 +182,16 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
               </div>
             )}
             {(tipo) && (
+              
               <div className="mx-auto my-auto p-4 border rounded-t-2xl overflow-scroll max-w-4xl h-screen sm:flex-row bg-white">
+                {closeModal && (
+                  <button onClick={closeModal}>
+                    <FontAwesomeIcon
+                      className="mt-[0.1rem] h-[1.5rem] text-gray-400 relative top-1 right-1"
+                      icon={faXmark}
+                    />
+                  </button>
+                )}
                 <div className="py-5">
                   <Label className="text-2xl text-center">Confirmar Adoção</Label>
                   <div className="mt-2 justify-center flex">
