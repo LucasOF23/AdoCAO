@@ -39,5 +39,6 @@ export type DogInfo = {
   species: DogSpecies,
   isNeutered: boolean,
   isDewormed: boolean,
+  isAdopted: boolean,
   tags: DogTag[]
 }

@@ -24,6 +24,7 @@ function convertToInfo(d): DogInfo {
     species: d.AnimalSpecie,
     isNeutered: d.isNeutered,
     isDewormed: d.isDewormed,
+    isAdopted: d.isAdopted,
     tags: d.AnimalTags
   }
 }

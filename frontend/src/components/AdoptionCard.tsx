@@ -48,6 +48,8 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
   const [tags, setTags] = useState([]);
   const [species, setSpecies] = useState([]);
 
+  const [isAdopted, setIsAdopted] = useState(info.isAdopted);
+
   function getCities() {                
     if(estado)
       cityApi.getByState(estado).then(res => setCities(res));
@@ -92,6 +94,27 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
       switch(err.response.status) {
       default:
         console.log('Erro desconhecido');      
+      }
+    }
+  }
+
+  async function changeAdopted(event) {
+    event.preventDefault();
+
+    const newAdop = !info.isAdopted;
+    let formData = new FormData();
+    formData.append('isAdopted', newAdop);
+    
+    try {      
+      await animalApi.update(info.id, formData);
+      info.isAdopted = newAdop;
+      setIsAdopted(newAdop);
+
+      console.log('Status alterado com sucesso!');
+    } catch(err) {
+      switch(err.response.status) {
+      default:
+        console.log('Erro inesperado');
       }
     }
   }
@@ -183,7 +206,7 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
                 <div className="py-5">
                   <Label className="text-2xl text-center">Confirmar Adoção</Label>
                   <div className="mt-2 justify-center flex">
-                    <button className="font-semibold bg-blue-600 rounded-full h-12 w-40 border text-xs">Já foi Adotado!!!</button>
+                    <button onClick={changeAdopted} type="button" className="font-semibold bg-blue-600 rounded-full h-12 w-40 border text-xs">Marcar como {isAdopted ? "não " : ""} adotado.</button>
                   </div>
                 </div>
                 <hr />

@@ -137,6 +137,11 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
           <span className="font-semibold text-xs">Descrição</span>
           <span className="text-sm text-wrap">{info.description}</span>
         </div>
+        {info.isAdopted && (
+          <div className="mt-2 flex flex-col">
+            <span className="font-semibold text-xs">ADOTADO!</span>
+          </div>
+        )}
       </div>
     </div>
   );
