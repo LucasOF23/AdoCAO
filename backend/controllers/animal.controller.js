@@ -78,10 +78,14 @@ async function findWithFilter(request, response) {
 			return response.status(400).send('Atributo ownerKind incorreto.');
 		}
 	}
-	if(request.body.isVerm && request.body.isVerm !== 'false') 
+	if(request.body.isVerm) 
 		queryData.isDewormed = true;
-	if(request.body.isCast && request.body.isCast !== 'false')
+	if(request.body.isCast)
 		queryData.isNeutered = true;
+	if(request.body.isAdopted)
+		queryData.isAdopted = true;
+	else
+		queryData.isAdopted = false;
 	
 	if(request.body.heightMin || request.body.heightMax)
 		queryData.heightInCm = _minMaxQuery(request.body.heightMin, request.body.heightMax);
@@ -93,8 +97,6 @@ async function findWithFilter(request, response) {
 		queryData.birthdate = _minMaxQuery(dateMin, dateMax);
 	}
 
-	console.log('Query:', queryData);
-	
 	try {
 		const res = await model.findAll({ include: defaultInclude, where: queryData });
 		

@@ -40,7 +40,7 @@ export default function Sidebar({ onClose, updateAnimals }: FormsProps) {
     ];
     const toArrayKeys = ["genders", "cityIds", "speciesIds"];
 
-    let filters = {};
+    let filters = { isAdopted: false };
     for (const key of keys) {
       const el = event.target[key];
       const value = el.type === "checkbox" ? el.checked : el.value;

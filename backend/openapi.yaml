@@ -1331,5 +1331,6 @@ components:
           type: integer  
         ageMax:
           type: integer  
-        
+        isAdopted:
+          type: boolean           
 
