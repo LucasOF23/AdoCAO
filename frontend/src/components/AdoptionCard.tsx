@@ -72,7 +72,7 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
         createPortal(
           <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex overflow-y-scroll z-20">
             <div className="mx-auto my-auto p-4">
-              <DetailedPost info={info} onClose={closeModal} />
+              <DetailedPost tipo={tipo} info={info} onClose={closeModal} />
             </div>
             {(tipo) && (
               <div className="mx-auto my-auto p-4 border rounded-t-2xl  overflow-scroll max-w-4xl flex h-screen flex-col sm:flex-row bg-white">
