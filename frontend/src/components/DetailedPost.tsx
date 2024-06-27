@@ -52,7 +52,7 @@ export default function DetailedPost({ info, onClose }: DetailedPostProps) {
   return (
     <div
       ref={ref}
-      className="border rounded-t-2xl overflow-hidden max-w-4xl flex min-h-80 flex-col sm:flex-row bg-white"
+      className="border rounded-t-2xl overflow-hidden max-w-4xl mx-auto flex min-h-80 flex-col sm:flex-row bg-white"
     >
       <div className="max-w-1/2 sm:w-1/2">
         <Image
