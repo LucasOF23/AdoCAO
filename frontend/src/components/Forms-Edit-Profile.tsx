@@ -4,6 +4,7 @@ import { ProfileInfo } from "@/types/profile";
 import { siglasEstados } from "@/lib/utils";
 
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import userApi from "@/api/user.api";
 
@@ -53,13 +54,13 @@ export default function Forms() {
       await userApi.update(data);
       await updateContact(event);
 
-      console.log('Dados alterados com sucesso!');
+      toast.info('Dados alterados com sucesso!');   
     } catch(err) {
       console.log(err);
       
       switch(err.response.status) {
       default:
-        console.log('Erro desconhecido.');
+        toast.error('Erro desconhecido.');
       }
     }
   }

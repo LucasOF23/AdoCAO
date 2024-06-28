@@ -71,8 +71,10 @@ export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
     try {
       const res = await animalApi.create(formData);
       toast.info('Cadastro feito com sucesso!');
+      window.location.reload();
     } catch(err) {
       console.log(err);
+      toast.error('Erro inesperado');
       // const { data } = err.response;
       // toast.error(data);
     }
