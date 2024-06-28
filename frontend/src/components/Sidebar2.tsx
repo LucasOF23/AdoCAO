@@ -87,7 +87,7 @@ export default function Sidebar({ onClose, updateAnimals }: FormsProps) {
           </summary>
           <ul className="p-1 shadow menu z-[1] flex flex-col bg-white rounded-box">
             {lines.map((line, indexLine) => (
-              <li className="flex">
+              <li className="flex m-1">
                 {line.map((tag, index) => (
                   <>
                     <Label className="w-1/3">{tag.name}</Label>

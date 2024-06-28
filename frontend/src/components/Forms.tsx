@@ -16,6 +16,7 @@ import tagApi from "@/api/animaltag.api";
 import specieApi from "@/api/animalspecie.api";
 import animalApi from "@/api/animal.api";
 import { siglasEstados } from "@/lib/utils";
+import { toast } from "react-toastify";
 
 export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
   const [isForms, setIsForms] = useState(true);
@@ -48,7 +49,7 @@ export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
   async function addAnimal(event) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
 
     const boolKeys = ["isNeutered", "isDewormed"];
     for (const key of boolKeys) {
@@ -58,20 +59,22 @@ export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
       } else formData.append(key, "0");
     }
 
-    formData.append("isUserOwned", isFromOng ? "0" : "1");
-    if (isFromOng) formData.append("ongId", ongId);
+    formData.append('isUserOwned', isFromOng ? '0' : '1');
+    if(isFromOng)
+      formData.append('ongId', ongId);
 
-    console.log(formData);
+    console.log('Form data:');
+    for (var [key, value] of formData.entries()) { 
+      console.log(key, value);
+    }    
 
     try {
       const res = await animalApi.create(formData);
-      console.log("Cadastro feito com sucesso!");
-    } catch (err) {
+      toast.info('Cadastro feito com sucesso!');
+    } catch(err) {
       console.log(err);
-      switch (err.response.status) {
-        default:
-          console.log("Erro desconhecido");
-      }
+      // const { data } = err.response;
+      // toast.error(data);
     }
   }
 
@@ -151,7 +154,7 @@ export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
           <form onSubmit={addAnimal}>
             <div>
               <Label>Nome do Animal</Label>
-              <Input name="name" type="nome" placeholder="Zeca" required />
+              <Input name="name" type="text" placeholder="Zeca" required />
             </div>
 
             <div>
@@ -226,12 +229,12 @@ export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
 
             <div>
               <Label>Peso</Label>
-              <Input name="weightInKg" type="peso" placeholder="30 kg" />
+              <Input name="weightInKg" type="text" placeholder="30 kg" />
             </div>
 
             <div>
               <Label>Altura</Label>
-              <Input name="heightInCm" type="peso" placeholder="3 m" />
+              <Input name="heightInCm" type="text" placeholder="3 m" />
             </div>
 
             <div className="flex flex-row p-4 justify-start">
@@ -255,12 +258,7 @@ export default function Forms({ tipo, isFromOng, ongId, onClose }: FormsProps) {
 
             <div>
               <Label>Descrição</Label>
-              <Input
-                name="description"
-                type="descricao"
-                className="h-20"
-                required
-              />
+              <Input name="description" type="text" className="h-20" required />
             </div>
 
             <div>

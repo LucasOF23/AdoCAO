@@ -8,6 +8,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ongApi from "@/api/ong.api";
 import cityApi from "@/api/city.api";
 import { siglasEstados } from "@/lib/utils";
+import { toast } from "react-toastify";
 
 type FormsProps = {
   onClose?: () => void;
@@ -34,11 +35,15 @@ export default function FormsOng({ onClose }: FormsProps) {
       if(value) data[key] = value;
     }
 
+    data.cnpj = data.cnpj.replace(/\D/g, '');
     
     try {
       await ongApi.create(data);
-      console.log('ONG cadastrada com sucesso!');
+      toast.info('ONG cadastrada com sucesso!');
+      window.location.reload();
     } catch(err) {
+      toast.error('Erro ao cadastrar ONG.');
+      console.log(err.response);
       switch(err.response.status) {
       default:
         console.log('Erro desconhecido.');

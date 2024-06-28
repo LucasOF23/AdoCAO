@@ -166,10 +166,14 @@ async function create(request, response) {
 		CityId: request.body.CityId
 	};
 
+	console.log('1', data);
+
 	if (request.body.isUserOwned === undefined || request.body.isUserOwned === null) {
 		imageUploader.eraseRequestFiles(request);
 		return response.status(400).send('Não está especificado se vai cadastrar na ong ou como usuário próprio.');
 	}
+
+	console.log('2', data);
 
 	if (request.body.isUserOwned === true || request.body.isUserOwned === '1' || request.body.isUserOwned === 'true') {
 		data.UserId = response.locals.userId;
@@ -194,13 +198,17 @@ async function create(request, response) {
 		data.ONGId = rel.ONGId;
 	}
 
+	console.log('3', data);
+
 	try {
 		const res = await model.create(data);
+		console.log('4', data);
 		response.status(201).json({
 			id: res.id,
 			imagePath: res.imagePath
 		});
 	} catch (err) {
+		console.log('5', data);
 		imageUploader.eraseRequestFiles(request);
 		console.log(err);
 		response.status(500).send();

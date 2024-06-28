@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 type LoginProps = {
   onClose?: () => void;
@@ -16,7 +17,7 @@ export default function Login({ onClose }: LoginProps) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [differentPassword, setDifferentPassword] = useState(false);
   const [emailExist, setEmailExist] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
 
   async function sendLogin(event) {
     const { email, password } = event.target;
@@ -27,7 +28,8 @@ export default function Login({ onClose }: LoginProps) {
       window.location.reload();
     } catch (err) {
       const { data } = err.response;
-      setError(data);
+      // setError(data);
+      toast.error(data);
     }
   }
 
@@ -49,13 +51,14 @@ export default function Login({ onClose }: LoginProps) {
       window.location.reload();
     } catch (err) {
       const { data } = err.response;
-      setError(data);
+      // setError(data);
+      toast.error(data);
     }
   }
 
   async function send(event) {
     event.preventDefault();
-    setError(null);
+    // setError(null);
     if (isLogin) await sendLogin(event);
     else await sendRegister(event);
   }
@@ -162,9 +165,9 @@ export default function Login({ onClose }: LoginProps) {
           </div>
         )}
 
-        {error && (
+        {/* {error && (
           <div className="text-center text-red-400 text-xs">{error}</div>
-        )}
+        )} */}
 
         <div className="flex mt-3 mb-3">
           <button
@@ -180,7 +183,7 @@ export default function Login({ onClose }: LoginProps) {
           <button
             onClick={() => {
               setIsLogin((prev) => !prev);
-              setError(null);
+              // setError(null);
             }}
             className="ml-1 text-xs align-center text-purple-500"
           >
