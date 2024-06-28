@@ -1,5 +1,6 @@
-sinfonia-test.internal.preditiva.io {
+adocao.localhost {
 	handle_path /_api/* {
 		reverse_proxy http://api
 	}
+	reverse_proxy http://web
 }

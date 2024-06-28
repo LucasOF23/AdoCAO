@@ -55,7 +55,7 @@ export default function AdoptionPosts() {
   return (
     <>
       <Navbar2 />
-      <div className="text-center text-5xl font-bold m-10 mt-14">Conheça nossas ONG's parceiras!</div>
+      <div className="text-center text-5xl font-bold m-10 mt-14">Conheça nossas ONG&lsquo;s parceiras!</div>
         
       <div className="p-4 mx-auto screen-max-width grid justify-items-center grid-autofit gap-4">
         {profileInfos.map((info) => (

@@ -7,6 +7,10 @@ info:
 servers:
   - url: "http://localhost:8080"
     description: Development server
+  - url: "http://adocao.localhost/_api"
+    description: Development server
+  - url: "http://adocao.allangarcia.com.br/_api"
+    description: Production server
 
 paths:
   # Auth

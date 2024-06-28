@@ -50,3 +50,7 @@
   background-color: white;
   gap: 20px;
 }
+
+nextjs-portal {
+  display: none;
+}

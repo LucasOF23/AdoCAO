@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:8080/';
-const baseImageUrl = 'http://localhost:9000/adocao-fotos/';
+const apiUrl = process.env.BACKEND_URL || 'http://localhost:8080';
+const baseImageUrl = process.env.BASE_IMAGE_URL || 'http://localhost:9000/adocao-fotos/';
 
 export {
   apiUrl as url,
@@ -13,7 +13,7 @@ export function storeToken(token) {
 }
 
 export function getToken() {
-  if(!window) return null;
+  if (!window) return null;
   const data = window.sessionStorage.getItem('token-adocao');
   return data ? JSON.parse(data) : null;
 }
@@ -32,7 +32,7 @@ export function putAnom(url, data?, config?) {
 
 function addTokenConfig(config?) {
   const token = getToken().token;
-  
+
   config = config || {};
   config.headers = config.headers || {};
   config.headers.Authorization = `Bearer ${token}`;

@@ -38,13 +38,13 @@ export default function Navbar2() {
           <hr />
           <li className="hover:bg-gray-200">
             <a href="/ongs" className="w-full p-2 block text-center">
-              ONG's
+              ONG&lsquo;s
             </a>
           </li>
           <hr />
           <li className="hover:bg-gray-200">
             <a href="/my_ongs" className="w-full p-2 block text-center">
-              Minhas ONG's
+              Minhas ONG&lsquo;s
             </a>
           </li>
           <hr />

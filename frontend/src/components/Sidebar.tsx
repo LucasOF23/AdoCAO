@@ -26,7 +26,7 @@ export default function Sidebar({ onClose }: FormsProps) {
       )}
       <div className="flex flex-row p-4">
         <div className="flex flex-row mx-auto my-auto">
-          <Label className="text-xl">Minhas ONG's</Label>
+          <Label className="text-xl">Minhas ONG&lsquo;s</Label>
           <Input type="checkbox" className="self-center h-5 hover:cursor-pointer"/>
         </div>
       </div>
