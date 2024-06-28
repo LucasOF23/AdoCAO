@@ -70,6 +70,7 @@ export default function EditONG({ ongId }) {
       await updateContact(event);
       toast.info("Dados alterados com sucesso!");
     } catch (err) {
+      console.log(err);
       toast.error("Erro desconhecido.");
     }
   }
@@ -264,7 +265,7 @@ export default function EditONG({ ongId }) {
           <div>
             <Label>Telefone</Label>
             <Input
-              name="contact_phoneNumber"
+              name="contact_telephoneNumber"
               type="contato"
               defaultValue={info.contato.telefone}
             />

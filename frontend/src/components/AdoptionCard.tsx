@@ -21,6 +21,8 @@ import specieApi from "@/api/animalspecie.api";
 import animalApi from "@/api/animal.api";
 import { siglasEstados } from "@/lib/utils";
 
+import { toast } from "react-toastify";
+
 export type AdoptionCardProps = {
   tipo: boolean;
   info: DogInfo;
@@ -98,12 +100,12 @@ export default function AdoptionCard({ tipo, info }: AdoptionCardProps) {
 
     try {
       const res = await animalApi.update(info.id, formData);
-      console.log("Atuailização feita com sucesso!");
+      toast.info("Atuailização feita com sucesso!");
     } catch (err) {
       console.log(err);
       switch (err.response.status) {
         default:
-          console.log("Erro desconhecido");
+          toast.error("Erro desconhecido");
       }
     }
   }
